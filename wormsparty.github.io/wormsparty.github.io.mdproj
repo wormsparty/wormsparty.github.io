@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ItemType>GenericProject</ItemType>
+    <ProjectGuid>{3BAD8F79-8239-4C4F-AC9E-8FCBC5C0731E}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Default|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="index.html" />
+    <None Include=".gitignore" />
+    <None Include="a.man\a.man.data" />
+    <None Include="a.man\a.man.html" />
+    <None Include="a.man\a.man.html.mem" />
+    <None Include="a.man\a.man.js" />
+    <None Include="escape\escape.html" />
+    <None Include="escape\css\escape.css" />
+    <None Include="escape\data\ball.png" />
+    <None Include="escape\data\floor.png" />
+    <None Include="escape\data\font.png" />
+    <None Include="escape\data\i%27m fine.mp3" />
+    <None Include="escape\data\megamany.png" />
+    <None Include="escape\data\menu.png" />
+    <None Include="escape\data\talk.mp3" />
+    <None Include="escape\js\canvas2d.js" />
+    <None Include="escape\js\engine.js" />
+    <None Include="escape\js\p2.js" />
+    <None Include="escape\js\webaudio.js" />
+    <None Include="static\story.pdf" />
+  </ItemGroup>
+</Project>

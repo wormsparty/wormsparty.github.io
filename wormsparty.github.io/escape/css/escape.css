@@ -1,0 +1,46 @@
+html {
+    width: 100%; 
+    height: 100%;
+}
+
+body {
+    background-color: #000;
+    width: 100%; 
+    min-height: 100%;
+}
+
+canvas {
+    background-color: #000; /* For border in fullscreen */
+    padding-left: 0;
+    padding-right: 0;
+    border: 0 none;
+ /*   border-radius: 15px; */
+    overflow: hidden;
+    display: block;
+}
+
+#canvasContainer {
+    text-align: center;
+    color: #fff;
+    width: 100%; 
+    min-height: 100vh;
+}
+
+#fullscreenbutton {
+    padding: 5px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.btn.btn-gray {
+    background: #222;
+    color: #fff;
+}
+
+
+.btn.btn-gray:hover {
+    background: #333;
+    color: #fff;
+}
