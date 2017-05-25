@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wormsparty.github.io", "wormsparty.github.io\wormsparty.github.io.csproj", "{A2B5F55F-668B-402E-BB0B-0D5B0E7483CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "doodles", "dodoles\doodles.csproj", "{A2B5F55F-668B-402E-BB0B-0D5B0E7483CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
