@@ -1,4 +1,6 @@
-Canvas2D = {}
+"use strict";
+
+var Canvas2D = {};
 
 Canvas2D.new = function(canvas, reference_width, reference_height) {
 	var handle = {
@@ -12,7 +14,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
         window_height: 0,
         reference_width: reference_width,
         reference_height: reference_height
-	}
+	};
 
     canvas.addEventListener('click', function(event) { 
         var x = (event.pageX - handle.margin_left) / handle.scaleFactor;
@@ -39,7 +41,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
         handle.ctx.mozImageSmoothingEnabled    = false;
         handle.ctx.msImageSmoothingEnabled     = false;
         handle.ctx.oImageSmoothingEnabled      = false;
-    }
+    };
 
     handle.render = function(sprite, x, y) {
         var sx = sprite.frame_width * sprite.frame_current;
@@ -75,7 +77,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
                 sprite.imageSrc, sx + cutLeft, cutTop, sprite.frame_width - cutLeft - cutRight, sprite.frame_height - cutTop - cutBottom, 
                 (x + cutLeft) * handle.scaleFactor + handle.margin_left, (y + cutTop) * handle.scaleFactor + handle.margin_top, (w1 - cutLeft - cutRight) * handle.scaleFactor, (w2 - cutTop - cutBottom) * handle.scaleFactor);            
         }
-	}
+	};
 
     handle.clear = function(r, g, b) {
         handle.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
@@ -91,7 +93,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
 
         handle.ctx.fillStyle = 'rgba(' + (r * 255) + ',' + (g * 255) + ',' + (b * 255) + ', 1)';
         handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
-    }
+    };
 
     return handle;
-}
+};

@@ -1,23 +1,11 @@
-WebAudio = {}
+"use strict";
 
-function createSource(buffer) 
-{
-    var source = context.createBufferSource();
-    var gainNode = context.createGain ? context.createGain() : context.createGainNode();
-    source.buffer = buffer;
-    source.connect(gainNode);
-    gainNode.connect(context.destination);
-
-    return {
-        source: source,
-        gainNode: gainNode
-    };
-}
+var WebAudio = {};
 
 WebAudio.new = function() {
     // Fix up prefixing
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext()
+    var context = new AudioContext();
 
     if (!context) {
       return undefined;
@@ -27,7 +15,7 @@ WebAudio.new = function() {
       context: context,
       data: {}
     };
-
+    
     handle.load = function(file) {
         var request = new XMLHttpRequest();
         request.open("GET", file, true);
@@ -48,11 +36,11 @@ WebAudio.new = function() {
               console.error('decodeAudioData error', error);
             }
           );
-        }
+        };
 
         request.onerror = function() {
           alert('BufferLoader: XHR error');
-        }
+        };
 
         request.send();
     };
@@ -67,4 +55,4 @@ WebAudio.new = function() {
     };
 
     return handle;
-}
+};

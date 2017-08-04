@@ -1,3 +1,5 @@
+"use strict";
+
 function fullscreen() {
     var canvas = document.getElementById('canvas');
 
@@ -26,7 +28,7 @@ Engine.new = function(descriptor) {
     var handle = {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: 256,
-        reference_height: 240, // NES resolution
+        reference_height: 240 // NES resolution
     };
 
     handle.audio = WebAudio.new();
@@ -94,7 +96,7 @@ Engine.new = function(descriptor) {
             frame_current: 0,
             frame_width: 0,
             frame_height: 0,
-            render: function() {},
+            render: function() {}
         };
 
         imageSrc.onload = function() { 
@@ -102,23 +104,23 @@ Engine.new = function(descriptor) {
             font.frame_height = imageSrc.height;
 
             font.render = function(text, x, y) {
-                var initial_x = x;
+                var current_x = x;
 
                 for (var i = 0, len = text.length; i < len; i++) {
-                    if (text.charCodeAt(i) == 10) { // newline
+                    if (text.charCodeAt(i) === 10) { // newline
                         y += font.frame_height + 2;
-                        x = initial_x;
+                        current_x = x;
                     } else {
                         font.frame_current = text.charCodeAt(i) - 32; // space = 32
-                        handle.graphics.render(font, x, y);
-                        x += font.frame_width;                        
+                        handle.graphics.render(font, current_x, y);
+                        current_x += font.frame_width;
                     }
                 }
             };
         };
 
         return font;
-    }
+    };
 
     handle.load_image = function(descriptor) {
         var imageSrc = new Image();
@@ -130,7 +132,7 @@ Engine.new = function(descriptor) {
             frame_count: descriptor.frame_count,
             frame_width: 0,
             frame_height: 0,
-            render: function() {},
+            render: function() {}
         };
 
         imageSrc.onload = function() { 
@@ -160,8 +162,7 @@ Engine.new = function(descriptor) {
             frame_height: 0,
             body: null,
             can_jump: false,
-            move: function() {},
-            jump: function() {}
+            move: function() {}
         };
 
         imageSrc.onload = function() { 
@@ -202,17 +203,17 @@ Engine.new = function(descriptor) {
 
     handle.play = function(descriptor) {
         handle.audio.play(descriptor);
-    }
+    };
 
     handle.stop = function(descriptor) {
         handle.audio.stop(descriptor);
-    }
+    };
 
     handle.resize = function(width, height) {
         var zoom_x = width / handle.reference_width;
         var zoom_y = height / handle.reference_height;
 
-        zoom = zoom_x;
+        var zoom = zoom_x;
 
         if (zoom_y < zoom)
             zoom = zoom_y;

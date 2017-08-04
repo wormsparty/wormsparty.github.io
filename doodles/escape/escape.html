@@ -31,7 +31,6 @@
     <script src="js/engine.js" type="text/javascript"></script>
 </head>
 <body>
-    <!-- TODO: Remake menu in canvas -->
     <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
         <a class="navbar-brand" href="/"></a>
         <ul class="nav navbar-nav">
@@ -58,6 +57,8 @@
         <source src="/a.man/i'm fine.mp3" type="audio/mp3" />
     </audio>-->
     <script type="text/javascript">
+        "use strict";
+        
         var load_success = true;
         var handle;
 
@@ -115,8 +116,8 @@
             });
 
             if (engine.error) {
-                var canvasContainer = document.getElementById('canvasContainer');
-                canvasContainer.innerHTML = engine.error;
+                var container = document.getElementById('canvasContainer');
+                container.innerHTML = engine.error;
                 return;
             }
 
@@ -124,7 +125,7 @@
             
             var menu = load_image({
                 url: 'data/menu.png',
-                frame_count: 10,
+                frame_count: 10
             });
 
             var hero = load_model({
@@ -203,7 +204,7 @@
                 handle.resize($(window).width(), $(window).height())
             });
 
-            handle.resize($(window).width(), $(window).height())
+            handle.resize($(window).width(), $(window).height());
 
             if (load_success) {
                 setInterval(function() {
