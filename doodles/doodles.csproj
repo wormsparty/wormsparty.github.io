@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,6 +26,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="static\bootstrap.min.css" />
+    <Content Include="static\bootstrap.min.js" />
+    <Content Include="static\jquery-3.1.1.min.js" />
+    <Content Include="static\tether.min.js" />
     <Content Include="Web.config" />
     <Content Include="index.html" />
     <Content Include="a.man\a.man.html" />
