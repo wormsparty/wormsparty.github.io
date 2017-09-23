@@ -693,22 +693,22 @@ module.exports={
   "description": "A JavaScript 2D physics engine.",
   "author": "Stefan Hedman <schteppe@gmail.com> (http://steffe.se)",
   "keywords": [
-    "p2.js",
+    "p2.engine",
     "p2",
     "physics",
     "engine",
     "2d"
   ],
-  "main": "./src/p2.js",
+  "main": "./src/p2.engine",
   "engines": {
     "node": "*"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/schteppe/p2.js.git"
+    "url": "https://github.com/schteppe/p2.engine.git"
   },
   "bugs": {
-    "url": "https://github.com/schteppe/p2.js/issues"
+    "url": "https://github.com/schteppe/p2.engine/issues"
   },
   "licenses": [
     {
@@ -11972,10 +11972,10 @@ Utils.splice = function(array,index,howmany){
  * @property {function} ARRAY_TYPE
  * @example
  *     <script>
- *         <!-- Inject your preferred array type before loading p2.js -->
+ *         <!-- Inject your preferred array type before loading p2.engine -->
  *         P2_ARRAY_TYPE = Array;
  *     </script>
- *     <script src="p2.js"></script>
+ *     <script src="p2.engine"></script>
  */
 if(typeof P2_ARRAY_TYPE !== 'undefined') {
     Utils.ARRAY_TYPE = P2_ARRAY_TYPE;
