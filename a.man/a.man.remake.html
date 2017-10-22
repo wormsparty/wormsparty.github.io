@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>doodles</title>
 
     <script src="../static/lib/jquery-3.1.1.min.js"></script>
@@ -10,21 +11,44 @@
     <script src="../static/lib/bootstrap.min.js"></script>
     <script src="../static/lib/p2.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="css/escape.css" />
-
     <script src="../static/engine/webaudio.js" type="text/javascript"></script>
     <script src="../static/engine/canvas2d.js" type="text/javascript"></script>
     <script src="../static/engine/engine.js" type="text/javascript"></script>
-</head>
-<body>
+
+    <style>
+      body {
+        background-color: #000;
+        margin: 0;
+        padding: 0 0 0 0;
+      }
+
+      @-webkit-keyframes rotation {
+        from {-webkit-transform: rotate(0deg);}
+        to {-webkit-transform: rotate(360deg);}
+      }
+      @-moz-keyframes rotation {
+        from {-moz-transform: rotate(0deg);}
+        to {-moz-transform: rotate(360deg);}
+      }
+      @-o-keyframes rotation {
+        from {-o-transform: rotate(0deg);}
+        to {-o-transform: rotate(360deg);}
+      }
+      @keyframes rotation {
+        from {transform: rotate(0deg);}
+        to {transform: rotate(360deg);}
+      }
+    </style>
+  </head>
+  <body>
     <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
         <a class="navbar-brand" href="/"></a>
         <ul class="nav navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="../a.man/a.man.html">a.man</a>
-            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="escape.html">escape</a>
+                <a class="nav-link" href="a.man.html">a.man</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../escape/escape.html">escape</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../static/story.pdf">story</a>
@@ -38,12 +62,9 @@
         </canvas>
     </div>
 
-    <!--<audio autoplay>
-        <source src="/a.man/i'm fine.mp3" type="audio/mp3" />
-    </audio>-->
-    <script type="text/javascript">
+    <script type='text/javascript'>
         "use strict";
-        
+
         var load_success = true;
         var handle;
 
@@ -61,36 +82,8 @@
             return value;
         }
 
-        function load_model(descriptor) {
-            var value = handle.load_model(descriptor);
-
-            if (!value) {
-                console.log('Failed to load ' + descriptor.url);
-                load_success = false;
-                return undefined;
-            } else {
-                console.log('Loaded ' + descriptor.url);
-            }
-
-            return value;
-        }
-
         function load_sound(descriptor) {
             handle.load_sound(descriptor);
-        }
-
-        function load_font(descriptor) {
-            var value = handle.load_font(descriptor);
-
-            if (!value) {
-                console.log('Failed to load ' + descriptor.url);
-                load_success = false;
-                return undefined;
-            } else {
-                console.log('Loaded ' + descriptor.url);
-            }
-
-            return value;
         }
 
         $(document).ready(function() {
@@ -107,45 +100,27 @@
             }
 
             handle = engine.handle;
-            
-            var menu = load_image({
-                url: 'data/menu.png',
-                frame_count: 10
-            });
 
-            var hero = load_model({
-                url: 'data/megamany.png',
-                frame_count: 4,
+            var father = load_image({
+                url: 'data/father.png',
+                frame_count: 23,
                 frame_duration: 0.2,
                 mass: 1,
-                x: 50,
-                y: 50 
+                x: 130,
+                y: 30
             });
 
-            var ball = load_model({
-                url: 'data/ball.png',
-                frame_count: 2,
-                frame_duration: 10,
-                mass: 3,
-                x: 50,
-                y: 150
-            });
-
-            var floor = load_model({
-                url: 'data/floor.png',
-                frame_count: 1,
-                frame_duration: 0,
-                mass: 0,
+            var menu = load_image({
+                url: 'data/menu.png',
+                frame_count: 9,
+                frame_duration: 0.0,
+                mass: 1,
                 x: 0,
-                y: 208
+                y: 0
             });
 
-            load_sound('data/talk.mp3');
-
-            var font = load_font({
-                url: 'data/font.png',
-                frame_count: 95
-            });
+            var talk = load_sound('data/talk.mp3');
+            var wave = load_sound('data/wave.mp3');
 
             var previous_keys = {
                 left: 0,
@@ -195,13 +170,15 @@
                 setInterval(function() {
                     var dx = (player.right - player.left) * 1000 / fps;
                     var dy = (player.down - player.up) * 1000 / fps;
-                    hero.move(dx, dy, 75);
+                    father.move(dx, dy, 75);
 
                     handle.step(1 / fps);
                     handle.clear(0.4, 0.4, 0.8);
                     handle.render();
-                    font.render('Coucou', 10, 10);
-                    menu.render(9, handle.reference_width - 16, handle.reference_height - 16);
+
+                    father.render(0);
+                    //font.render('Coucou', 10, 10);
+                    //menu.render(9, handle.reference_width - 16, handle.reference_height - 16);
 
                     if (player.down && !previous_keys.down) {
                         handle.play('data/talk.mp3');
@@ -218,5 +195,5 @@
             }
         });
     </script>
-</body>
+  </body>
 </html>

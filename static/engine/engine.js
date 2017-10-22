@@ -132,6 +132,8 @@ Engine.new = function(descriptor) {
             frame_count: descriptor.frame_count,
             frame_width: 0,
             frame_height: 0,
+            x: descriptor.x,
+            y: descriptor.y,
             render: function() {}
         };
 
@@ -139,10 +141,15 @@ Engine.new = function(descriptor) {
             sprite.frame_width = imageSrc.width / sprite.frame_count;
             sprite.frame_height = imageSrc.height;
 
-            sprite.render = function(frame, x, y) {
+            sprite.render = function(frame) {
                 sprite.frame_current = frame;
-                handle.graphics.render(sprite, x, y);
+                handle.graphics.render(sprite, sprite.x, sprite.y);
             };
+
+            sprite.move = function(dx, dy) {
+                sprite.x += dx;
+                sprite.y += dy;
+            }
         };
 
         return sprite;  
