@@ -235,8 +235,9 @@ Engine.new = function(descriptor) {
         var ajustementx = Math.floor(width - handle.reference_width * zoom - borderx * 2);
         var ajustementy = Math.floor(height - handle.reference_height * zoom - bordery * 2);
 
+        var safety_margin = 6; // If we don't put this margin on the height of the canvas, we often get a scrollbar
         handle.canvas.width = width;
-        handle.canvas.height = height;
+        handle.canvas.height = height - safety_margin;
         handle.graphics.resize(zoom, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
     };
 

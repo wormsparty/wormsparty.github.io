@@ -168,8 +168,8 @@
 
             if (load_success) {
                 setInterval(function() {
-                    var dx = (player.right - player.left) * 1000 / fps;
-                    var dy = (player.down - player.up) * 1000 / fps;
+                    var dx = (player.right - player.left) * 250 / fps;
+                    var dy = (player.down - player.up) * 250 / fps;
                     father.move(dx, dy, 75);
 
                     handle.step(1 / fps);
