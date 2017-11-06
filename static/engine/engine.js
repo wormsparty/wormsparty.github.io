@@ -51,37 +51,6 @@ Engine.new = function(descriptor) {
         };
     }
 
-    handle.sprites = [];
-    handle.world = new p2.World({ gravity: [0, 0] });
-
-    // This allows to only detect collisions from the top
-    handle.world.on('beginContact', function(event) {
-/*        var b1 = event.bodyA;
-        var b2 = event.bodyB;
-
-        var s1 = b1.sprite;
-        var s2 = b2.sprite;
-
-        if (b1.position[1] - s1.frame_height <= b2.position[1] - s2.frame_height) {
-            s1.can_jump = true;
-        }
-
-        if (b2.position[1] - s2.frame_height <= b1.position[1] - s1.frame_height) {
-            s2.can_jump = true;
-        }*/
-    });
-
-    // This prevents from jumping after we have fallen in a pit
-    handle.world.on('endContact', function(event) {
-        if (event.bodyA.type === p2.Body.STATIC) {
-//            event.bodyB.sprite.can_jump = false;
-        }
-
-        if (event.bodyB.type === p2.Body.STATIC) {
-  //          event.bodyA.sprite.can_jump = false;
-        }
-    });
-
     handle.clear = function(r, g, b) {
         handle.graphics.clear(r, g, b);
     };
@@ -122,7 +91,7 @@ Engine.new = function(descriptor) {
         return font;
     };
 
-    handle.load_image = function(descriptor) {
+    handle.load_image = function(descriptor, onload, onfailure) {
         var imageSrc = new Image();
         imageSrc.src = descriptor.url;
 
@@ -134,7 +103,8 @@ Engine.new = function(descriptor) {
             frame_height: 0,
             x: descriptor.x,
             y: descriptor.y,
-            render: function() {}
+            render: function() {},
+            move: function() {}
         };
 
         imageSrc.onload = function() { 
@@ -149,63 +119,20 @@ Engine.new = function(descriptor) {
             sprite.move = function(dx, dy) {
                 sprite.x += dx;
                 sprite.y += dy;
-            }
-        };
-
-        return sprite;  
-    };
-
-    handle.load_model = function(descriptor) {
-        var imageSrc = new Image();
-        imageSrc.src = descriptor.url;
-
-        var sprite = {
-            imageSrc: imageSrc,
-            frame_current: 0,
-            frame_count: descriptor.frame_count,
-            frame_timer: 0,
-            frame_duration: descriptor.frame_duration,
-            frame_width: 0,
-            frame_height: 0,
-            body: null,
-            can_jump: false,
-            move: function() {}
-        };
-
-        imageSrc.onload = function() { 
-            sprite.frame_width = imageSrc.width / sprite.frame_count;
-            sprite.frame_height = imageSrc.height;
-
-            var x = descriptor.x + sprite.frame_width / 2;
-            var y = descriptor.y + sprite.frame_height / 2;
-
-            var shape = new p2.Box({ width: sprite.frame_width, height: sprite.frame_height });
-            sprite.body = new p2.Body({ mass: descriptor.mass, position:[x, y], fixedRotation: true });
-            sprite.body.damping = 0.95; // To decelerate / air friction
-            sprite.body.sprite = sprite; // A helper to be able to find the sprite from the body.
-            sprite.body.addShape(shape);
-            handle.world.addBody(sprite.body);
-
-            sprite.move = function(dx, dy, max) {
-                var vx = sprite.body.velocity[0] + dx;
-                var vy = sprite.body.velocity[1] + dy;
-
-                vx = Math.max(-max, Math.min(vx, max));
-                vy = Math.max(-max, Math.min(vy, max));
-
-                sprite.body.velocity[0] = vx;
-                sprite.body.velocity[1] = vy;
             };
 
-             // TODO: REMOVE
-             handle.sprites.push(sprite);
+            onload(descriptor.url);
+        };
+
+        imageSrc.onerror = function() {
+            onfailure();
         };
 
         return sprite;  
     };
 
-    handle.load_sound = function(descriptor) {
-        handle.audio.load(descriptor);
+    handle.load_sound = function(descriptor, onload, onfailure) {
+        handle.audio.load(descriptor, onload, onfailure);
     };
 
     handle.play = function(descriptor) {
@@ -239,30 +166,6 @@ Engine.new = function(descriptor) {
         handle.canvas.width = width;
         handle.canvas.height = height - safety_margin;
         handle.graphics.resize(zoom, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
-    };
-
-    // TODO: REMOVE
-    handle.render = function() {
-        handle.sprites.forEach(function(sprite) {
-            var x = sprite.body.position[0] - sprite.frame_width / 2;
-            var y = sprite.body.position[1] - sprite.frame_height / 2;
-
-            handle.graphics.render(sprite, x, y);
-        });
-    };
-
-    // TODO: REMOVE
-    handle.step = function(dt) {
-        handle.sprites.forEach(function(sprite) {
-            sprite.frame_timer += dt;
-
-            if (sprite.frame_timer >= sprite.frame_duration) {
-                sprite.frame_current = (sprite.frame_current + 1) % sprite.frame_count;
-                sprite.frame_timer -= sprite.frame_duration;
-            }            
-        });
-
-        handle.world.step(dt);
     };
 
     return {

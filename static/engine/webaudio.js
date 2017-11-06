@@ -16,30 +16,34 @@ WebAudio.new = function() {
       data: {}
     };
     
-    handle.load = function(file) {
+    handle.load = function(file, onload, onfailure) {
         var request = new XMLHttpRequest();
-        request.open("GET", file, true);
-        request.responseType = "arraybuffer";
+        request.open('GET', file, true);
+        request.responseType = 'arraybuffer';
 
         request.onload = function() {
           context.decodeAudioData(
             request.response,
             function(buffer) {
               if (!buffer) {
-                alert('error decoding file data: ' + file);
+                console.error('error decoding file data: ' + file);
+                onfailure();
                 return;
               }
 
               handle.data[file] = buffer;
+              onload(file);
             },
             function(error) {
               console.error('decodeAudioData error', error);
+              onfailure();
             }
           );
         };
 
         request.onerror = function() {
-          alert('BufferLoader: XHR error');
+          console.error('BufferLoader: XHR error');
+          onfailure();
         };
 
         request.send();

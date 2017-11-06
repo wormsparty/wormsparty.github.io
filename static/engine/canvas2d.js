@@ -91,7 +91,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
         // Bottom band
         handle.ctx.fillRect(handle.margin_left, handle.window_height - handle.margin_bottom, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_bottom);
 
-        handle.ctx.fillStyle = 'rgba(' + (r * 255) + ',' + (g * 255) + ',' + (b * 255) + ', 1)';
+        handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
         handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
     };
 
