@@ -69,10 +69,10 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
             cutBottom = y + w2 - handle.reference_height;
         }
 
-        if (cutLeft <= w1
-        && cutRight <= w1
-        && cutTop <= w2
-        && cutBottom <= w2){
+        if (cutLeft < w1
+        && cutRight < w1
+        && cutTop < w2
+        && cutBottom < w2){
             handle.ctx.drawImage(
                 sprite.imageSrc, sx + cutLeft, cutTop, sprite.frame_width - cutLeft - cutRight, sprite.frame_height - cutTop - cutBottom, 
                 (x + cutLeft) * handle.scaleFactor + handle.margin_left, (y + cutTop) * handle.scaleFactor + handle.margin_top, (w1 - cutLeft - cutRight) * handle.scaleFactor, (w2 - cutTop - cutBottom) * handle.scaleFactor);            
