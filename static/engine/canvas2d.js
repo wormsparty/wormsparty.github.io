@@ -45,6 +45,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
 
     handle.render = function(sprite, x, y) {
         var sx = sprite.frame_width * sprite.frame_current;
+        var sy = sprite.frame_height * sprite.variant_current;
         var w1 = sprite.frame_width;
         var w2 = sprite.frame_height;
 
@@ -53,31 +54,39 @@ Canvas2D.new = function(canvas, reference_width, reference_height) {
         var cutTop = 0;
         var cutBottom = 0;
 
-        if (x < 0) {
+        if (x !== Math.floor(x))
+            console.error("x should be an integer! x=" + x);
+
+        if (y !== Math.floor(y))
+            console.error("y should be an integer! y=" + y);
+
+        if (x < 0)
             cutLeft = -x;
-        }
 
-        if (y < 0) {
+        if (y < 0)
             cutTop = -y;
-        }
 
-        if (x + w1 > handle.reference_width) {
+        if (x + w1 > handle.reference_width)
             cutRight = x + w1 - handle.reference_width;
-        }
 
-        if (y + w2 > handle.reference_height) {
+        if (y + w2 > handle.reference_height)
             cutBottom = y + w2 - handle.reference_height;
-        }
 
-        if (cutLeft <= w1
-        && cutRight <= w1
-        && cutTop <= w2
-        && cutBottom <= w2){
+        if (cutLeft < w1
+        && cutRight < w1
+        && cutTop < w2
+        && cutBottom < w2) {
             handle.ctx.drawImage(
-                sprite.imageSrc, sx + cutLeft, cutTop, sprite.frame_width - cutLeft - cutRight, sprite.frame_height - cutTop - cutBottom, 
-                (x + cutLeft) * handle.scaleFactor + handle.margin_left, (y + cutTop) * handle.scaleFactor + handle.margin_top, (w1 - cutLeft - cutRight) * handle.scaleFactor, (w2 - cutTop - cutBottom) * handle.scaleFactor);            
+                sprite.imageSrc, sx + cutLeft, sy + cutTop, sprite.frame_width - cutLeft - cutRight, sprite.frame_height - cutTop - cutBottom,
+                (x + cutLeft) * handle.scaleFactor + handle.margin_left, (y + cutTop) * handle.scaleFactor + handle.margin_top, (w1 - cutLeft - cutRight) * handle.scaleFactor, (w2 - cutTop - cutBottom) * handle.scaleFactor);
         }
-	};
+    };
+
+    handle.rect = function(x, y, w, h, r, g, b) {
+        handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
+        // TODO: Handle out-of-frame case
+        handle.ctx.fillRect(handle.margin_left + x * handle.scaleFactor, handle.margin_top + y * handle.scaleFactor, w * handle.scaleFactor, h * handle.scaleFactor);
+    };
 
     handle.clear = function(r, g, b) {
         handle.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
