@@ -388,7 +388,15 @@
 
                 menu.x = handle.reference_width - 16;
                 menu.y = handle.reference_height - 16;
-                menu.render(6);
+
+                var index_selected = isfullscreen() ? 6 : 7;
+                var index_unselected = isfullscreen() ? 7 : 6;
+
+                if (handle.mouse_x >= menu.x && handle.mouse_y >= menu.y
+                    && handle.mouse_x < handle.reference_width && handle.mouse_y < handle.reference_height)
+                    menu.render(index_selected);
+                else
+                    menu.render(index_unselected);
 
                 previous_keys.up = player.up;
                 previous_keys.down = player.down;

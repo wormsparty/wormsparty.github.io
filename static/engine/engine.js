@@ -1,9 +1,17 @@
 "use strict";
 
+function isfullscreen() {
+    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+        return false;
+    }
+
+    return true;
+}
+
 function fullscreen() {
     var canvas = document.getElementById('canvas');
 
-    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+    if (!isfullscreen()) {
         if (canvas.requestFullscreen) {
             canvas.requestFullscreen();
         } else if (canvas.mozRequestFullScreen) {
@@ -28,7 +36,9 @@ Engine.new = function(descriptor) {
     var handle = {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: 256,
-        reference_height: 240 // NES resolution
+        reference_height: 240, // NES resolution,
+        mouse_x: 0,
+        mouse_y: 0
     };
 
     handle.audio = WebAudio.new();
@@ -41,7 +51,10 @@ Engine.new = function(descriptor) {
         };
     }
 
-    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height);
+    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, function (x, y) {
+        handle.mouse_x = (x - handle.graphics.margin_left) / handle.graphics.scaleFactor;
+        handle.mouse_y = (y - handle.graphics.margin_top) / handle.graphics.scaleFactor;
+    });
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');
