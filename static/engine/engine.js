@@ -1,9 +1,17 @@
 "use strict";
 
+function isfullscreen() {
+    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+        return false;
+    }
+
+    return true;
+}
+
 function fullscreen() {
     var canvas = document.getElementById('canvas');
 
-    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+    if (!isfullscreen()) {
         if (canvas.requestFullscreen) {
             canvas.requestFullscreen();
         } else if (canvas.mozRequestFullScreen) {
@@ -28,7 +36,9 @@ Engine.new = function(descriptor) {
     var handle = {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: 256,
-        reference_height: 240 // NES resolution
+        reference_height: 240, // NES resolution,
+        mouse_x: 0,
+        mouse_y: 0
     };
 
     handle.audio = WebAudio.new();
@@ -41,7 +51,10 @@ Engine.new = function(descriptor) {
         };
     }
 
-    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height);
+    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, function (x, y) {
+        handle.mouse_x = (x - handle.graphics.margin_left) / handle.graphics.scaleFactor;
+        handle.mouse_y = (y - handle.graphics.margin_top) / handle.graphics.scaleFactor;
+    });
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');
@@ -55,7 +68,7 @@ Engine.new = function(descriptor) {
         handle.graphics.clear(r, g, b);
     };
 
-    handle.load_font = function(descriptor) {
+    handle.load_font = function(descriptor, onload, onfailure) {
         var imageSrc = new Image();
         imageSrc.src = descriptor.url;
 
@@ -65,12 +78,17 @@ Engine.new = function(descriptor) {
             frame_current: 0,
             frame_width: 0,
             frame_height: 0,
-            render: function() {}
+            variant_count: descriptor.variant_count,
+            variant_current: 0,
+            render: function() {},
+            variant: function(v) {
+                font.variant_current = v;
+            }
         };
 
         imageSrc.onload = function() { 
             font.frame_width = imageSrc.width / font.frame_count;
-            font.frame_height = imageSrc.height;
+            font.frame_height = imageSrc.height / font.variant_count;
 
             font.render = function(text, x, y) {
                 var current_x = x;
@@ -86,6 +104,12 @@ Engine.new = function(descriptor) {
                     }
                 }
             };
+
+            onload(descriptor.url);
+        };
+
+        imageSrc.onerror = function() {
+            onfailure();
         };
 
         return font;
@@ -101,6 +125,8 @@ Engine.new = function(descriptor) {
             frame_count: descriptor.frame_count,
             frame_width: 0,
             frame_height: 0,
+            variant_count: 1, // TODO: We leave one variant for images for now
+            variant_current: 0,
             x: descriptor.x,
             y: descriptor.y,
             render: function() {},
@@ -109,7 +135,7 @@ Engine.new = function(descriptor) {
 
         imageSrc.onload = function() { 
             sprite.frame_width = imageSrc.width / sprite.frame_count;
-            sprite.frame_height = imageSrc.height;
+            sprite.frame_height = imageSrc.height / sprite.variant_count;
 
             sprite.render = function(frame) {
                 sprite.frame_current = frame;
@@ -129,6 +155,10 @@ Engine.new = function(descriptor) {
         };
 
         return sprite;  
+    };
+
+    handle.rect = function(x, y, w, h, r, g, b) {
+        handle.graphics.rect(x, y, w, h, r, g, b);
     };
 
     handle.load_sound = function(descriptor, onload, onfailure) {

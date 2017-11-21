@@ -26,10 +26,10 @@
     <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
         <a class="navbar-brand" href="/"></a>
         <ul class="nav navbar-nav">
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="a.man.html">a.man</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="skywards.html">skywards</a>
             </li>
             <li class="nav-item">
@@ -75,8 +75,6 @@
                 console.log('Failed to load ' + descriptor.url);
                 load_success = false;
                 return undefined;
-            } else {
-                //console.log('Loaded ' + descriptor.url);
             }
 
             return value;
@@ -95,7 +93,28 @@
             });
         }
 
-        var cloud, seagull, water, menu;
+        function load_font(descriptor) {
+            elements_to_load++;
+
+            var value = handle.load_font(descriptor, function(e) {
+                elements_loaded++;
+
+                if (all_load_declared && elements_to_load === elements_loaded)
+                    all_loaded(e);
+            }, function() {
+                onfailure();
+            });
+
+            if (!value) {
+                console.log('Failed to load ' + descriptor.url);
+                load_success = false;
+                return undefined;
+            }
+
+            return value;
+        }
+
+        var cloud, seagull, water, silhouette, transition, menu, font;
         var already_loaded = false;
 
         function all_loaded(e) {
@@ -115,8 +134,17 @@
             var sky_delta = 0.0;
             var water_delta = 0.0;
             var cloud_delta = 0.0;
-
             var sky_timer = 5.0;
+
+            var father_text = "I wish this moment would never end.";
+            var father_position = 0;
+            var father_timer = 5.0;
+            var son_text = "Don't worry. You are about to wake up.";
+            var son_position = 0;
+            var son_timer = 15.0;
+            var dialog_speed = 0.125;
+
+            var transition_timer = -25.0;
 
             var previous_keys = {
                 left: 0,
@@ -209,11 +237,14 @@
                     var velocity = Math.floor(1 + Math.random() * 6.0);
                     var px = -seagull.frame_width;
 
+                    // We don't want velocity 0, and split if coming from left or right
                     if (velocity <= 3)
                     {
                         velocity -= 4;
                         px = handle.reference_width;
                     }
+                    else
+                        velocity -= 3;
 
                     var found_inactive_seagull = false;
 
@@ -250,6 +281,35 @@
 
                     seagull_timer -= seagull_threshold;
                     seagull_threshold = Math.random() * 10.0 + 5.0;
+                }
+
+                if (sky_delta >= 60)
+                {
+                    father_timer -= dt;
+                    son_timer -= dt;
+
+                    if (father_timer < dialog_speed)
+                    {
+                        father_timer += dialog_speed;
+
+                        if (father_position < father_text.length)
+                            father_position++;
+                    }
+
+                    if (son_timer < dialog_speed)
+                    {
+                        son_timer += dialog_speed;
+
+                        if (son_position < son_text.length)
+                            son_position++;
+                    }
+
+                    transition_timer += dt;
+
+                    if (transition_timer >= 5.0)
+                    {
+                        // TODO: Switch to the next scene
+                    }
                 }
 
                 //
@@ -297,6 +357,34 @@
 
                     seagull.render(s.frame);
                 });
+
+                silhouette.x = 0;
+                silhouette.y = 200 - 3 * Math.floor(sky_delta) + water.frame_height;
+
+                if (father_position !== father_text.length)
+                    silhouette.render((father_position % 2) * 2); // 0 or 2
+                else if (son_position !== son_text.length)
+                    silhouette.render(son_position % 2);
+                else
+                    silhouette.render(0);
+
+                font.variant(1);
+                font.render(father_text.substring(0, father_position), silhouette.x + 20, silhouette.y - 40);
+
+                font.variant(2);
+                font.render(son_text.substring(0, son_position), silhouette.x + 20, silhouette.y - 20);
+
+                if (transition_timer >= 0.0)
+                {
+                    var delta = Math.floor(transition_timer * (handle.reference_width + transition.frame_width) / 30.0);
+
+                    transition.x = handle.reference_width - delta * 10;
+                    transition.y = 0;
+                    transition.render(0);
+
+                    if (delta * 10 - transition.frame_width > 0)
+                        handle.rect(transition.x + transition.frame_width, 0, delta * 10 - transition.frame_width, handle.reference_height, 0, 0, 0);
+                }
 
                 menu.x = handle.reference_width - 16;
                 menu.y = handle.reference_height - 16;
@@ -362,6 +450,29 @@
                 y: 0
             });
 
+            silhouette = load_image({
+                url: 'data/silhouette.png',
+                frame_count: 3,
+                mass: 0,
+                x: 0,
+                y: 0
+            });
+
+            transition = load_image({
+                url: 'data/transition.png',
+                frame_count: 1,
+                mass: 0,
+                x: 0,
+                y: 0
+            });
+
+            font = load_font({
+                url: 'data/font.png',
+                frame_count: 95,
+                variant_count: 3
+            });
+
+            load_sound('data/talk.mp3');
             load_sound('data/wave.mp3');
             load_sound('data/seagull.mp3');
 
