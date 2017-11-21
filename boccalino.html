@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boccalino Recommender</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body style="background-color: #000; color: #FFF">
+<div style="display: none" id="data">
+    - les classiques
+    204, Marguerite, 15.90, tomates, mozzarella
+    205, Napoli, 19.90, anchois, câpres
+    206, Capri, 19.90, anchois, câpres, olives
+    207, Veneziana, 19.90, jambon
+    208, Romana, 19.90, jambon, champignons
+    209, Appia, 19.90, anchois, huile de basilic,  persil, huile d'olive
+    210, Navigation, 20.50, parmesan, pancetta, oignons
+    211, Thon, 20.50, thon, huile de basilic, persil, câpres
+    212, Rucola, 21.90, rucola, parmesan
+    213, Fruits de mer, 21.90, fruits de mer
+    214, Exotique, 20.50, jambon, ananas, banane
+    215, Beau-rivage, 20.50, jambon, artichauts, œuf
+    216, Italia, 20.50, poivrons, jambon, œuf
+    217, Ouchy, 20.50, champignons, asperges, artichauts, œuf
+    - les gourmandes
+    218, Bismark, 21.50, jambon, artichauts, œuf
+    219, Toscana, 21.50, champignons, asperges, jus de citron, ail, persil, huile d'olive
+    220, Valaisanne, 22.50, jambon, viande séchée de cheval, raclette, persil
+    221, Vaudoise, 22.50, filets de perche, artichauts, ail, persil, jus de citron
+    222, Grisonne, 22.50, viande séchée de cheval, salami, persil
+    223, Ticinese, 22.50, salami, pancetta, coppa, champignons
+    224, Six fromages, 22.50, mozzarella, gruyère, ricotta, gorgonzola, tomme, parmesan
+    225, Capricciosa, 22.50, jambon, artichauts, asperges, olives
+    226, Quattro stagioni, 22.50, jambon, champignons, fruits de mer, œuf, olives
+    227, Siciliana, 22.50, jambon, poivrons, anchois, œuf
+    228, Boccalino, 22.50, jambon, champignons, chanterelles, olives
+    239, Tunisienne, 22.50, poivrons, merguez
+    229, Calzone alla diavola, 22.50, calzone, jambon cru, ricotta, piments
+    230, Calzone alla romana, 22.50, calzone, jambon, jaune d’œuf, parmesan
+    231, Calzone alla ricotta, 22.50, calzone, jaune d’œuf, ricotta, parmesan
+    232, Calzone al prosciutto, 22.50, calzone, tomates, mozzarella, jambon, champignons
+    - les sportives
+    233, FC Lausanne-sport, 22.50, jambon, œuf, parmesan
+    234, CUST école de régate, 22.50, chanterelles, tomme, jambon cru, ail
+    235, L.U.C, 22.50, parmesan, poivrons, œuf, mortadella, salami, champignons, piments
+    236, Richard Chassot, 22.50, vacherin fribourgeois, gruyère, jambon, oignons
+    237, José Mourinho, 22.50, artichauts, anchois, thon, ail, persil, jus de citron, piments
+    238, Real Madrid, 22.50, jambon cru
+    240, Manchester United, 22.50, champignons, jambon cru, persil, ail, huile d'olive
+    241, Michel Platini, 22.50, pancetta, salami, champignons, oignons
+    242, Lionel Messi, 22.50, jambon, champignons, oignons, poivrons, œuf, thon
+    243, Vladimir Petkovic, 23.50, jambon, jambon cru, coppa, mortadella, merguez, salami
+    244, Dimitri Payet, 22.50, poulet, champignons, oignons, piments
+    245, Stan Wawrinka, 22.90, gruyère, tomme, champignons, chanterelles, viande séchée de cheval, olives
+    246, Maradona, 22.90, câpres, oignons, crevettes, saumon fumé
+    247, Zinedine Zidane, 22.90, câpres, oignons, saumon fumé
+    248, LS Tennis, 22.50, jambon, champignons, poivrons, merguez
+    249, Roger Federer, 22.50, jambon, lard, jambon cru, champignons
+    250, Antoine Griezmann, 22.50, crevettes, thon, piments, ananas, merguez
+    251, John Gobbi, 22.50, jambon, œuf, merguez, poivrons, piments
+    252, Christian Constantin, 23.50, raclette, jambon cru, viande séchée de cheval
+    253, David Beckham, 22.50, jambon, lard, merguez, ananas, piments
+    254, Neymar Jr, 22.50, poulet, crevettes, ananas
+    255, Cristobal Huet, 22.50, gruyère, lard, viande séchée de cheval, œuf
+    256, Benjamin Antonietti, 22.50, jambon, lard, œuf, oignons
+    257, CAN-AM, 22.50, jambon, champignons, salami, olives
+    - les people
+    258, DJ Guz, 22.50, viande hâchée de bœuf, jambon, oignons, œuf, basilic frais
+    259, Rihanna, 22.50, artichauts, oignons, parmesan, rucola
+    260, Ed Sheeran, 22.50, jambon cru, oignons, champignons, piments
+    261, Hugh Jackman, 22.50, jambon, champignons, poivrons, parmesan, câpres, gruyère
+    262, Johnny Hallyday, 22.50, jambon, coppa, champignons, poivrons, œuf, olives
+    264, Adele, 22.90, fruits de mer, crevettes, jambon, oignons, champignons
+    265, George Clooney, 22.50, asperges, artichauts, poivrons, champignons
+    266, Céline Dion, 22.90, pancetta, jambon, oignons, crevettes, ananas, champignons, banane
+    267, Robert de Niro, 22.90, crevettes, gambas, saumon fumé, oignons
+    - les politiques
+    268, Theresa May, 22.50, jambon cru, champignons, olives, oignons, artichauts, piments
+    269, Mario Monti, 22.50, pancetta, coppa, jambon cru, salami, champignons, olives, asperges
+    270, Donald Trump, 22.90, jambon cru, asperges, thon, œuf, crevettes, ananas
+    271, François Hollande, 22.50, merguez, oignons, champignons, huile de basilic, piments
+    272, D. Burkhalter c. féd., 22.50, thon, ananas, poivrons, tortellini, olives
+    273, A. Berset c. féd., 22.50, thon, ananas, oignons, câpres, crevettes, huile de basilic
+    274, D. Leuthard c. féd., 22.50, thon, jambon, champignons, olives, piments
+    275, G. Parmelin c.féd., 22.50, jambon, champignons, fruits de mer, lard, oignons
+    276, S. sommaruga c. féd., 22.50, jambon, champignons, asperges, tortellini, olives
+    277, J. Schneider-A. c.féd., 22.50, jambon, champignons, tortellini, merguez, œuf, asperges
+    278, U. Maurer c. féd., 22.90, jambon cru, pancetta, mortadella, salami, crevettes, champignons, ail
+    263, J. de Quattro c. d’etat, 22.50, jambon, lard, coppa, mortadella, champignons
+    279, P.Y. Maillard c. d’etat, 22.50, viande hâchée de bœuf, poivrons, oignons
+    280, P. Leuba c. d’etat, 22.90, tomates, rucola, mozzarella di bufala, jambon cru, huile d'olive
+    281, B. Métraux c. d’etat, 22.50, jambon, gorgonzola, champignons, ail
+    282, A.C. Lyon c. d’etat, 22.50, aubergines, jambon cru
+    283, N. Gorrite c. d’etat, 22.50, tomme, piments, ail, chanterelles
+    284, P. Broulis c. d’etat, 22.50, lard, olives, oignons
+    285, O. Tosato c. muni., 22.50, gambas, ail, piments, merguez
+    286, P.A Hildbrand c. muni., 22.50, jambon, artichauts, champignons, olives, rucola
+    287, J-Y. Pidoux c. muni., 22.50, crevettes, olives, oignons, ail, câpres
+    288, F. Germond c. muni., 22.50, epinards, poivrons, œuf, chanterelles, champignons
+    289, G. Junod c. muni., 22.50, merguez, salami
+    290, N. litzistorf c. muni., 22.50, tomates, anchois, olives, piments
+    291, D. payot c. muni., 22.50, calzone, poulet, oignons, ananas, piments
+    - les amis du Bocca
+    293, Sauvetage d’Ouchy, 22.50, oignons, câpres, ail, gambas, ananas, piments
+    294, P.A. Schürmann, 22.50, merguez, poivrons, piments, salami
+    295, Confrérie LS, 22.50, jambon, pancetta, œuf, olives, champignons, merguez, oignons
+    296, Philippe Rochat, 22.50, mozzarella di bufala, tomates, basilic frais
+    297, J.P. Delamuraz, 22.90, fruits de mer, gambas, câpres, piments
+    298, J. Zisyadis, 22.50, olives, féta, artichauts, aubergines, salami, piments
+    300, Guy Delessert, 22.50, crevettes, piments, ananas, fruits de mer
+    301, P.O.P Porsche Ouchy Passion, 22.50, jambon cru, tomates, parmesan, basilic frais
+    302, John Kerry, 22.50, poulet, oignons, lard, rucola, parmesan
+</div>
+<div id="thediv" style="width: 300px; top: 100px; position: absolute">
+    <h4>Welcome to the Boccalino Recommender™</h4>
+    Please choose your ingredients:
+    <br/>
+    <br/>
+    <div id="ingredientsDiv">
+        <!-- Populated dynamically -->
+    </div>
+    <br/>
+    <br/>
+    Recommendation:
+    <br/>
+    <br/>
+    <div id="recommendation"></div>    
+</div>
+<script type="text/javascript">
+    "use strict";
+
+    $(document).ready(function() {
+        var onresize = function() {
+            var thediv = document.getElementById('thediv');
+            var width = $(window).width();
+            thediv.style.left = ((width - $('#thediv').width()) / 2) + 'px';
+        };
+
+        onresize();
+        $(window).resize(onresize);
+
+        var lines = $('#data').text().split('\n');
+
+        // First parse the data
+        var allIngredients = [];
+        var ingredientsToNo = {};
+        var noToPizza = {};
+        var i;
+
+        for(i = 0 ; i < lines.length; i++)
+        {
+            if (lines[i].trim().length === 0
+            || lines[i].trim()[0] === '-')
+                continue;
+
+            var elements = lines[i].trim().split(',');
+            var name = elements[1].trim();
+            var nb = elements[0].trim();
+            elements.splice(0, 3);
+            // elements now contains the ingredients
+
+            for(var j = 0; j < elements.length; j++)
+            {
+                var ingredient = elements[j].trim();
+
+                if (!allIngredients.includes(ingredient))
+                    allIngredients.push(ingredient);
+
+                if (ingredientsToNo[ingredient] === undefined)
+                    ingredientsToNo[ingredient] = [];
+
+                if (!ingredientsToNo[ingredient].includes(nb))
+                    ingredientsToNo[ingredient].push(nb);
+            }
+
+            noToPizza[nb] = name;
+        }
+
+        console.log('Ingredients: ' + allIngredients);
+
+        console.log('IngredientsToNo: ' + ingredientsToNo['tomates']);
+
+        // Now process it!
+        var ingDv = $('#ingredientsDiv')[0];
+        ingDv.innerHTML = '';
+
+        for(i = 0; i < allIngredients.length; i++)
+        {
+            ingDv.innerHTML += allIngredients[i] + ' <input class="' + allIngredients[i] + '" type="checkbox" />';
+            ingDv.innerHTML += '<div id="' + allIngredients[i] + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>'
+        }
+
+        $(':input').change(function() {
+            var r = $('#recommendation')[0];
+            r.innerHTML = '';
+
+            var allInput = $(':input');
+            var i = 0;
+
+            while (i < allInput.length && !allInput[i].checked)
+                i++;
+
+            if (i === allInput.length)
+                return;
+
+            var ids = $('#' + allInput[i].classList[0]).text().split(',');
+
+            i++;
+            for (; i < allInput.length; i++) {
+                if (!allInput[i].checked)
+                    continue;
+
+                var dv = $('#' + allInput[i].classList[0]).text().split(',');
+
+                for (var j = 0; j < ids.length; j++) {
+                    if (!dv.includes(ids[j])) {
+                        ids.splice(j, 1);
+                        j--;
+                    }
+
+                }
+            }
+
+            if (ids.length === 0)
+            {
+                r.innerHTML += '203, Pizza au goût du client, 6 ingrédients à choix'
+            }
+            else
+                {
+                for (i = 0; i < ids.length; i++)
+                    r.innerHTML += ids[i] + ', ' + noToPizza[ids[i]] + '<br/>';
+            }
+
+            r.innerHTML = r.innerHTML.substring(0, r.innerHTML.length - 7);
+        });
+    });
+</script>
+</body>
+</html>
