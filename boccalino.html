@@ -203,7 +203,7 @@
         {
             var newHtml = '<div style="white-space:nowrap; display: inline">' + allIngredients[i]
                 + '<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" type="checkbox" />'
-                + '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>';
+                + '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>&nbsp;&nbsp;';
 
             $('#testdiv').html(newHtml);
             len += $('#testdiv').width();
