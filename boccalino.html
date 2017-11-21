@@ -182,8 +182,8 @@
 
         for(i = 0; i < allIngredients.length; i++)
         {
-            ingDv.innerHTML += allIngredients[i] + '<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_') + '" type="checkbox" />';
-            ingDv.innerHTML += '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>'
+            ingDv.innerHTML += allIngredients[i] + '<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" type="checkbox" />';
+            ingDv.innerHTML += '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>'
         }
 
         $(':input').change(function() {
