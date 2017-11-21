@@ -250,11 +250,11 @@
             }
 
             if (ids.length === 0 && nbChecked <= 6)
-                r.innerHTML += '203, Pizza au goût du client, 6 ingrédients à choix'
+                r.innerHTML += '<div style="white-space:nowrap; display: inline">203, Pizza au goût du client, 6 ingrédients à choix</div>'
             else
             {
                 for (i = 0; i < ids.length; i++)
-                    r.innerHTML += ids[i] + ', ' + noToPizza[ids[i]] + '<br/>';
+                    r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + '</div><br/>';
             }
         });
     });
