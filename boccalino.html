@@ -229,12 +229,14 @@
                 return;
 
             var ids = $('#' + allInput[i].classList[0])[0].innerText.split(',');
+            var nbChecked = 1;
 
             i++;
             for (; i < allInput.length; i++) {
                 if (!allInput[i].checked)
                     continue;
 
+                nbChecked++;
                 var dv = $('#' + allInput[i].classList[0]).text().split(',');
 
                 for (var j = 0; j < ids.length; j++) {
@@ -242,11 +244,10 @@
                         ids.splice(j, 1);
                         j--;
                     }
-
                 }
             }
 
-            if (ids.length === 0)
+            if (ids.length === 0 && nbChecked <= 6)
                 r.innerHTML += '203, Pizza au goût du client, 6 ingrédients à choix'
             else
             {
