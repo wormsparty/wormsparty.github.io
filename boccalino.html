@@ -129,6 +129,21 @@
 <script type="text/javascript">
     "use strict";
 
+    if (!Array.prototype.includes) {
+        Array.prototype.includes = function(search, start) {
+            'use strict';
+            if (typeof start !== 'number') {
+                start = 0;
+            }
+
+            if (start + search.length > this.length) {
+                return false;
+            } else {
+                return this.indexOf(search, start) !== -1;
+            }
+        };
+    }
+
     $(document).ready(function() {
         var onresize = function() {
             var thediv = document.getElementById('thediv');
