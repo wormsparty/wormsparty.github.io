@@ -176,18 +176,14 @@
             noToPizza[nb] = name;
         }
 
-        console.log('Ingredients: ' + allIngredients);
-
-        console.log('IngredientsToNo: ' + ingredientsToNo['tomates']);
-
         // Now process it!
         var ingDv = $('#ingredientsDiv')[0];
         ingDv.innerHTML = '';
 
         for(i = 0; i < allIngredients.length; i++)
         {
-            ingDv.innerHTML += allIngredients[i] + ' <input class="' + allIngredients[i] + '" type="checkbox" />';
-            ingDv.innerHTML += '<div id="' + allIngredients[i] + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>'
+            ingDv.innerHTML += allIngredients[i] + '<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_') + '" type="checkbox" />';
+            ingDv.innerHTML += '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>'
         }
 
         $(':input').change(function() {
