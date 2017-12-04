@@ -40,7 +40,7 @@
     231, Calzone alla ricotta, 22.50, calzone, jaune d’œuf, ricotta, parmesan
     232, Calzone al prosciutto, 22.50, calzone, tomates, mozzarella, jambon, champignons
     - les sportives
-    233, FC Lausanne-sport, 22.50, jambon, (2) œuf, parmesan
+    233, FC Lausanne-sport, 22.50, jambon, (2) œuf(s), parmesan
     234, CUST école de régate, 22.50, chanterelles, tomme, jambon cru, ail
     235, L.U.C, 22.50, parmesan, poivrons, œuf, mortadella, salami, champignons, piments
     236, Richard Chassot, 22.50, vacherin fribourgeois, gruyère, jambon, oignons
@@ -177,8 +177,11 @@
 
             for(var j = 0; j < elements.length; j++)
             {
-                var ingredient = elements[j].replace(/\(.*\)/, '').trim();
+                var ingredient = elements[j].replace(/\(.*?\)/g, '').trim();
             
+                if(elements[j].includes("uf"))
+                    console.log('avant=' + elements[j] + ", après=" + ingredient);
+
                 if (!allIngredients.includes(ingredient))
                     allIngredients.push(ingredient);
 
