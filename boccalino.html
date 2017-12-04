@@ -159,6 +159,7 @@
         // First parse the data
         var allIngredients = [];
         var ingredientsToNo = {};
+        var noToIngredients = {};
         var noToPizza = {};
         var i;
 
@@ -188,6 +189,7 @@
                     ingredientsToNo[ingredient].push(nb);
             }
 
+            noToIngredients[nb] = elements.join();
             noToPizza[nb] = name;
         }
 
@@ -254,7 +256,7 @@
             else
             {
                 for (i = 0; i < ids.length; i++)
-                    r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + '</div><br/>';
+                    r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + ', ' + noToIngredients[ids[i]] + '</div><br/>';
             }
         });
     });
