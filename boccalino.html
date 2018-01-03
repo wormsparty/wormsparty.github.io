@@ -217,7 +217,7 @@
             ingDv.innerHTML += newHtml;
         }
 
-        $(':input').change(function() {
+		var onchange = function() {
             var r = $('#recommendation')[0];
             r.innerHTML = '';
 
@@ -259,7 +259,10 @@
                 for (i = 0; i < ids.length; i++)
                     r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + ', ' + noToIngredients[ids[i]] + '</div><br/>';
             }
-        });
+        };
+		
+		onchange();
+        $(':input').change(onchange);
     });
 </script>
 </body>
