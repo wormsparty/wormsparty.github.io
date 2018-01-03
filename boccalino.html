@@ -111,8 +111,8 @@
 </div>
 <div id="testdiv" style="position: absolute; top: -9999px; left: -9999px"></div>
 <div id="thediv" style="width: 300px; top: 100px; position: absolute">
-    <h4>Welcome to the Boccalino Recommender™</h4>
-    Please choose your ingredients:
+    <h4>Carte des pizzas du Boccalino v2.0</h4>
+    Choisissez vos ingrédients:
     <br/>
     <br/>
     <div id="ingredientsDiv">
@@ -120,7 +120,7 @@
     </div>
     <br/>
     <br/>
-    Recommendation:
+    Recommandations:
     <br/>
     <br/>
     <div id="recommendation"></div>    
@@ -231,7 +231,10 @@
                 i++;
 
             if (i === allInput.length)
+			{
+                r.innerHTML += '<div style="white-space:nowrap; display: inline">Choisissez vos ingrédients ci-dessus</div>'
                 return;
+			}
 
             var ids = $('#' + allInput[i].classList[0])[0].innerText.split(',');
             var nbChecked = 1;
