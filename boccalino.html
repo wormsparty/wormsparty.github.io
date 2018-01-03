@@ -5,7 +5,7 @@
     <title>Boccalino Recommender</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
-<body style="background-color: #000; color: #FFF">
+<body style="background-color: #FFF; color: #000; font-family: 'Trebuchet MS', Helvetica, sans-serif">
 <div style="display: none" id="data">
     - les classiques
     204, Marguerite, 15.90, tomates, mozzarella
@@ -110,7 +110,7 @@
     302, John Kerry, 22.50, poulet, oignons, lard(ons), rucola, (copeaux de) parmesan
 </div>
 <div id="testdiv" style="position: absolute; top: -9999px; left: -9999px"></div>
-<div id="thediv" style="width: 300px; top: 100px; position: absolute">
+<div id="thediv" style="width: 780px; top: 20px; position: absolute; background-color: #91d6a0; padding: 20px">
     <h4>Carte des pizzas du Boccalino v2.0</h4>
     Choisissez vos ingrédients:
     <br/>
@@ -177,9 +177,6 @@
             {
                 var ingredient = elements[j].replace(/\(.*?\)/g, '').trim();
             
-                if(elements[j].includes("uf"))
-                    console.log('avant=' + elements[j] + ", après=" + ingredient);
-
                 if (!allIngredients.includes(ingredient))
                     allIngredients.push(ingredient);
 
@@ -209,7 +206,7 @@
                 + '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>&nbsp;&nbsp;';
 
             $('#testdiv').html(newHtml);
-            len += $('#testdiv').width();
+            len += $('#testdiv').width() + 15;
 
             if (len > $('#thediv').width())
             {
