@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Carte des pizzas du Boccalino v2.0</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="static/konami.js"></script>
 </head>
 <body style="background-color: #FFF; color: #000; font-family: 'Trebuchet MS', Helvetica, sans-serif">
@@ -112,8 +115,9 @@
 </div>
 <div id="testdiv" style="position: absolute; top: -9999px; left: -9999px"></div>
 <div id="thediv" style="width: 780px; top: 0; height: 100%; position: absolute; background-color: #91d6a0; padding-left: 20px; padding-right: 20px; overflow: hidden">
+    <br/>
     <h4>Carte des pizzas du Boccalino v2.0</h4>
-    Choisissez vos ingrédients:
+    Choisissez vos ingrédients, triés par... <a href="javascript:void(0)" id="sortByName">nom</a> ou <a href="javascript:void(0)" id="sortByFrequency">fréquence</a>
     <br/>
     <br/>
     <div id="ingredientsDiv">
@@ -124,7 +128,7 @@
     Recommandations:
     <br/>
     <br/>
-    <div id="recommendation"></div>    
+    <div id="recommendation"></div>
 </div>
 <script type="text/javascript">
     "use strict";
@@ -143,6 +147,98 @@
         };
     }
 
+    var buildIngredientList = function() {
+      // Now process it!
+      var ingDv = $('#ingredientsDiv')[0];
+      ingDv.innerHTML = '';
+
+      var len = 0;
+      var i;
+
+      for(i = 0; i < allIngredients.length; i++)
+      {
+          var newHtml = '<div style="white-space:nowrap; display: inline">' + allIngredients[i]
+              + '&nbsp;<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" type="checkbox" />'
+              + '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>&nbsp;&nbsp;';
+
+          $('#testdiv').html(newHtml);
+          len += $('#testdiv').width() + 15;
+
+          if (len > $('#thediv').width())
+          {
+              ingDv.innerHTML += '<br/>';
+              len = 0;
+          }
+
+          ingDv.innerHTML += newHtml;
+      }
+
+      var onchange = function() {
+          var r = $('#recommendation')[0];
+          r.innerHTML = '';
+
+          var allInput = $(':input');
+          var i = 0;
+
+          while (i < allInput.length && !allInput[i].checked)
+              i++;
+
+          if (i === allInput.length)
+          {
+             r.innerHTML += '<div style="white-space:nowrap; display: inline">Choisissez vos ingrédients ci-dessus</div>'
+             return;
+          }
+
+          var ids = $('#' + allInput[i].classList[0])[0].innerText.split(',');
+          var nbChecked = 1;
+
+          i++;
+          for (; i < allInput.length; i++) {
+              if (!allInput[i].checked)
+                  continue;
+
+              nbChecked++;
+              var dv = $('#' + allInput[i].classList[0]).text().split(',');
+
+              for (var j = 0; j < ids.length; j++) {
+                  if (!dv.includes(ids[j])) {
+                      ids.splice(j, 1);
+                      j--;
+                  }
+              }
+          }
+
+          if (ids.length === 0 && nbChecked <= 6)
+              r.innerHTML += '<div style="white-space:nowrap; display: inline">203, Pizza au goût du client, 6 ingrédients à choix</div>'
+          else
+          {
+              for (i = 0; i < ids.length; i++)
+                  r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + ', ' + noToIngredients[ids[i]] + '</div><br/>';
+          }
+      };
+
+      onchange();
+      $(':input').change(onchange);
+    }
+
+    var allIngredients = [];
+    var ingredientsToNo = {};
+    var noToIngredients = {};
+    var noToPizza = {};
+
+    var sortByName = function() {
+      allIngredients.sort();
+      buildIngredientList();
+    }
+
+    var sortByFrequency = function() {
+      allIngredients.sort(function(a, b) { return ingredientsToNo[b].length - ingredientsToNo[a].length; })
+      buildIngredientList();
+    }
+
+    $('#sortByName').click(sortByName);
+    $('#sortByFrequency').click(sortByFrequency);
+
     $(document).ready(function() {
         var onresize = function() {
             var thediv = document.getElementById('thediv');
@@ -156,10 +252,6 @@
         var lines = $('#data').text().split('\n');
 
         // First parse the data
-        var allIngredients = [];
-        var ingredientsToNo = {};
-        var noToIngredients = {};
-        var noToPizza = {};
         var i;
 
         for(i = 0 ; i < lines.length; i++)
@@ -177,7 +269,7 @@
             for(var j = 0; j < elements.length; j++)
             {
                 var ingredient = elements[j].replace(/\(.*?\)/g, '').trim();
-            
+
                 if (!allIngredients.includes(ingredient))
                     allIngredients.push(ingredient);
 
@@ -192,78 +284,7 @@
             noToPizza[nb] = name;
         }
 
-        allIngredients.sort();
-
-        // Now process it!
-        var ingDv = $('#ingredientsDiv')[0];
-        ingDv.innerHTML = '';
-
-        var len = 0;
-
-        for(i = 0; i < allIngredients.length; i++)
-        {
-            var newHtml = '<div style="white-space:nowrap; display: inline">' + allIngredients[i]
-                + '<input class="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" type="checkbox" />'
-                + '<div id="' + allIngredients[i].replace(' ', '_').replace("'", '_').replace(' ', '_').replace(' ', '_') + '" style="display: none;">' + ingredientsToNo[allIngredients[i]] + '</div>&nbsp;&nbsp;';
-
-            $('#testdiv').html(newHtml);
-            len += $('#testdiv').width() + 15;
-
-            if (len > $('#thediv').width())
-            {
-                ingDv.innerHTML += '<br/>';
-                len = 0;
-            }
-
-            ingDv.innerHTML += newHtml;
-        }
-
-		var onchange = function() {
-            var r = $('#recommendation')[0];
-            r.innerHTML = '';
-
-            var allInput = $(':input');
-            var i = 0;
-
-            while (i < allInput.length && !allInput[i].checked)
-                i++;
-
-            if (i === allInput.length)
-			{
-                r.innerHTML += '<div style="white-space:nowrap; display: inline">Choisissez vos ingrédients ci-dessus</div>'
-               return;
-			}
-
-            var ids = $('#' + allInput[i].classList[0])[0].innerText.split(',');
-            var nbChecked = 1;
-
-            i++;
-            for (; i < allInput.length; i++) {
-                if (!allInput[i].checked)
-                    continue;
-
-                nbChecked++;
-                var dv = $('#' + allInput[i].classList[0]).text().split(',');
-
-                for (var j = 0; j < ids.length; j++) {
-                    if (!dv.includes(ids[j])) {
-                        ids.splice(j, 1);
-                        j--;
-                    }
-                }
-            }
-
-            if (ids.length === 0 && nbChecked <= 6)
-                r.innerHTML += '<div style="white-space:nowrap; display: inline">203, Pizza au goût du client, 6 ingrédients à choix</div>'
-            else
-            {
-                for (i = 0; i < ids.length; i++)
-                    r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + ', ' + noToIngredients[ids[i]] + '</div><br/>';
-            }
-        };
-		
-		onchange();
-        $(':input').change(onchange);
+        sortByName();
     });
 </script>
 </body>
