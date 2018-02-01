@@ -232,7 +232,14 @@
     }
 
     var sortByFrequency = function() {
-      allIngredients.sort(function(a, b) { return ingredientsToNo[b].length - ingredientsToNo[a].length; })
+      allIngredients.sort(function(a, b) {
+        var diff = ingredientsToNo[b].length - ingredientsToNo[a].length;
+
+        if (diff != 0)
+          return diff;
+
+        return a.localeCompare(b);
+      });
       buildIngredientList();
     }
 
