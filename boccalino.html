@@ -114,21 +114,23 @@
     302, John Kerry, 22.50, poulet, oignons, lard(ons), rucola, (copeaux de) parmesan
 </div>
 <div id="testdiv" style="position: absolute; top: -9999px; left: -9999px"></div>
-<div id="thediv" style="width: 780px; top: 0; height: 100%; position: absolute; background-color: #91d6a0; padding-left: 20px; padding-right: 20px; overflow: hidden">
-    <br/>
-    <h4>Carte des pizzas du Boccalino v2.0</h4>
-    Choisissez vos ingrédients, triés par... <a href="javascript:void(0)" id="sortByName">nom</a> ou <a href="javascript:void(0)" id="sortByFrequency">fréquence</a>
-    <br/>
-    <br/>
-    <div id="ingredientsDiv">
-        <!-- Populated dynamically -->
-    </div>
-    <br/>
-    <br/>
-    Recommandations:
-    <br/>
-    <br/>
-    <div id="recommendation"></div>
+<div id="wrapper" style="position: absolute; height: 100%; ">
+  <div id="thediv" style="position: relative; width: 780px; min-height: 100%; background-color: #91d6a0; padding-left: 20px; padding-right: 20px;">
+      <br/>
+      <h4>Carte des pizzas du Boccalino v2.0</h4>
+      Choisissez vos ingrédients, triés par... <a href="javascript:void(0)" id="sortByName">nom</a> ou <a href="javascript:void(0)" id="sortByFrequency">fréquence</a>
+      <br/>
+      <br/>
+      <div id="ingredientsDiv">
+          <!-- Populated dynamically -->
+      </div>
+      <br/>
+      <br/>
+      Recommandations:
+      <br/>
+      <br/>
+      <div id="recommendation"></div>
+  </div>
 </div>
 <script type="text/javascript">
     "use strict";
