@@ -157,7 +157,7 @@
   <div id="thediv" style="position: relative; width: 780px; min-height: 100%; background-color: rgb(165, 199, 255); padding-left: 20px; padding-right: 20px;">
       <br/>
       <h4>Carte des pizzas du Boccalino v2.0</h4>
-      Choisissez vos ingrédients, triés par... <a href="javascript:void(0)" id="sortByName">nom</a> ou <a href="javascript:void(0)" id="sortByFrequency">fréquence</a>
+      Choisissez vos ingrédients, triés par... <a href="javascript:void(0)" id="sortByName">nom</a> ou <a href="javascript:void(0)" id="sortByFrequency">fréquence</a> ou <a href="javascript:void(0)" id="random">aléatoire</a>
       <br/>
       <br/>
       <div id="ingredientsDiv">
@@ -266,6 +266,7 @@
     var ingredientsToNo = {};
     var noToIngredients = {};
     var noToPizza = {};
+	var allNb = [];
 
     var sortByName = function() {
       allIngredients.sort();
@@ -284,8 +285,15 @@
       buildIngredientList();
     }
 
+	var random = function() {
+		var r = $('#recommendation')[0];
+		var randomNb = allNb[Math.floor(Math.random() * allNb.length)];
+		r.innerHTML = '<div style="white-space:nowrap; display: inline">' + randomNb + ', ' + noToPizza[randomNb] + ', ' + noToIngredients[randomNb] + '</div><br/>';
+	};
+	
     $('#sortByName').click(sortByName);
     $('#sortByFrequency').click(sortByFrequency);
+	$('#random').click(random);
 
     $(document).ready(function() {
         var onresize = function() {
@@ -330,6 +338,7 @@
 
             noToIngredients[nb] = elements.join();
             noToPizza[nb] = name;
+			allNb.push(nb);
         }
 
         sortByName();
