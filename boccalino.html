@@ -164,7 +164,7 @@
     var onresize = function() {
       var thediv = document.getElementById('thediv');
       var width = $(window).width();
-      thediv.style.left = ((width - $('#thediv').width()) / 2) + 'px';
+      thediv.style.left = ((width - $('#thediv').width()) / 2 - parseInt($('#thediv').css('padding-left'))) + 'px';
 	  thediv.style.height = Math.max($(document).height(), $(window).height()) + 'px';
     };
 
