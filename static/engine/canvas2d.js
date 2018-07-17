@@ -42,7 +42,6 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove) {
         // This needs to be done at each resizing!
         handle.ctx.imageSmoothingEnabled       = false;
         handle.ctx.webkitImageSmoothingEnabled = false;
-        handle.ctx.mozImageSmoothingEnabled    = false;
         handle.ctx.msImageSmoothingEnabled     = false;
         handle.ctx.oImageSmoothingEnabled      = false;
     };
