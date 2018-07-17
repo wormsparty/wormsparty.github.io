@@ -126,6 +126,8 @@
     $(document).ready(function() {
         var engine = Engine.new({
             canvasId: 'canvas'
+        }, function(x, y) {
+            labyrinth.click(x, y);
         });
 
         if (engine.error) {

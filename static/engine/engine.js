@@ -32,7 +32,7 @@ function fullscreen() {
 
 var Engine = {};
 
-Engine.new = function(descriptor) {
+Engine.new = function(descriptor, click) {
     var handle = {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: 256,
@@ -54,7 +54,7 @@ Engine.new = function(descriptor) {
     handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, function (x, y) {
         handle.mouse_x = (x - handle.graphics.margin_left) / handle.graphics.scaleFactor;
         handle.mouse_y = (y - handle.graphics.margin_top) / handle.graphics.scaleFactor;
-    });
+    }, click);
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');

@@ -22,11 +22,13 @@ let world_map = [
     [ 1, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 ],
     [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ],
     [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1 ],
-    [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4 ,0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
 ];
+
+let btn_up   =  [118, 207, 9, 10],
+    btn_down =  [118, 217, 9, 10],
+    btn_right = [128, 217, 9, 10],
+    btn_left =  [108, 217, 9, 10];
 
 function mark_map(handle, newpx, newpy)
 {
@@ -91,6 +93,29 @@ Labyrinth.new = function() {
 
     mark_map(handle, handle.px, handle.py);
 
+    function test_new_position(newpx, newpy)
+    {
+        if (newpx !== handle.px || newpy !== handle.py)
+        {
+            if (newpx >= 0 && newpx < world_map[0].length
+             && newpy >= 0 && newpy < world_map.length)
+            {
+                let newval = world_map[newpy][newpx];
+
+                if (newval === 0 || newval === 2)
+                    return true;
+                else
+                    console.log('value is ' + newval);
+            }
+            else
+                console.log('not in range');
+        }
+        else
+            console.log('it\'s the same');
+
+        return false;
+    }
+
     handle.update = function(dt) {
         let newpx = handle.px;
         let newpy = handle.py;
@@ -107,23 +132,10 @@ Labyrinth.new = function() {
         if (handle.right && !handle.was_right)
             newpx += 1;
 
-        if (newpx !== handle.px || newpy !== handle.py)
-        {
-            if (newpx >= 0 && newpx < world_map[0].length
-                && newpy >= 0 && newpy < world_map.length)
-            {
-                let newval = world_map[newpy][newpx];
-
-                if (newval === 0 || newval === 2)
-                {
-                    handle.px = newpx;
-                    handle.py = newpy;
-
-                    mark_map(handle, newpx, newpy);
-                }
-                else
-                    console.log('newval=' + newval);
-            }
+        if (test_new_position(newpx, newpy)) {
+            handle.px = newpx;
+            handle.py = newpy;
+            mark_map(handle, newpx, newpy);
         }
 
         handle.was_up = handle.up;
@@ -138,33 +150,60 @@ Labyrinth.new = function() {
             for(let x = 0; x < world_map[y].length; x++)
             {
                 let val = world_map[y][x];
+                let xx = 3 + 10 * x;
+                let yy = 5 + 10 * y;
 
                 if (x === handle.px && y === handle.py)
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 0, 128, 128);
-                }
+                    engine.rect(xx, yy, 10, 10, 0, 128, 128);
                 else if (!handle.map_visitations[y][x])
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 20, 20, 20);
-                }
+                    engine.rect(xx, yy, 10, 10, 20, 20, 20);
                 else if (val === 0 || val === 2)
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 128, 128, 0);
-                }
+                    engine.rect(xx, yy, 10, 10, 128, 128, 0);
                 else if (val === 1)
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 128, 0, 128);
-                }
+                    engine.rect(xx, yy, 10, 10, 128, 0, 128);
                 else if (val === 3)
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 0, 128, 0);
-                }
+                    engine.rect(xx, yy, 10, 10, 0, 128, 0);
                 else if (val === 4)
-                {
-                    engine.rect(x * 10, y * 10, 10, 10, 128, 0.0, 0.0);
-                }
+                    engine.rect(xx, yy, 10, 10, 128, 0.0, 0.0);
             }
         }
+
+        engine.rect(btn_up[0], btn_up[1], btn_up[2], btn_up[3], 5, 5, 5);
+        font.render('^', btn_up[0] + 2, btn_up[1] + 3);
+        engine.rect(btn_right[0], btn_right[1], btn_right[2], btn_right[3], 5, 5, 5);
+        font.render('>', btn_right[0] + 2, btn_right[1] + 2);
+        engine.rect(btn_down[0], btn_down[1], btn_down[2], btn_down[3], 5, 5, 5);
+        font.render('v', btn_down[0] + 2, btn_down[1] + 2);
+        engine.rect(btn_left[0], btn_left[1], btn_left[2], btn_left[3], 5, 5, 5);
+        font.render('<', btn_left[0] + 2, btn_left[1] + 2);
+    };
+
+    function is_inside(x, y, btn) {
+        if (btn[0] <= x && x <= btn[0] + btn[2]
+         && btn[1] <= y && y <= btn[1] + btn[3]) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function try_move(x, y) {
+        if (test_new_position(x, y)) {
+            handle.px = x;
+            handle.py = y;
+            mark_map(handle, x, y);
+        }
+    }
+
+    handle.click = function(x, y) {
+        if (is_inside(x, y, btn_left))
+            try_move(handle.px - 1, handle.py);
+        else if (is_inside(x, y, btn_right))
+            try_move(handle.px + 1, handle.py);
+        else if (is_inside(x, y, btn_down))
+            try_move(handle.px, handle.py + 1);
+        else if (is_inside(x, y, btn_up))
+            try_move(handle.px, handle.py - 1);
     };
 
     return handle;

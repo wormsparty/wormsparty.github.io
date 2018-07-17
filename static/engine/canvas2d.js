@@ -2,7 +2,7 @@
 
 var Canvas2D = {};
 
-Canvas2D.new = function(canvas, reference_width, reference_height, mousemove) {
+Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, click) {
 	var handle = {
 		ctx: canvas.getContext('2d'),
         scaleFactor: 1,
@@ -24,6 +24,9 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove) {
          && y >= handle.reference_height - 16 && y <= handle.reference_height) {
             fullscreen();
         }
+
+        if (click != null)
+            click(x, y);
     }, false);
 
     canvas.addEventListener('mousemove', function(event) {
