@@ -34,32 +34,45 @@ function mark_map(handle, newpx, newpy)
 {
     handle.map_visitations[newpy][newpx] = true;
 
-    if (newpx + 1 < world_map[0].length)
-        handle.map_visitations[newpy][newpx+1] = true;
+    let depth_of_view = 2;
 
-    if (newpx - 1 >= 0)
-        handle.map_visitations[newpy][newpx-1] = true;
-
-    if (newpy + 1 < world_map.length)
+    for(let y = 1; y <= depth_of_view; y++)
     {
-        handle.map_visitations[newpy+1][newpx] = true;
+        if (newpy + y < world_map.length)
+            handle.map_visitations[newpy+y][newpx] = true;
 
-        if (newpx + 1 < world_map[0].length)
-            handle.map_visitations[newpy+1][newpx+1] = true;
-
-        if (newpx - 1 >= 0)
-            handle.map_visitations[newpy+1][newpx-1] = true;
+        if (newpy - y >= 0)
+            handle.map_visitations[newpy-y][newpx] = true;
     }
-
-    if (newpy - 1 >= 0)
+    
+    for(let x = 1; x <= depth_of_view; x++)
     {
-        handle.map_visitations[newpy-1][newpx] = true;
+      if (newpx + x < world_map[0].length)
+          handle.map_visitations[newpy][newpx+x] = true;
 
-        if (newpx + 1 < world_map[0].length)
-            handle.map_visitations[newpy-1][newpx+1] = true;
+      if (newpx - x >= 0)
+          handle.map_visitations[newpy][newpx-x] = true;
 
-        if (newpx - 1 >= 0)
-            handle.map_visitations[newpy-1][newpx-1] = true;
+      for(let y = 1; y <= depth_of_view; y++)
+      {
+        if (newpy + y < world_map.length)
+        {
+            if (newpx + x < world_map[0].length)
+                handle.map_visitations[newpy+y][newpx+x] = true;
+
+            if (newpx - x >= 0)
+                handle.map_visitations[newpy+y][newpx-x] = true;
+        }
+
+        if (newpy - y >= 0)
+        {
+          if (newpx + x < world_map[0].length)
+              handle.map_visitations[newpy-y][newpx+x] = true;
+
+          if (newpx - x >= 0)
+              handle.map_visitations[newpy-y][newpx-x] = true;
+        }
+      }
     }
 }
 
@@ -145,26 +158,38 @@ Labyrinth.new = function() {
     };
 
     handle.draw = function(font, engine) {
-        for(let y = 0; y < world_map.length; y++)
-        {
-            for(let x = 0; x < world_map[y].length; x++)
-            {
-                let val = world_map[y][x];
-                let xx = 3 + 10 * x;
-                let yy = 5 + 10 * y;
+        let number_of_visible_blocs = 10;
+        let max_x = world_map[0].length;
+        let max_y = world_map.length;
 
-                if (x === handle.px && y === handle.py)
-                    engine.rect(xx, yy, 10, 10, 0, 128, 128);
-                else if (!handle.map_visitations[y][x])
+        for(let y = -number_of_visible_blocs; y < number_of_visible_blocs; y++)
+        {
+            for(let x = -number_of_visible_blocs; x < number_of_visible_blocs; x++)
+            {
+                let px = x + handle.px;
+                let py = y + handle.py;
+
+                if (px < 0 || px >= max_x
+                 || py < 0 || py >= max_y) {
+                   continue;
+                }
+
+                let val = world_map[py][px];
+                let xx = 3 + 10 * (px - handle.px + max_x / 2);
+                let yy = 5 + 10 * (py - handle.py + max_y / 2);
+
+                if (px === handle.px && py === handle.py)
+                    engine.rect(xx, yy, 10, 10, 256, 256, 256);
+                else if (!handle.map_visitations[py][px])
                     engine.rect(xx, yy, 10, 10, 20, 20, 20);
                 else if (val === 0 || val === 2)
-                    engine.rect(xx, yy, 10, 10, 128, 128, 0);
+                    engine.rect(xx, yy, 10, 10, 100, 100, 100);
                 else if (val === 1)
-                    engine.rect(xx, yy, 10, 10, 128, 0, 128);
+                    engine.rect(xx, yy, 10, 10, 50, 50, 50);
                 else if (val === 3)
-                    engine.rect(xx, yy, 10, 10, 0, 128, 0);
+                    engine.rect(xx, yy, 10, 10, 0, 256, 0);
                 else if (val === 4)
-                    engine.rect(xx, yy, 10, 10, 128, 0.0, 0.0);
+                    engine.rect(xx, yy, 10, 10, 256, 0.0, 0.0);
             }
         }
 
@@ -208,4 +233,3 @@ Labyrinth.new = function() {
 
     return handle;
 };
-
