@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>console</title>
 
     <script src="../static/lib/jquery-3.2.1.js"></script>
@@ -125,7 +126,9 @@
 
     $(document).ready(function() {
         var engine = Engine.new({
-            canvasId: 'canvas'
+            canvasId: 'canvas',
+            width: 320,
+            height: 480
         }, function(x, y) {
             labyrinth.click(x, y);
         });

@@ -33,10 +33,17 @@ function fullscreen() {
 var Engine = {};
 
 Engine.new = function(descriptor, click) {
+    // Default NES resolution
+    if (descriptor.width == undefined)
+      descriptor.width = 256;
+
+    if (descriptor.height == undefined)
+      descriptor.height = 240;
+
     var handle = {
         canvas: document.getElementById(descriptor.canvasId),
-        reference_width: 256,
-        reference_height: 240, // NES resolution,
+        reference_width: descriptor.width,
+        reference_height: descriptor.height,
         mouse_x: 0,
         mouse_y: 0
     };
@@ -86,7 +93,7 @@ Engine.new = function(descriptor, click) {
             }
         };
 
-        imageSrc.onload = function() { 
+        imageSrc.onload = function() {
             font.frame_width = imageSrc.width / font.frame_count;
             font.frame_height = imageSrc.height / font.variant_count;
 
@@ -133,7 +140,7 @@ Engine.new = function(descriptor, click) {
             move: function() {}
         };
 
-        imageSrc.onload = function() { 
+        imageSrc.onload = function() {
             sprite.frame_width = imageSrc.width / sprite.frame_count;
             sprite.frame_height = imageSrc.height / sprite.variant_count;
 
@@ -154,7 +161,7 @@ Engine.new = function(descriptor, click) {
             onfailure();
         };
 
-        return sprite;  
+        return sprite;
     };
 
     handle.rect = function(x, y, w, h, r, g, b) {
@@ -203,5 +210,3 @@ Engine.new = function(descriptor, click) {
         error: undefined
     }
 };
-
-
