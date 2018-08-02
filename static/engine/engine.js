@@ -45,7 +45,8 @@ Engine.new = function(descriptor, click) {
         reference_width: descriptor.width,
         reference_height: descriptor.height,
         mouse_x: 0,
-        mouse_y: 0
+        mouse_y: 0,
+        rotate: false
     };
 
     handle.audio = WebAudio.new();
@@ -180,29 +181,60 @@ Engine.new = function(descriptor, click) {
         handle.audio.stop(descriptor);
     };
 
-    handle.resize = function(width, height) {
-        var zoom_x = width / handle.reference_width;
-        var zoom_y = height / handle.reference_height;
+    handle.get_coordinate = function(x, y, w, h) {
+      return handle.graphics.get_coordinate(x, y, w, h);
+    };
 
+    function get_zoom(width, height, reference_width, reference_height)
+    {
+        var zoom_x = width / reference_width;
+        var zoom_y = height / reference_height;
         var zoom = zoom_x;
 
         if (zoom_y < zoom)
             zoom = zoom_y;
 
+        return zoom;
+    }
+
+    handle.resize = function(width, height) {
+        var rotate = false;
+        var zoom;
+
+        var zoom_h = get_zoom(width, height, handle.reference_width, handle.reference_height);
+        var zoom_v = get_zoom(width, height, handle.reference_height, handle.reference_width);
+
+        if (zoom_v > zoom_h)
+        {
+            rotate = true;
+            zoom = Math.floor(zoom_v);
+        }
+        else
+        {
+            zoom = Math.floor(zoom_h);
+        }
+
         if (zoom < 1)
-            zoom = 1;
+          zoom = 1;
 
-        zoom = Math.floor(zoom);
+        var borderx, bordery, ajustementx, ajustementy;
 
-        var borderx = Math.floor((width - handle.reference_width * zoom) / 2);
-        var bordery = Math.floor((height - handle.reference_height * zoom) / 2);
-        var ajustementx = Math.floor(width - handle.reference_width * zoom - borderx * 2);
-        var ajustementy = Math.floor(height - handle.reference_height * zoom - bordery * 2);
+        if (rotate) {
+          borderx = Math.floor((height - handle.reference_height * zoom) / 2);
+          bordery = Math.floor((width - handle.reference_width * zoom) / 2);
+          ajustementx = Math.floor(height - handle.reference_height * zoom - borderx * 2);
+          ajustementy = Math.floor(width - handle.reference_width * zoom - bordery * 2);
+        } else {
+          borderx = Math.floor((width - handle.reference_width * zoom) / 2);
+          bordery = Math.floor((height - handle.reference_height * zoom) / 2);
+          ajustementx = Math.floor(width - handle.reference_width * zoom - borderx * 2);
+          ajustementy = Math.floor(height - handle.reference_height * zoom - bordery * 2);
+        }
 
-        var safety_margin = 6; // If we don't put this margin on the height of the canvas, we often get a scrollbar
+        handle.rotate = rotate;
         handle.canvas.width = width;
-        handle.canvas.height = height - safety_margin;
-        handle.graphics.resize(zoom, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
+        handle.canvas.height = height;
+        handle.graphics.resize(zoom, rotate, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
     };
 
     return {

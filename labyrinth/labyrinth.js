@@ -44,7 +44,7 @@ function mark_map(handle, newpx, newpy)
         if (newpy - y >= 0)
             handle.map_visitations[newpy-y][newpx] = true;
     }
-    
+
     for(let x = 1; x <= depth_of_view; x++)
     {
       if (newpx + x < world_map[0].length)
@@ -76,7 +76,7 @@ function mark_map(handle, newpx, newpy)
     }
 }
 
-Labyrinth.new = function() {
+Labyrinth.new = function(engine) {
     let handle = {
         was_up: 0,
         up: 0,
@@ -88,7 +88,8 @@ Labyrinth.new = function() {
         right: 0,
         px: 0,
         py: 0,
-        map_visitations: Array.from(Array(world_map[0].length), () => new Array(world_map.length))
+        map_visitations: Array.from(Array(world_map[0].length), () => new Array(world_map.length)),
+        engine: engine
     };
 
     for(let y = 0; y < world_map.length; y++)
@@ -117,14 +118,8 @@ Labyrinth.new = function() {
 
                 if (newval === 0 || newval === 2)
                     return true;
-                else
-                    console.log('value is ' + newval);
             }
-            else
-                console.log('not in range');
         }
-        else
-            console.log('it\'s the same');
 
         return false;
     }
@@ -157,7 +152,7 @@ Labyrinth.new = function() {
         handle.was_right = handle.right;
     };
 
-    handle.draw = function(font, engine) {
+    handle.draw = function(font) {
         let number_of_visible_blocs = 10;
         let max_x = world_map[0].length;
         let max_y = world_map.length;
@@ -175,35 +170,42 @@ Labyrinth.new = function() {
                 }
 
                 let val = world_map[py][px];
-                let xx = 3 + 10 * (px - handle.px + max_x / 2);
-                let yy = 5 + 10 * (py - handle.py + max_y / 2);
+                let xx = handle.engine.reference_width / 2 + 10 * (px - handle.px) - 5;
+                let yy = handle.engine.reference_height / 2 + 10 * (py - handle.py) - 5;
 
                 if (px === handle.px && py === handle.py)
-                    engine.rect(xx, yy, 10, 10, 256, 256, 256);
+                    handle.engine.rect(xx, yy, 10, 10, 256, 256, 256);
                 else if (!handle.map_visitations[py][px])
-                    engine.rect(xx, yy, 10, 10, 20, 20, 20);
+                    handle.engine.rect(xx, yy, 10, 10, 20, 20, 20);
                 else if (val === 0 || val === 2)
-                    engine.rect(xx, yy, 10, 10, 100, 100, 100);
+                    handle.engine.rect(xx, yy, 10, 10, 100, 100, 100);
                 else if (val === 1)
-                    engine.rect(xx, yy, 10, 10, 50, 50, 50);
+                    handle.engine.rect(xx, yy, 10, 10, 50, 50, 50);
                 else if (val === 3)
-                    engine.rect(xx, yy, 10, 10, 0, 256, 0);
+                    handle.engine.rect(xx, yy, 10, 10, 0, 256, 0);
                 else if (val === 4)
-                    engine.rect(xx, yy, 10, 10, 256, 0.0, 0.0);
+                    handle.engine.rect(xx, yy, 10, 10, 256, 0.0, 0.0);
             }
         }
 
-        engine.rect(btn_up[0], btn_up[1], btn_up[2], btn_up[3], 5, 5, 5);
+        handle.engine.rect(btn_up[0], btn_up[1], btn_up[2], btn_up[3], 5, 5, 5);
         font.render('^', btn_up[0] + 2, btn_up[1] + 3);
-        engine.rect(btn_right[0], btn_right[1], btn_right[2], btn_right[3], 5, 5, 5);
+        handle.engine.rect(btn_right[0], btn_right[1], btn_right[2], btn_right[3], 5, 5, 5);
         font.render('>', btn_right[0] + 2, btn_right[1] + 2);
-        engine.rect(btn_down[0], btn_down[1], btn_down[2], btn_down[3], 5, 5, 5);
+        handle.engine.rect(btn_down[0], btn_down[1], btn_down[2], btn_down[3], 5, 5, 5);
         font.render('v', btn_down[0] + 2, btn_down[1] + 2);
-        engine.rect(btn_left[0], btn_left[1], btn_left[2], btn_left[3], 5, 5, 5);
+        handle.engine.rect(btn_left[0], btn_left[1], btn_left[2], btn_left[3], 5, 5, 5);
         font.render('<', btn_left[0] + 2, btn_left[1] + 2);
     };
 
-    function is_inside(x, y, btn) {
+    function is_inside(handle, x, y, btn) {
+        if (engine.rotate) {
+          var coord = engine.get_coordinate(x, y, 0, 0)
+
+          x = coord.x;
+          y = coord.y;
+        }
+
         if (btn[0] <= x && x <= btn[0] + btn[2]
          && btn[1] <= y && y <= btn[1] + btn[3]) {
             return true;
@@ -221,13 +223,13 @@ Labyrinth.new = function() {
     }
 
     handle.click = function(x, y) {
-        if (is_inside(x, y, btn_left))
+        if (is_inside(handle, x, y, btn_left))
             try_move(handle.px - 1, handle.py);
-        else if (is_inside(x, y, btn_right))
+        else if (is_inside(handle, x, y, btn_right))
             try_move(handle.px + 1, handle.py);
-        else if (is_inside(x, y, btn_down))
+        else if (is_inside(handle, x, y, btn_down))
             try_move(handle.px, handle.py + 1);
-        else if (is_inside(x, y, btn_up))
+        else if (is_inside(handle, x, y, btn_up))
             try_move(handle.px, handle.py - 1);
     };
 

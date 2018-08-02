@@ -22,6 +22,7 @@
             background-color: #000;
             margin: 0;
             padding: 0 0 0 0;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -53,9 +54,9 @@
     var elements_to_load = 0;
     var elements_loaded = 0;
     var all_load_declared = false;
-    var handle = undefined;
     var font = undefined;
-    var labyrinth = Labyrinth.new();
+    var labyrinth = undefined;
+    var engine = undefined;
 
     function onfailure() {
         var canvasContainer = document.getElementById('canvasContainer');
@@ -65,7 +66,7 @@
     function load_font(descriptor) {
         elements_to_load++;
 
-        var value = handle.load_font(descriptor, function(e) {
+        var value = engine.load_font(descriptor, function(e) {
             elements_loaded++;
 
             if (all_load_declared && elements_to_load === elements_loaded)
@@ -88,10 +89,10 @@
         var dt = 1.0 / fps;
 
         $(window).resize(function() {
-            handle.resize($(window).width(), $(window).height())
+            engine.resize($(window).width(), $(window).height())
         });
 
-        handle.resize($(window).width(), $(window).height());
+        engine.resize($(window).width(), $(window).height());
 
         $(document).on('keydown', function( event ) {
             if (event.which === 37) {
@@ -118,20 +119,22 @@
         });
 
         setInterval(function() {
-            handle.clear(10, 10, 10);
+            engine.clear(10, 10, 10);
             labyrinth.update(dt);
-            labyrinth.draw(font, handle);
+            labyrinth.draw(font);
         }, dt * 1000);
     };
 
+    function labyrinth_click(x, y) {
+        labyrinth.click(x, y);
+    };
+
     $(document).ready(function() {
-        var engine = Engine.new({
+        engine = Engine.new({
             canvasId: 'canvas',
-            width: 320,
-            height: 480
-        }, function(x, y) {
-            labyrinth.click(x, y);
-        });
+            width: 470,
+            height: 320
+        }, labyrinth_click);
 
         if (engine.error) {
             var container = document.getElementById('canvasContainer');
@@ -139,7 +142,8 @@
             return;
         }
 
-        handle = engine.handle;
+        engine = engine.handle;
+        labyrinth = Labyrinth.new(engine);
 
         font = load_font({
             url: 'data/font.png',

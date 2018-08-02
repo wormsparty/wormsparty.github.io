@@ -16,7 +16,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         reference_height: reference_height
 	};
 
-    canvas.addEventListener('click', function(event) { 
+    canvas.addEventListener('click', function(event) {
         var x = (event.pageX - handle.margin_left) / handle.scaleFactor;
         var y = (event.pageY - handle.margin_top) / handle.scaleFactor;
 
@@ -33,7 +33,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         mousemove(event.clientX, event.clientY);
     }, false);
 
-    handle.resize = function(scaleFactor, margin_left, margin_right, margin_top, margin_bottom, window_width, window_height) {
+    handle.resize = function(scaleFactor, rotate, margin_left, margin_right, margin_top, margin_bottom, window_width, window_height) {
         handle.scaleFactor = scaleFactor;
         handle.margin_left = margin_left;
         handle.margin_right = margin_right;
@@ -41,6 +41,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         handle.margin_bottom = margin_bottom;
         handle.window_width = window_width;
         handle.window_height = window_height;
+        handle.rotate = rotate;
 
         // This needs to be done at each resizing!
         handle.ctx.imageSmoothingEnabled       = false;
@@ -48,6 +49,29 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         handle.ctx.msImageSmoothingEnabled     = false;
         handle.ctx.oImageSmoothingEnabled      = false;
     };
+
+    handle.get_coordinate = function(x, y, w, h) {
+        if (!handle.rotate) {
+            return {
+                x: x,
+                y: y,
+                w: w,
+                h: h
+            };
+        }
+
+        let nx = x - handle.reference_width / 2;
+        let ny = y - handle.reference_height / 2;
+				let y2 = nx + handle.reference_height / 2;
+				let dy = y2;
+
+        return {
+            x: ny + handle.reference_width / 2,
+            y: w - y2 + 2 * handle.reference_height,
+            w: h,
+            h: w
+        };
+    }
 
     handle.render = function(sprite, x, y) {
         var sx = sprite.frame_width * sprite.frame_current;
@@ -88,26 +112,36 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         }
     };
 
+    handle.rotated_rect = function(x, y, w, h) {
+        let coord = handle.get_coordinate(x, y, w, h);
+        handle.ctx.fillRect(coord.x, coord.y, coord.w, coord.h);
+    }
+
     handle.rect = function(x, y, w, h, r, g, b) {
         handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
         // TODO: Handle out-of-frame case
-        handle.ctx.fillRect(handle.margin_left + x * handle.scaleFactor, handle.margin_top + y * handle.scaleFactor, w * handle.scaleFactor, h * handle.scaleFactor);
+        handle.rotated_rect(handle.margin_left + x * handle.scaleFactor, handle.margin_top + y * handle.scaleFactor, w * handle.scaleFactor, h * handle.scaleFactor);
     };
 
     handle.clear = function(r, g, b) {
-        handle.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+        handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+				//handle.ctx.fillRect(0, 0, handle.window_width, handle.window_height);
 
         // Left band
-    	handle.ctx.fillRect(0, 0, handle.margin_left, handle.window_height);
+				handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+				handle.ctx.fillRect(0, 0, handle.margin_left, handle.window_height);
         // Top band
-        handle.ctx.fillRect(handle.margin_left, 0, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_top);
+				handle.ctx.fillStyle = 'rgba(255, 255, 0, 1)';
+				handle.ctx.fillRect(handle.margin_left, 0, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_top);
         // Right band
-        handle.ctx.fillRect(handle.window_width - handle.margin_right, 0, handle.margin_right, handle.window_height);
+				handle.ctx.fillStyle = 'rgba(255, 0, 255, 1)';
+        handle.ctx.fillRect(handle.window_width - handle.margin_right, 0, handle.margin_right, handle.window_height, 255, 0, 255);
         // Bottom band
+				handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
         handle.ctx.fillRect(handle.margin_left, handle.window_height - handle.margin_bottom, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_bottom);
 
-        handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
-        handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
+				handle.ctx.fillStyle = 'rgba(' + r + ', ' + g + 50 + ', ' + b + ', 1)';
+				handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
     };
 
     return handle;
