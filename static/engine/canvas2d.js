@@ -83,25 +83,53 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         if (y !== Math.floor(y))
             console.error("y should be an integer! y=" + y);
 
-        if (x < 0)
-            cutLeft = -x;
+				let coord = handle.get_coordinate(x, y, w1, w2);
 
-        if (y < 0)
-            cutTop = -y;
+				if (handle.rotate) {
+					coord.y += 2 * coord.h;					
+				}
 
-        if (x + w1 > handle.reference_width)
-            cutRight = x + w1 - handle.reference_width;
+/*        if (coord.x < 0)
+            cutLeft = -coord.x;
 
-        if (y + w2 > handle.reference_height)
-            cutBottom = y + w2 - handle.reference_height;
+        if (coord.y < 0)
+            cutTop = -coord.y;
 
-        if (cutLeft < w1
-        && cutRight < w1
-        && cutTop < w2
-        && cutBottom < w2) {
+        if (coord.x + coord.w > handle.reference_width)
+            cutRight = coord.x + coord.w - handle.reference_width;
+
+        if (coord.y + coord.h > handle.reference_height)
+            cutBottom = coord.y + coord.h - handle.reference_height;*/
+
+        if (cutLeft < coord.w
+        && cutRight < coord.w
+        && cutTop < coord.h
+        && cutBottom < coord.h)
+				{
+					  let target_x = (coord.x + cutLeft) * handle.scaleFactor + handle.margin_left;
+						let target_y = (coord.y + cutTop) * handle.scaleFactor + handle.margin_top;
+
+						if (handle.rotate) {
+							handle.ctx.save();
+							handle.ctx.translate(target_x, target_y)
+							handle.ctx.rotate(-Math.PI / 2);
+							handle.ctx.translate(-target_x, -target_y)
+						}
+
             handle.ctx.drawImage(
-                sprite.imageSrc, sx + cutLeft, sy + cutTop, sprite.frame_width - cutLeft - cutRight, sprite.frame_height - cutTop - cutBottom,
-                (x + cutLeft) * handle.scaleFactor + handle.margin_left, (y + cutTop) * handle.scaleFactor + handle.margin_top, (w1 - cutLeft - cutRight) * handle.scaleFactor, (w2 - cutTop - cutBottom) * handle.scaleFactor);
+                sprite.imageSrc,
+								sx + cutLeft,
+								sy + cutTop,
+								sprite.frame_width - cutLeft - cutRight,
+								sprite.frame_height - cutTop - cutBottom,
+                target_x,
+								target_y,
+								(coord.w - cutLeft - cutRight) * handle.scaleFactor,
+								(coord.h - cutTop - cutBottom) * handle.scaleFactor);
+
+						if (handle.rotate) {
+							handle.ctx.restore();
+						}
         }
     };
 
@@ -119,23 +147,23 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     };
 
     handle.clear = function(r, g, b) {
-        handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+        handle.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
 				//handle.ctx.fillRect(0, 0, handle.window_width, handle.window_height);
 
         // Left band
-				handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+				//handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
 				handle.ctx.fillRect(0, 0, handle.margin_left, handle.window_height);
         // Top band
-				handle.ctx.fillStyle = 'rgba(255, 255, 0, 1)';
+				//handle.ctx.fillStyle = 'rgba(255, 255, 0, 1)';
 				handle.ctx.fillRect(handle.margin_left, 0, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_top);
         // Right band
-				handle.ctx.fillStyle = 'rgba(255, 0, 255, 1)';
+				//handle.ctx.fillStyle = 'rgba(255, 0, 255, 1)';
         handle.ctx.fillRect(handle.window_width - handle.margin_right, 0, handle.margin_right, handle.window_height, 255, 0, 255);
         // Bottom band
-				handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
+				//handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
         handle.ctx.fillRect(handle.margin_left, handle.window_height - handle.margin_bottom, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_bottom);
 
-				handle.ctx.fillStyle = 'rgba(' + r + ', ' + g + 50 + ', ' + b + ', 1)';
+				handle.ctx.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
 				handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
     };
 
