@@ -199,15 +199,10 @@ Labyrinth.new = function(engine) {
     };
 
     function is_inside(handle, x, y, btn) {
-        if (engine.rotate) {
-          var coord = engine.get_coordinate(x, y, 0, 0)
+        let coord = engine.get_coordinate(btn[0], btn[1], btn[2], btn[3]);
 
-          x = coord.x;
-          y = coord.y;
-        }
-
-        if (btn[0] <= x && x <= btn[0] + btn[2]
-         && btn[1] <= y && y <= btn[1] + btn[3]) {
+        if (coord.x <= x && x <= coord.x + coord.w
+         && coord.y <= y && y <= coord.y + coord.h) {
             return true;
         }
 

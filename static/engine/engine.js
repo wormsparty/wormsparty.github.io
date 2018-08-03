@@ -44,8 +44,6 @@ Engine.new = function(descriptor, click) {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: descriptor.width,
         reference_height: descriptor.height,
-        mouse_x: 0,
-        mouse_y: 0,
         rotate: false
     };
 
@@ -59,10 +57,7 @@ Engine.new = function(descriptor, click) {
         };
     }
 
-    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, function (x, y) {
-        handle.mouse_x = (x - handle.graphics.margin_left) / handle.graphics.scaleFactor;
-        handle.mouse_y = (y - handle.graphics.margin_top) / handle.graphics.scaleFactor;
-    }, click);
+    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, click);
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');
@@ -220,10 +215,10 @@ Engine.new = function(descriptor, click) {
         var borderx, bordery, ajustementx, ajustementy;
 
         if (rotate) {
-          borderx = Math.floor((height - handle.reference_height * zoom) / 2);
-          bordery = Math.floor((width - handle.reference_width * zoom) / 2);
-          ajustementx = Math.floor(height - handle.reference_height * zoom - borderx * 2);
-          ajustementy = Math.floor(width - handle.reference_width * zoom - bordery * 2);
+          borderx = Math.floor((width - handle.reference_height * zoom) / 2);
+          bordery = Math.floor((height - handle.reference_width * zoom) / 2);
+          ajustementx = Math.floor(width - handle.reference_height * zoom - borderx * 2);
+          ajustementy = Math.floor(height - handle.reference_width * zoom - bordery * 2);
         } else {
           borderx = Math.floor((width - handle.reference_width * zoom) / 2);
           bordery = Math.floor((height - handle.reference_height * zoom) / 2);

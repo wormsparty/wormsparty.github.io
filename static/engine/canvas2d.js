@@ -2,7 +2,7 @@
 
 var Canvas2D = {};
 
-Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, click) {
+Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 	var handle = {
 		ctx: canvas.getContext('2d'),
         scaleFactor: 1,
@@ -20,17 +20,13 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         var x = (event.pageX - handle.margin_left) / handle.scaleFactor;
         var y = (event.pageY - handle.margin_top) / handle.scaleFactor;
 
-        if (x >= handle.reference_width - 16 && x <= handle.reference_width
+        /*if (x >= handle.reference_width - 16 && x <= handle.reference_width
          && y >= handle.reference_height - 16 && y <= handle.reference_height) {
             fullscreen();
-        }
+        }*/
 
         if (click != null)
-            click(x, y);
-    }, false);
-
-    canvas.addEventListener('mousemove', function(event) {
-        mousemove(event.clientX, event.clientY);
+					click(x, y);
     }, false);
 
     handle.resize = function(scaleFactor, rotate, margin_left, margin_right, margin_top, margin_bottom, window_width, window_height) {
@@ -61,13 +57,10 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         }
 
         let nx = x - handle.reference_width / 2;
-        let ny = y - handle.reference_height / 2;
-				let y2 = nx + handle.reference_height / 2;
-				let dy = y2;
 
         return {
-            x: ny + handle.reference_width / 2,
-            y: w - y2 + 2 * handle.reference_height,
+						x: y,
+						y: x - 2 * nx + w,
             w: h,
             h: w
         };
@@ -112,15 +105,17 @@ Canvas2D.new = function(canvas, reference_width, reference_height, mousemove, cl
         }
     };
 
-    handle.rotated_rect = function(x, y, w, h) {
-        let coord = handle.get_coordinate(x, y, w, h);
-        handle.ctx.fillRect(coord.x, coord.y, coord.w, coord.h);
-    }
-
     handle.rect = function(x, y, w, h, r, g, b) {
         handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
-        // TODO: Handle out-of-frame case
-        handle.rotated_rect(handle.margin_left + x * handle.scaleFactor, handle.margin_top + y * handle.scaleFactor, w * handle.scaleFactor, h * handle.scaleFactor);
+				let coord = handle.get_coordinate(x, y, w, h);
+
+				coord.x = handle.margin_left + coord.x * handle.scaleFactor;
+				coord.y = handle.margin_top + coord.y * handle.scaleFactor;
+				coord.w = coord.w * handle.scaleFactor;
+				coord.h = coord.h * handle.scaleFactor;
+
+				// TODO: Handle out-of-frame case
+				handle.ctx.fillRect(coord.x, coord.y, coord.w, coord.h);
     };
 
     handle.clear = function(r, g, b) {
