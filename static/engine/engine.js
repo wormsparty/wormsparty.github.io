@@ -44,6 +44,7 @@ Engine.new = function(descriptor, click) {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: descriptor.width,
         reference_height: descriptor.height,
+        allow_rotate: false,
         rotate: false
     };
 
@@ -201,7 +202,9 @@ Engine.new = function(descriptor, click) {
 
         if (zoom_v > zoom_h)
         {
-            rotate = true;
+            if (handle.allow_rotate)
+              rotate = true;
+
             zoom = Math.floor(zoom_v);
         }
         else

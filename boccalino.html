@@ -9,8 +9,6 @@
     <script src="static/lib/bootstrap-4.1.2.min.js"></script>
     <script src="../static/lib/popper-1.14.3.min.js"></script>
 
-    <script src="static/konami.js"></script>
-
     <style>
     #thediv {
       height: 100%;
@@ -238,7 +236,7 @@
               for (i = 0; i < ids.length; i++)
                   r.innerHTML += '<div style="white-space:nowrap; display: inline">' + ids[i] + ', ' + noToPizza[ids[i]] + ', ' + noToIngredients[ids[i]] + '</div><br/>';
           }
-		  
+
           onresize();
       };
 
@@ -274,7 +272,7 @@
 		var randomNb = allNb[Math.floor(Math.random() * allNb.length)];
 		r.innerHTML = '<div style="white-space:nowrap; display: inline">' + randomNb + ', ' + noToPizza[randomNb] + ', ' + noToIngredients[randomNb] + '</div><br/>';
 	};
-	
+
     $('#sortByName').click(sortByName);
     $('#sortByFrequency').click(sortByFrequency);
 	$('#random').click(random);

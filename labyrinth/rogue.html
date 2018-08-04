@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rogue</title>
+
+   <script src="https://ondras.github.io/rot.js/rot.js"></script>
+   <script src="../static/lib/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <script>
+      var Game = {
+        display: null,
+        map: {},
+      }
+
+      Game.init = function() {
+        this.display = new ROT.Display();
+        document.body.appendChild(this.display.getContainer());
+        this._generateMap();
+      }
+
+      Game._generateMap = function() {
+          console.log('Generating map...');
+
+          var digger = new ROT.Map.Digger();
+          var freeCells = [];
+
+          var digCallback = function(x, y, value) {
+              if (value) { return; } /* do not store walls */
+
+              var key = x+","+y;
+              freeCells.push(key);
+              this.map[key] = ".";
+          }
+
+          digger.create(digCallback.bind(this));
+          this._generateBoxes(freeCells);
+          this._drawWholeMap();
+      };
+
+      Game._generateBoxes = function(freeCells) {
+        console.log('Generating boxes...');
+
+          for (var i=0;i<10;i++) {
+              var index = Math.floor(ROT.RNG.getUniform() * freeCells.length);
+              var key = freeCells.splice(index, 1)[0];
+              this.map[key] = "*";
+          }
+      };
+
+      Game._drawWholeMap = function() {
+        console.log('Drawing map...');
+
+        for (var key in this.map) {
+          var parts = key.split(",");
+          var x = parseInt(parts[0]);
+          var y = parseInt(parts[1]);
+          this.display.draw(x, y, this.map[key]);
+        }
+      }
+
+      $(document).ready(function() {
+        Game.init();
+        console.log('Ready');
+      });
+    </script>
+  </body>
+</html>

@@ -2,28 +2,31 @@
 
 let Labyrinth = {};
 
-let world_map = [
-    [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1, 1, 1 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1 ],
-    [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4 ,0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1 ],
-    [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4 ,0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 ],
-    [ 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1 ,0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1 ],
-    [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-];
+let world_map = "" +
+    '##########################################################################\n' +
+    '#   #     ###########################   #                  ###############\n' +
+    '# J #     ########################### C #                  ###############\n' +
+    '# o #     ########################### o .                  ###############\n' +
+    '# r #  @  ########################### o .                                #\n' +
+    '# d #     ########################### p #                                #\n' +
+    '# i #     ###########################   #                                #\n' +
+    '# l #     ###############################                   ####         #\n' +
+    '# s #     #                             #                   #EL#         #\n' +
+    '#   #     #  Objectif: va à ton bureau  #                   #CA#         #\n' +
+    '#####     #                             #                   ####         #\n' +
+    '#####     ###############################                                #\n' +
+    '#####                                                                    #\n' +
+    '#####                                                   ####..############\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ##################\n' +
+    '#########################################               ####..############\n' +
+    '#########################################                ~~~~~~~~        #\n' +
+    '#########################################                  ~~~~          #\n' +
+    '##########################################################################\n';
 
 let btn_up   =  [118, 207, 9, 10],
     btn_down =  [118, 217, 9, 10],
@@ -32,51 +35,56 @@ let btn_up   =  [118, 207, 9, 10],
 
 function mark_map(handle, newpx, newpy)
 {
-    handle.map_visitations[newpy][newpx] = true;
+    handle.map_visitations[newpy * handle.map_length + newpx] = true;
 
-    let depth_of_view = 2;
+    let depth_of_view = 8;
 
     for(let y = 1; y <= depth_of_view; y++)
     {
         if (newpy + y < world_map.length)
-            handle.map_visitations[newpy+y][newpx] = true;
+            handle.map_visitations[(newpy+y) * handle.map_length + newpx] = true;
 
         if (newpy - y >= 0)
-            handle.map_visitations[newpy-y][newpx] = true;
+            handle.map_visitations[(newpy-y) * handle.map_length + newpx] = true;
     }
 
     for(let x = 1; x <= depth_of_view; x++)
     {
-      if (newpx + x < world_map[0].length)
-          handle.map_visitations[newpy][newpx+x] = true;
+      if (newpx + x < handle.map_length)
+          handle.map_visitations[newpy * handle.map_length + newpx+x] = true;
 
       if (newpx - x >= 0)
-          handle.map_visitations[newpy][newpx-x] = true;
+          handle.map_visitations[newpy * handle.map_length + newpx-x] = true;
 
       for(let y = 1; y <= depth_of_view; y++)
       {
-        if (newpy + y < world_map.length)
+        if (newpy + y < handle.map_height)
         {
-            if (newpx + x < world_map[0].length)
-                handle.map_visitations[newpy+y][newpx+x] = true;
+            if (newpx + x < handle.map_length)
+                handle.map_visitations[(newpy+y) * handle.map_length + newpx+x] = true;
 
             if (newpx - x >= 0)
-                handle.map_visitations[newpy+y][newpx-x] = true;
+                handle.map_visitations[(newpy+y) * handle.map_length + newpx-x] = true;
         }
 
         if (newpy - y >= 0)
         {
-          if (newpx + x < world_map[0].length)
-              handle.map_visitations[newpy-y][newpx+x] = true;
+          if (newpx + x < handle.map_length)
+              handle.map_visitations[(newpy-y) * handle.map_length + newpx+x] = true;
 
           if (newpx - x >= 0)
-              handle.map_visitations[newpy-y][newpx-x] = true;
+              handle.map_visitations[(newpy-y) * handle.map_length + newpx-x] = true;
         }
       }
     }
 }
 
 Labyrinth.new = function(engine) {
+    let splitted_map = world_map.split('\n');
+
+    let map_length = splitted_map[0].length,
+        map_height = splitted_map.length;
+
     let handle = {
         was_up: 0,
         up: 0,
@@ -88,17 +96,19 @@ Labyrinth.new = function(engine) {
         right: 0,
         px: 0,
         py: 0,
-        map_visitations: Array.from(Array(world_map[0].length), () => new Array(world_map.length)),
-        engine: engine
+        map_visitations: new Array(map_length * map_height),
+        engine: engine,
+        map_length: map_length,
+        map_height: map_height
     };
 
-    for(let y = 0; y < world_map.length; y++)
+    for(let y = 0; y < map_height; y++)
     {
-        for(let x = 0; x < world_map[y].length; x++)
+        for(let x = 0; x < map_length; x++)
         {
-            handle.map_visitations[x][y] = false;
+            handle.map_visitations[y * map_length + x] = false;
 
-            if (world_map[y][x] === 2) {
+            if (world_map[y * (map_length + 1) + x] === '@') {
                 handle.px = x;
                 handle.py = y;
             }
@@ -111,12 +121,12 @@ Labyrinth.new = function(engine) {
     {
         if (newpx !== handle.px || newpy !== handle.py)
         {
-            if (newpx >= 0 && newpx < world_map[0].length
-             && newpy >= 0 && newpy < world_map.length)
+            if (newpx >= 0 && newpx < map_length
+             && newpy >= 0 && newpy < map_height)
             {
-                let newval = world_map[newpy][newpx];
+                let newval = world_map[newpy * (map_length + 1) + newpx];
 
-                if (newval === 0 || newval === 2)
+                if (newval !== '#')
                     return true;
             }
         }
@@ -154,8 +164,6 @@ Labyrinth.new = function(engine) {
 
     handle.draw = function(font) {
         let number_of_visible_blocs = 10;
-        let max_x = world_map[0].length;
-        let max_y = world_map.length;
 
         for(let y = -number_of_visible_blocs; y < number_of_visible_blocs; y++)
         {
@@ -164,27 +172,27 @@ Labyrinth.new = function(engine) {
                 let px = x + handle.px;
                 let py = y + handle.py;
 
-                if (px < 0 || px >= max_x
-                 || py < 0 || py >= max_y) {
+                if (px < 0 || px >= map_length
+                 || py < 0 || py >= map_height) {
                    continue;
                 }
 
-                let val = world_map[py][px];
+                let val = world_map[py * (map_length + 1) + px];
                 let xx = handle.engine.reference_width / 2 + 10 * (px - handle.px) - 5;
                 let yy = handle.engine.reference_height / 2 + 10 * (py - handle.py) - 5;
 
                 if (px === handle.px && py === handle.py)
                     handle.engine.rect(xx, yy, 10, 10, 256, 256, 256);
-                else if (!handle.map_visitations[py][px])
+                else if (!handle.map_visitations[py * map_length + px])
                     handle.engine.rect(xx, yy, 10, 10, 20, 20, 20);
-                else if (val === 0 || val === 2)
-                    handle.engine.rect(xx, yy, 10, 10, 100, 100, 100);
-                else if (val === 1)
-                    handle.engine.rect(xx, yy, 10, 10, 50, 50, 50);
-                else if (val === 3)
+                else if (val === '#')
+                    handle.engine.rect(xx, yy, 10, 10, 256, 0, 0);
+                else if (val === '.')
                     handle.engine.rect(xx, yy, 10, 10, 0, 256, 0);
-                else if (val === 4)
-                    handle.engine.rect(xx, yy, 10, 10, 256, 0.0, 0.0);
+                else if (val === '~')
+                    handle.engine.rect(xx, yy, 10, 10, 156, 156, 156);
+                else
+                    handle.engine.rect(xx, yy, 10, 10, 0, 0, 256);
             }
         }
 
