@@ -8,19 +8,27 @@
 
    <script src="https://ondras.github.io/rot.js/rot.js"></script>
    <script src="../static/lib/jquery-3.3.1.min.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+      <style>
+          body {
+              font-family: inconsolata, monospace;
+              font-size: 16px;
+          }
+      </style>
   </head>
   <body>
     <script>
       var Game = {
         display: null,
         map: {},
-      }
+      };
 
       Game.init = function() {
         this.display = new ROT.Display();
         document.body.appendChild(this.display.getContainer());
         this._generateMap();
-      }
+      };
 
       Game._generateMap = function() {
           console.log('Generating map...');
@@ -34,7 +42,7 @@
               var key = x+","+y;
               freeCells.push(key);
               this.map[key] = ".";
-          }
+          };
 
           digger.create(digCallback.bind(this));
           this._generateBoxes(freeCells);
@@ -60,7 +68,7 @@
           var y = parseInt(parts[1]);
           this.display.draw(x, y, this.map[key]);
         }
-      }
+      };
 
       $(document).ready(function() {
         Game.init();

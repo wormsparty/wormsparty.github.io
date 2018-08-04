@@ -72,53 +72,6 @@ Engine.new = function(descriptor, click) {
         handle.graphics.clear(r, g, b);
     };
 
-    handle.load_font = function(descriptor, onload, onfailure) {
-        var imageSrc = new Image();
-        imageSrc.src = descriptor.url;
-
-        var font = {
-            imageSrc: imageSrc,
-            frame_count: descriptor.frame_count,
-            frame_current: 0,
-            frame_width: 0,
-            frame_height: 0,
-            variant_count: descriptor.variant_count,
-            variant_current: 0,
-            render: function() {},
-            variant: function(v) {
-                font.variant_current = v;
-            }
-        };
-
-        imageSrc.onload = function() {
-            font.frame_width = imageSrc.width / font.frame_count;
-            font.frame_height = imageSrc.height / font.variant_count;
-
-            font.render = function(text, x, y) {
-                var current_x = x;
-
-                for (var i = 0, len = text.length; i < len; i++) {
-                    if (text.charCodeAt(i) === 10) { // newline
-                        y += font.frame_height + 2;
-                        current_x = x;
-                    } else {
-                        font.frame_current = text.charCodeAt(i) - 32; // space = 32
-                        handle.graphics.render(font, current_x, y);
-                        current_x += font.frame_width;
-                    }
-                }
-            };
-
-            onload(descriptor.url);
-        };
-
-        imageSrc.onerror = function() {
-            onfailure();
-        };
-
-        return font;
-    };
-
     handle.load_image = function(descriptor, onload, onfailure) {
         var imageSrc = new Image();
         imageSrc.src = descriptor.url;
@@ -163,6 +116,10 @@ Engine.new = function(descriptor, click) {
 
     handle.rect = function(x, y, w, h, r, g, b) {
         handle.graphics.rect(x, y, w, h, r, g, b);
+    };
+
+    handle.text = function(str, x, y, s, r, g, b) {
+        handle.graphics.text(str, x, y, s, r, g, b);
     };
 
     handle.load_sound = function(descriptor, onload, onfailure) {

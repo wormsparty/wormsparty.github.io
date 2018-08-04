@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>console</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
     <script src="../static/lib/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="../static/lib/bootstrap-4.1.2.min.css" />
     <script src="../static/lib/bootstrap-4.1.2.min.js"></script>
@@ -23,6 +25,9 @@
             margin: 0;
             padding: 0 0 0 0;
             overflow: hidden;
+            font-family: inconsolata, monospace;
+            font-size: 16px;
+            line-height: 100%;
         }
     </style>
 </head>
@@ -54,34 +59,12 @@
     var elements_to_load = 0;
     var elements_loaded = 0;
     var all_load_declared = false;
-    var font = undefined;
     var labyrinth = undefined;
     var engine = undefined;
 
     function onfailure() {
         var canvasContainer = document.getElementById('canvasContainer');
         canvasContainer.innerHTML = 'Something went wrong while loading the data... Check the console for details.';
-    }
-
-    function load_font(descriptor) {
-        elements_to_load++;
-
-        var value = engine.load_font(descriptor, function(e) {
-            elements_loaded++;
-
-            if (all_load_declared && elements_to_load === elements_loaded)
-                all_loaded();
-        }, function() {
-            onfailure();
-        });
-
-        if (!value) {
-            console.log('Failed to load ' + descriptor.url);
-            load_success = false;
-            return undefined;
-        }
-
-        return value;
     }
 
     var all_loaded = function() {
@@ -121,13 +104,13 @@
         setInterval(function() {
             engine.clear(10, 10, 10);
             labyrinth.update(dt);
-            labyrinth.draw(font);
+            labyrinth.draw();
         }, dt * 1000);
     };
 
     function labyrinth_click(x, y) {
         labyrinth.click(x, y);
-    };
+    }
 
     $(document).ready(function() {
         engine = Engine.new({
@@ -144,12 +127,6 @@
 
         engine = engine.handle;
         labyrinth = Labyrinth.new(engine);
-
-        font = load_font({
-            url: 'data/font.png',
-            frame_count: 95,
-            variant_count: 3
-        });
 
         all_load_declared = true;
 

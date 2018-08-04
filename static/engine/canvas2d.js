@@ -59,12 +59,12 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         let nx = x - handle.reference_width / 2;
 
         return {
-						x: y,
-						y: x - 2 * nx + w,
+            x: y,
+            y: x - 2 * nx + w,
             w: h,
             h: w
         };
-    }
+    };
 
     handle.render = function(sprite, x, y) {
         var sx = sprite.frame_width * sprite.frame_current;
@@ -122,7 +122,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 								sy + cutTop,
 								sprite.frame_width - cutLeft - cutRight,
 								sprite.frame_height - cutTop - cutBottom,
-                target_x,
+                                target_x,
 								target_y,
 								(coord.w - cutLeft - cutRight) * handle.scaleFactor,
 								(coord.h - cutTop - cutBottom) * handle.scaleFactor);
@@ -135,15 +135,29 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 
     handle.rect = function(x, y, w, h, r, g, b) {
         handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
-				let coord = handle.get_coordinate(x, y, w, h);
+        let coord = handle.get_coordinate(x, y, w, h);
 
-				coord.x = handle.margin_left + coord.x * handle.scaleFactor;
-				coord.y = handle.margin_top + coord.y * handle.scaleFactor;
-				coord.w = coord.w * handle.scaleFactor;
-				coord.h = coord.h * handle.scaleFactor;
+        coord.x = handle.margin_left + coord.x * handle.scaleFactor;
+        coord.y = handle.margin_top + coord.y * handle.scaleFactor;
+        coord.w = coord.w * handle.scaleFactor;
+        coord.h = coord.h * handle.scaleFactor;
 
-				// TODO: Handle out-of-frame case
-				handle.ctx.fillRect(coord.x, coord.y, coord.w, coord.h);
+        // TODO: Handle out-of-frame case
+        handle.ctx.fillRect(coord.x, coord.y, coord.w, coord.h);
+    };
+
+    handle.text = function(str, x, y, s, r, g, b) {
+        handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
+        handle.ctx.font = (s * handle.scaleFactor) + 'px inconsola, monospace';
+
+        let coord = handle.get_coordinate(x, y * 1.2 + s, 0, 0);
+
+        coord.x = handle.margin_left + coord.x * handle.scaleFactor;
+        coord.y = handle.margin_top + coord.y * handle.scaleFactor;
+        coord.w = coord.w * handle.scaleFactor;
+        coord.h = coord.h * handle.scaleFactor;
+
+        handle.ctx.fillText(str, coord.x, coord.y);
     };
 
     handle.clear = function(r, g, b) {
