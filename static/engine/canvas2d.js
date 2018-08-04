@@ -150,7 +150,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
         handle.ctx.font = (s * handle.scaleFactor) + 'px inconsola, monospace';
 
-        let coord = handle.get_coordinate(x, y * 1.2 + s, 0, 0);
+        let coord = handle.get_coordinate(x, y + s, 0, 0);
 
         coord.x = handle.margin_left + coord.x * handle.scaleFactor;
         coord.y = handle.margin_top + coord.y * handle.scaleFactor;

@@ -179,7 +179,7 @@ Labyrinth.new = function(engine) {
 
                 let val = world_map[py * (map_length + 1) + px];
                 let xx = handle.engine.reference_width / 2 + 10 * (px - handle.px) - 5;
-                let yy = handle.engine.reference_height / 2 + 10 * (py - handle.py) - 5;
+                let yy = handle.engine.reference_height / 2 + 16 * (py - handle.py) - 5;
 
                 if (val === '@')
                     val = '.';

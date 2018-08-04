@@ -169,7 +169,7 @@ Engine.new = function(descriptor, click) {
             zoom = Math.floor(zoom_h);
         }
 
-        if (zoom < 1)
+        //if (zoom < 1)
           zoom = 1;
 
         var borderx, bordery, ajustementx, ajustementy;
