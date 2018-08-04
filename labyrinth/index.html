@@ -68,7 +68,7 @@
     }
 
     var all_loaded = function() {
-        var fps = 30;
+        var fps = 3;
         var dt = 1.0 / fps;
 
         $(window).resize(function() {
@@ -102,7 +102,7 @@
         });
 
         setInterval(function() {
-            engine.clear(10, 10, 10);
+            engine.clear(0, 0, 0);
             labyrinth.update(dt);
             labyrinth.draw();
         }, dt * 1000);

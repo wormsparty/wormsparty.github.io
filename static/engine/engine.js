@@ -48,6 +48,7 @@ Engine.new = function(descriptor, click) {
         rotate: false
     };
 
+    handle.canvas.focus();
     handle.audio = WebAudio.new();
 
     if (!handle.audio) {
@@ -169,7 +170,7 @@ Engine.new = function(descriptor, click) {
             zoom = Math.floor(zoom_h);
         }
 
-        //if (zoom < 1)
+        if (zoom < 1)
           zoom = 1;
 
         var borderx, bordery, ajustementx, ajustementy;

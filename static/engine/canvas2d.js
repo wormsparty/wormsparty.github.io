@@ -148,16 +148,16 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 
     handle.text = function(str, x, y, s, r, g, b) {
         handle.ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
-        handle.ctx.font = (s * handle.scaleFactor) + 'px inconsola, monospace';
+        handle.ctx.font = s + 'px inconsola, monospace';
+
+        handle.ctx.save();
+        handle.ctx.translate(handle.margin_left, handle.margin_top);
+        handle.ctx.scale(handle.scaleFactor, handle.scaleFactor);
 
         let coord = handle.get_coordinate(x, y + s, 0, 0);
 
-        coord.x = handle.margin_left + coord.x * handle.scaleFactor;
-        coord.y = handle.margin_top + coord.y * handle.scaleFactor;
-        coord.w = coord.w * handle.scaleFactor;
-        coord.h = coord.h * handle.scaleFactor;
-
         handle.ctx.fillText(str, coord.x, coord.y);
+        handle.ctx.restore();
     };
 
     handle.clear = function(r, g, b) {
