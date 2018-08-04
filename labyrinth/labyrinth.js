@@ -2,62 +2,118 @@
 
 let Labyrinth = {};
 
-let outside_map = "" +
-    '#######                         ########################              \n' +
-    '#.....#                         #   #..................#              \n' +
-    '#.....#                         # C #..................#              \n' +
-    '#.....#                         # o ...................###############\n' +
-    '#.....# Jordils                 # o .................................#\n' +
-    '#.....#                         # p #................................#\n' +
-    '#.....#                         #   #................................#\n' +
-    '#.....###############################...................####.........#\n' +
-    '#.....#                             #...................#EL#.........#\n' +
-    '#.....#  Objectif: va à ton bureau  #...................#CA#.........#\n' +
-    '#.....#                             #...................####.........#\n' +
-    '#.....###############################................................#\n' +
-    '#....................................................................#\n' +
-    '#...................................................####..############\n' +
-    '#####################################...............#                 \n' +
-    '                                    #...............#                 \n' +
-    '                                    #...............#                 \n' +
-    '                                    #...............#                 \n' +
-    '                                    #...............#                 \n' +
-    '                                    #...............#                 \n' +
-    '                                    #...............####..############\n' +
-    '                                    #.................~~~~~~~........#\n' +
-    '                                    #..................~~~~..........#\n' +
-    '                                    ##################################\n';
+let maps = {
+    'outside': {
+        map: '' +
+            '#######                         ########################              \n' +
+            '#.....#                         #   #..................#              \n' +
+            '#.....#                         # C #..................#              \n' +
+            '#.....# Jordils                 # o 1..................###############\n' +
+            '#.....#                         # o 2...@............................#\n' +
+            '#.....#                         # p #................................#\n' +
+            '#.....#                         #   #................................#\n' +
+            '#.....###############################...................####.........#\n' +
+            '#.....#                             #...................#EL#.........#\n' +
+            '#.....#  Objectif: va à ton bureau  #...................#CA#.........#\n' +
+            '#.....#                             #...................####.........#\n' +
+            '#.....###############################................................#\n' +
+            '#....................................................................#\n' +
+            '#...................................................####34############\n' +
+            '#####################################...............#                 \n' +
+            '                                    #...............#                 \n' +
+            '                                    #...............#                 \n' +
+            '                                    #...............#                 \n' +
+            '                                    #...............#                 \n' +
+            '                                    #...............#                 \n' +
+            '                                    #...............####56############\n' +
+            '                                    #.................~~~~~~~........#\n' +
+            '                                    #..................~~~~..........#\n' +
+            '                                    ##################################\n',
+    },
+    'coop': {
+        map: '' +
+            '               Coop                          \n' +
+            '####################################         \n' +
+            '#..................................1         \n' +
+            '#...............................@..2         \n' +
+            '#.....#.....#.....#.....#####......#         \n' +
+            '#.....#.....#.....#.....#..........#         \n' +
+            '#.....#.....#.....#.....#.......####         \n' +
+            '#.....#.....#.....#.....#.......#$$# Caisse A\n' +
+            '#.....#.....#.....#.....#.......####         \n' +
+            '#.....#.....#.....#.....#..........#         \n' +
+            '#.....#.....#.....#.....#.......####         \n' +
+            '#.....#.....#.....#.....#.......#$$# Caisse B\n' +
+            '#.....#.....#.....#.....#.......####         \n' +
+            '#..................................#         \n' +
+            '#..................................#         \n' +
+            '####################################         \n',
+    },
+};
 
-let coop_map = "" +
-    '               Coop                          \n' +
-    '####################################         \n' +
-    '#...................................         \n' +
-    '#...................................         \n' +
-    '#.....#.....#.....#.....#####......#         \n' +
-    '#.....#.....#.....#.....#..........#         \n' +
-    '#.....#.....#.....#.....#.......####         \n' +
-    '#.....#.....#.....#.....#.......#$$# Caisse 1\n' +
-    '#.....#.....#.....#.....#.......####         \n' +
-    '#.....#.....#.....#.....#..........#         \n' +
-    '#.....#.....#.....#.....#.......####         \n' +
-    '#.....#.....#.....#.....#.......#$$# Caisse 2\n' +
-    '#.....#.....#.....#.....#.......####         \n' +
-    '#..................................#         \n' +
-    '#..................................#         \n' +
-    '####################################         \n';
+let initial_map = 'coop';
 
-let current_map = coop_map;
+function parse_all_maps() {
+    let all_teleports = {};
+    let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
-/*let btn_up   =  [118, 207, 9, 10],
-    btn_down =  [118, 217, 9, 10],
-    btn_right = [128, 217, 9, 10],
-    btn_left =  [108, 217, 9, 10];*/
+    for (let key in maps) {
+        let map = maps[key];
+        let edited_map = map.map.split('');
+        map.teleports = [];
+
+        let splitted_map = map.map.split('\n');
+
+        map.map_length = splitted_map[0].length;
+        map.map_height = splitted_map.length;
+
+        for(let y = 0; y < map.map_height; y++) {
+            for(let x = 0; x < map.map_length; x++) {
+                let chr = splitted_map[y][x];
+
+                if (chr === '@') {
+                    map.startx = x;
+                    map.starty = y;
+                    edited_map[y * (map.map_length + 1) + x] = '.';
+                } else if (teleport_symbols.indexOf(chr) > -1) {
+                    if (all_teleports[chr] === undefined) {
+                        all_teleports[chr] = {
+                            map: key,
+                            x: x,
+                            y: y
+                        };
+                    } else {
+                        map.teleports.push({
+                            sx: x,
+                            sy: y,
+                            map: all_teleports[chr].map,
+                            ex: all_teleports[chr].x,
+                            ey: all_teleports[chr].y,
+                        });
+
+                        let other_map = maps[all_teleports[chr].map];
+
+                        other_map.teleports.push({
+                            sx: all_teleports[chr].x,
+                            sy: all_teleports[chr].y,
+                            map: key,
+                            ex: x,
+                            ey: y,
+                        });
+
+                    }
+
+                    edited_map[y * (map.map_length + 1) + x] = '.';
+                }
+            }
+        }
+
+        map.map = edited_map;
+    }
+}
 
 Labyrinth.new = function(engine) {
-    let splitted_map = current_map.split('\n');
-
-    let map_length = splitted_map[0].length,
-        map_height = splitted_map.length;
+    parse_all_maps();
 
     let handle = {
         up: 0,
@@ -67,31 +123,88 @@ Labyrinth.new = function(engine) {
         px: 0,
         py: 0,
         engine: engine,
-        map_length: map_length,
-        map_height: map_height
+        map_length: 0,
+        map_height: 0,
+        current_map: undefined
     };
 
-    handle.px = 3;
-    handle.py = 4;
+    function change_map(map_name) {
+        handle.current_map = maps[map_name];
+        handle.px = handle.current_map.startx;
+        handle.py = handle.current_map.starty;
+        handle.map_length = handle.current_map.map_length;
+        handle.map_height = handle.current_map.map_height;
+    }
 
-    function test_new_position(newpx, newpy)
+    change_map(initial_map);
+
+    function test_new_position(newx, newy)
     {
-        if (newpx !== handle.px || newpy !== handle.py)
-        {
-            if (newpx >= 0 && newpx < map_length
-             && newpy >= 0 && newpy < map_height)
-            {
-                let newval = current_map[newpy * (map_length + 1) + newpx];
+        for(let i in handle.current_map.teleports) {
+            let tp = handle.current_map.teleports[i];
 
-                if (newval !== '#')
-                    return true;
+            if (tp.sx === newx && tp.sy === newy
+             || (tp.sx === handle.px && tp.sy === newy && handle.py !== newy)
+             || (tp.sx === newx && tp.sy === handle.py && handle.px !== newx)) {
+                return {
+                    'success': true,
+                    'newpx': tp.ex,
+                    'newpy': tp.ey,
+                    'newmap': tp.map
+                };
             }
         }
 
-        return false;
+        if (newx === handle.px && newy === handle.py) {
+            return {
+                'success': false
+            }
+        }
+
+        if (newx >= 0 && newx < handle.map_length
+         && newy >= 0 && newy < handle.map_height)
+        {
+            let newval = handle.current_map.map[newy * (handle.map_length + 1) + newx];
+
+            if (newval !== '#') {
+                return {
+                    'success': true,
+                    'newpx': newx,
+                    'newpy': newy
+                };
+            }
+        }
+
+        if (newx >= 0 && newx < handle.map_length
+         && handle.py >= 0 && handle.py < handle.map_height)
+        {
+            let newval = handle.current_map.map[handle.py * (handle.map_length + 1) + newx];
+
+            if (newval !== '#') {
+                return {
+                    'success': true,
+                    'newpx': newx,
+                    'newpy': handle.py
+                };
+            }
+        }
+
+        if (handle.px >= 0 && handle.px < handle.map_length
+         && newy >= 0 && newy < handle.map_height)
+        {
+            let newval = handle.current_map.map[newy * (handle.map_length + 1) + handle.px];
+
+            if (newval !== '#') {
+                return {
+                    'success': true,
+                    'newpx': handle.px,
+                    'newpy': newy
+                };
+            }
+        }
     }
 
-    handle.update = function(dt) {
+    handle.update = function() {
         let newpx = handle.px;
         let newpy = handle.py;
 
@@ -107,13 +220,15 @@ Labyrinth.new = function(engine) {
         if (handle.right)
             newpx += 1;
 
-        if (test_new_position(newpx, newpy)) {
-            handle.px = newpx;
-            handle.py = newpy;
-        } else if (test_new_position(newpx, handle.py) && newpx !== handle.px) {
-            handle.px = newpx;
-        } else if (test_new_position(handle.px, newpy) && newpy !== handle.py) {
-            handle.py = newpy;
+        let ret = test_new_position(newpx, newpy);
+
+        if (ret.success) {
+            if (typeof ret.newmap !== 'undefined') {
+                change_map(ret.newmap);
+            }
+
+            handle.px = ret.newpx;
+            handle.py = ret.newpy;
         }
     };
 
@@ -123,7 +238,7 @@ Labyrinth.new = function(engine) {
             for(let x = 0; x < handle.map_length;)
             {
                 let length = 0;
-                let val = current_map[y * (map_length + 1) + x];
+                let val = handle.current_map.map[y * (handle.map_length + 1) + x];
                 let str = "";
 
                 if (val === undefined)
@@ -141,7 +256,7 @@ Labyrinth.new = function(engine) {
                      || x + length === handle.px && y === handle.py)
                         break;
 
-                    if (current_map[y * (map_length + 1) + x + length] !== val)
+                    if (handle.current_map.map[y * (handle.map_length + 1) + x + length] !== val)
                         break;
                 }
 
@@ -164,17 +279,8 @@ Labyrinth.new = function(engine) {
                 x += length;
             }
         }
-
-        /*     handle.engine.rect(btn_up[0], btn_up[1], btn_up[2], btn_up[3], 5, 5, 5);
-        handle.engine.text('^', btn_up[0] + 2, btn_up[1] + 3, 16, 255, 0, 0);
-        handle.engine.rect(btn_right[0], btn_right[1], btn_right[2], btn_right[3], 5, 5, 5);
-        handle.engine.text('>', btn_right[0] + 2, btn_right[1] + 2, 16, 0, 255, 0);
-        handle.engine.rect(btn_down[0], btn_down[1], btn_down[2], btn_down[3], 5, 5, 5);
-        handle.engine.text('v', btn_down[0] + 2, btn_down[1] + 2, 16, 0, 0, 255);
-        handle.engine.rect(btn_left[0], btn_left[1], btn_left[2], btn_left[3], 5, 5, 5);
-        handle.engine.text('<', btn_left[0] + 2, btn_left[1] + 2, 16, 255, 0, 255);*/
     };
-
+/*
     function is_inside(handle, x, y, btn) {
         let coord = engine.get_coordinate(btn[0], btn[1], btn[2], btn[3]);
 
@@ -190,9 +296,8 @@ Labyrinth.new = function(engine) {
         if (test_new_position(x, y)) {
             handle.px = x;
             handle.py = y;
-            mark_map(handle, x, y);
         }
-    }
+    }*/
 
     handle.click = function(x, y) {
 /*        if (is_inside(handle, x, y, btn_left))
