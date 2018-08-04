@@ -68,6 +68,8 @@
     var all_loaded = function() {
         $(window).resize(function() {
             engine.resize($(window).width(), $(window).height())
+            engine.clear(0, 0, 0);
+            labyrinth.draw();
         });
 
         engine.resize($(window).width(), $(window).height());
