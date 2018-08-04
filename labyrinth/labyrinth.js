@@ -148,8 +148,8 @@ Labyrinth.new = function(engine) {
              || (tp.sx === newx && tp.sy === handle.py && handle.px !== newx)) {
                 return {
                     'success': true,
-                    'newpx': tp.ex,
-                    'newpy': tp.ey,
+                    'newpx': tp.ex + (newx - handle.px),
+                    'newpy': tp.ey + (newy - handle.py),
                     'newmap': tp.map
                 };
             }
