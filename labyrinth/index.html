@@ -56,15 +56,13 @@
 <script type="text/javascript">
     "use strict";
 
-    var elements_to_load = 0;
-    var elements_loaded = 0;
-    var all_load_declared = false;
     var labyrinth = undefined;
     var engine = undefined;
 
-    function onfailure() {
-        var canvasContainer = document.getElementById('canvasContainer');
-        canvasContainer.innerHTML = 'Something went wrong while loading the data... Check the console for details.';
+    function step() {
+        engine.clear(0, 0, 0);
+        labyrinth.update();
+        labyrinth.draw();
     }
 
     var all_loaded = function() {
@@ -87,6 +85,8 @@
             } else if (event.which === 40) {
                 labyrinth.down = 1;
             }
+
+            step();
         });
 
         $(document).on('keyup', function( event ) {
@@ -101,11 +101,7 @@
             }
         });
 
-        setInterval(function() {
-            engine.clear(0, 0, 0);
-            labyrinth.update(dt);
-            labyrinth.draw();
-        }, dt * 1000);
+        step();
     };
 
     function labyrinth_click(x, y) {
@@ -128,10 +124,7 @@
         engine = engine.handle;
         labyrinth = Labyrinth.new(engine);
 
-        all_load_declared = true;
-
-        if (elements_loaded === elements_to_load)
-            all_loaded();
+        all_loaded();
     });
 </script>
 </body>
