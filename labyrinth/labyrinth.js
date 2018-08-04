@@ -202,6 +202,10 @@ Labyrinth.new = function(engine) {
                 };
             }
         }
+
+        return {
+            'success': false
+        }
     }
 
     handle.update = function() {
