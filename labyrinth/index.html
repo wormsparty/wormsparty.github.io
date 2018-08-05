@@ -56,25 +56,25 @@
 <script type="text/javascript">
     "use strict";
 
-    var labyrinth = undefined;
-    var engine = undefined;
+    let labyrinth = undefined;
+    let engine = undefined;
 
     function step() {
-        engine.clear(0, 0, 0);
+        engine.clear(5, 5, 5);
         labyrinth.update();
         labyrinth.draw();
     }
 
-    var all_loaded = function() {
-        $(window).resize(function() {
+    function all_loaded() {
+        $(window).resize(function () {
             engine.resize($(window).width(), $(window).height())
-            engine.clear(0, 0, 0);
+            engine.clear(5, 5, 5);
             labyrinth.draw();
         });
 
         engine.resize($(window).width(), $(window).height());
 
-        $(document).on('keydown', function( event ) {
+        $(document).on('keydown', function (event) {
             if (event.which === 37) {
                 labyrinth.left = 1;
             } else if (event.which === 39) {
@@ -88,7 +88,7 @@
             step();
         });
 
-        $(document).on('keyup', function( event ) {
+        $(document).on('keyup', function (event) {
             if (event.which === 37) {
                 labyrinth.left = 0;
             } else if (event.which === 39) {
@@ -101,7 +101,7 @@
         });
 
         step();
-    };
+    }
 
     function labyrinth_click(x, y) {
         labyrinth.click(x, y);
@@ -110,12 +110,12 @@
     $(document).ready(function() {
         engine = Engine.new({
             canvasId: 'canvas',
-            width: 470,
-            height: 320
+            width: 640,
+            height: 420
         }, labyrinth_click);
 
         if (engine.error) {
-            var container = document.getElementById('canvasContainer');
+            const container = document.getElementById('canvasContainer');
             container.innerHTML = engine.error;
             return;
         }

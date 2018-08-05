@@ -1,15 +1,11 @@
 "use strict";
 
 function isfullscreen() {
-    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
-        return false;
-    }
-
-    return true;
+    return document.fullscreenElement || document.mozFullScreenElement ||document.webkitFullscreenElement;
 }
 
 function fullscreen() {
-    var canvas = document.getElementById('canvas');
+    const canvas = document.getElementById('canvas');
 
     if (!isfullscreen()) {
         if (canvas.requestFullscreen) {
@@ -30,17 +26,17 @@ function fullscreen() {
     }
 }
 
-var Engine = {};
+let Engine = {};
 
 Engine.new = function(descriptor, click) {
     // Default NES resolution
-    if (descriptor.width == undefined)
+    if (descriptor.width === undefined)
       descriptor.width = 256;
 
-    if (descriptor.height == undefined)
+    if (descriptor.height === undefined)
       descriptor.height = 240;
 
-    var handle = {
+    let handle = {
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: descriptor.width,
         reference_height: descriptor.height,
@@ -74,10 +70,10 @@ Engine.new = function(descriptor, click) {
     };
 
     handle.load_image = function(descriptor, onload, onfailure) {
-        var imageSrc = new Image();
+        let imageSrc = new Image();
         imageSrc.src = descriptor.url;
 
-        var sprite = {
+        let sprite = {
             imageSrc: imageSrc,
             frame_current: 0,
             frame_count: descriptor.frame_count,
@@ -141,9 +137,9 @@ Engine.new = function(descriptor, click) {
 
     function get_zoom(width, height, reference_width, reference_height)
     {
-        var zoom_x = width / reference_width;
-        var zoom_y = height / reference_height;
-        var zoom = zoom_x;
+        let zoom_x = width / reference_width;
+        let zoom_y = height / reference_height;
+        let zoom = zoom_x;
 
         if (zoom_y < zoom)
             zoom = zoom_y;
@@ -173,7 +169,7 @@ Engine.new = function(descriptor, click) {
         if (zoom < 1)
           zoom = 1;
 
-        var borderx, bordery, ajustementx, ajustementy;
+        let borderx, bordery, ajustementx, ajustementy;
 
         if (rotate) {
           borderx = Math.floor((width - handle.reference_height * zoom) / 2);

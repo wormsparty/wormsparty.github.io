@@ -1,9 +1,9 @@
 "use strict";
 
-var Canvas2D = {};
+let Canvas2D = {};
 
 Canvas2D.new = function(canvas, reference_width, reference_height, click) {
-	var handle = {
+	let handle = {
 		ctx: canvas.getContext('2d'),
         scaleFactor: 1,
         margin_left: 0,
@@ -17,8 +17,8 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 	};
 
     canvas.addEventListener('click', function(event) {
-        var x = (event.pageX - handle.margin_left) / handle.scaleFactor;
-        var y = (event.pageY - handle.margin_top) / handle.scaleFactor;
+        let x = (event.pageX - handle.margin_left) / handle.scaleFactor;
+        let y = (event.pageY - handle.margin_top) / handle.scaleFactor;
 
         /*if (x >= handle.reference_width - 16 && x <= handle.reference_width
          && y >= handle.reference_height - 16 && y <= handle.reference_height) {
@@ -26,7 +26,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         }*/
 
         if (click != null)
-					click(x, y);
+            click(x, y);
     }, false);
 
     handle.resize = function(scaleFactor, rotate, margin_left, margin_right, margin_top, margin_bottom, window_width, window_height) {
@@ -67,15 +67,15 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     };
 
     handle.render = function(sprite, x, y) {
-        var sx = sprite.frame_width * sprite.frame_current;
-        var sy = sprite.frame_height * sprite.variant_current;
-        var w1 = sprite.frame_width;
-        var w2 = sprite.frame_height;
+        let sx = sprite.frame_width * sprite.frame_current;
+        let sy = sprite.frame_height * sprite.variant_current;
+        let w1 = sprite.frame_width;
+        let w2 = sprite.frame_height;
 
-        var cutLeft = 0;
-        var cutRight = 0;
-        var cutTop = 0;
-        var cutBottom = 0;
+        let cutLeft = 0;
+        let cutRight = 0;
+        let cutTop = 0;
+        let cutBottom = 0;
 
         if (x !== Math.floor(x))
             console.error("x should be an integer! x=" + x);
@@ -162,23 +162,23 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 
     handle.clear = function(r, g, b) {
         handle.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-				//handle.ctx.fillRect(0, 0, handle.window_width, handle.window_height);
+        //handle.ctx.fillRect(0, 0, handle.window_width, handle.window_height);
 
         // Left band
-				//handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-				handle.ctx.fillRect(0, 0, handle.margin_left, handle.window_height);
+        //handle.ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+        handle.ctx.fillRect(0, 0, handle.margin_left, handle.window_height);
         // Top band
-				//handle.ctx.fillStyle = 'rgba(255, 255, 0, 1)';
-				handle.ctx.fillRect(handle.margin_left, 0, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_top);
+        //handle.ctx.fillStyle = 'rgba(255, 255, 0, 1)';
+        handle.ctx.fillRect(handle.margin_left, 0, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_top);
         // Right band
-				//handle.ctx.fillStyle = 'rgba(255, 0, 255, 1)';
+        //handle.ctx.fillStyle = 'rgba(255, 0, 255, 1)';
         handle.ctx.fillRect(handle.window_width - handle.margin_right, 0, handle.margin_right, handle.window_height, 255, 0, 255);
         // Bottom band
-				//handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
+        //handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
         handle.ctx.fillRect(handle.margin_left, handle.window_height - handle.margin_bottom, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_bottom);
 
-				handle.ctx.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
-				handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
+        handle.ctx.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
+        handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
     };
 
     return handle;
