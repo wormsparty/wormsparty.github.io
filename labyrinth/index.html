@@ -75,27 +75,29 @@
         engine.resize($(window).width(), $(window).height());
 
         $(document).on('keydown', function (event) {
-            if (event.which === 37) {
+            if (event.key === 'ArrowLeft') {
                 labyrinth.left = 1;
-            } else if (event.which === 39) {
+            } else if (event.key === 'ArrowRight') {
                 labyrinth.right = 1;
-            } else if (event.which === 38) {
+            } else if (event.key === 'ArrowUp') {
                 labyrinth.up = 1;
-            } else if (event.which === 40) {
+            } else if (event.key === 'ArrowDown') {
                 labyrinth.down = 1;
+            } else if (event.key === 'i') {
+                labyrinth.open_inventory = !labyrinth.open_inventory;
             }
 
             step();
         });
 
         $(document).on('keyup', function (event) {
-            if (event.which === 37) {
+            if (event.key === 'ArrowLeft') {
                 labyrinth.left = 0;
-            } else if (event.which === 39) {
+            } else if (event.key === 'ArrowRight') {
                 labyrinth.right = 0;
-            } else if (event.which === 38) {
+            } else if (event.key === 'ArrowUp') {
                 labyrinth.up = 0;
-            } else if (event.which === 40) {
+            } else if (event.key === 'ArrowDown') {
                 labyrinth.down = 0;
             }
         });

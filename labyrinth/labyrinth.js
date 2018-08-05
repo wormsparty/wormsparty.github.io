@@ -31,6 +31,50 @@ let maps = {
             '                                    #...............~~~~..........#\n' +
             '                                    ###############################\n',
     },
+    'rez': {
+        map: '' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                               ELCA Rez                      \n' +
+            '                                                             \n' +
+            '                #####34#############################         \n' +
+            '                #..................................#         \n' +
+            '                #.....@............................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                ####################################         \n',
+    },
+    '1e': {
+        map: '' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                             ELCA premier                    \n' +
+            '                                                             \n' +
+            '                ####################################         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #.....@............................#         \n' +
+            '                #..................................#         \n' +
+            '                #..................................#         \n' +
+            '                #####56#############################         \n',
+    },
     'coop': {
         map: '' +
             '                                                             \n' +
@@ -53,6 +97,34 @@ let maps = {
             '                #..................................#         \n' +
             '                ####################################         \n',
     },
+};
+
+let screens = {
+    'inventory': {
+        map: '' +
+            '                                                           \n' +
+            '                                                           \n' +
+            '                                                           \n' +
+            '      #####################################################\n' +
+            '      #...................................................#\n' +
+            '      #....................Inventaire.....................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #...................................................#\n' +
+            '      #####################################################\n',
+    }
 };
 
 let initial_map = 'coop';
@@ -116,14 +188,26 @@ function parse_all_maps() {
     }
 }
 
+function parse_all_screens() {
+    for (let key in screens) {
+        let map = screens[key];
+        let splitted_map = map.map.split('\n');
+
+        map.map_length = splitted_map[0].length;
+        map.map_height = splitted_map.length;
+    }
+}
+
 Labyrinth.new = function(engine) {
     parse_all_maps();
+    parse_all_screens();
 
     let handle = {
         up: 0,
         down: 0,
         left: 0,
         right: 0,
+        open_inventory: false,
         px: 0,
         py: 0,
         engine: engine,
@@ -212,7 +296,7 @@ Labyrinth.new = function(engine) {
         }
     }
 
-    handle.update = function() {
+    function update_on_map(handle) {
         let newpx = handle.px;
         let newpy = handle.py;
 
@@ -238,9 +322,21 @@ Labyrinth.new = function(engine) {
             handle.px = ret.newpx;
             handle.py = ret.newpy;
         }
+    }
+
+    function update_on_inventory(handle) {
+        // TODO
+    }
+
+    handle.update = function() {
+        if (handle.open_inventory) {
+            update_on_inventory(handle);
+        } else {
+            update_on_map(handle);
+        }
     };
 
-    handle.draw = function() {
+    function draw_map(handle) {
         for(let y = 0; y < handle.map_height; y++)
         {
             for(let x = 0; x < handle.map_length;)
@@ -261,7 +357,7 @@ Labyrinth.new = function(engine) {
                     str += val;
 
                     if (x === handle.px && y === handle.py
-                     || x + length === handle.px && y === handle.py)
+                        || x + length === handle.px && y === handle.py)
                         break;
 
                     if (handle.current_map.map[y * (handle.map_length + 1) + x + length] !== val)
@@ -286,6 +382,26 @@ Labyrinth.new = function(engine) {
 
                 x += length;
             }
+        }
+    }
+
+    function draw_inventory(handle)
+    {
+        let inventory = screens['inventory'];
+
+        for(let y = 0; y < inventory.map_height; y++) {
+            for (let x = 0; x < inventory.map_length; x++) {
+                let start = y * (inventory.map_length + 1);
+                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
+            }
+        }
+    }
+
+    handle.draw = function() {
+        if (handle.open_inventory) {
+            draw_inventory(handle);
+        } else {
+            draw_map(handle);
         }
     };
 /*
