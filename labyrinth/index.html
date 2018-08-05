@@ -63,6 +63,11 @@
         engine.clear(5, 5, 5);
         labyrinth.update();
         labyrinth.draw();
+
+        labyrinth.left = 0;
+        labyrinth.right = 0;
+        labyrinth.up = 0;
+        labyrinth.down = 0;
     }
 
     function all_loaded() {
@@ -75,31 +80,43 @@
         engine.resize($(window).width(), $(window).height());
 
         $(document).on('keydown', function (event) {
-            if (event.key === 'ArrowLeft') {
-                labyrinth.left = 1;
-            } else if (event.key === 'ArrowRight') {
-                labyrinth.right = 1;
-            } else if (event.key === 'ArrowUp') {
-                labyrinth.up = 1;
-            } else if (event.key === 'ArrowDown') {
-                labyrinth.down = 1;
-            } else if (event.key === 'i') {
+            let update = false;
+
+            if (event.key === 'i') {
                 labyrinth.open_inventory = !labyrinth.open_inventory;
+                update = true;
+            }
+            else
+            {
+                if (event.key === 'ArrowLeft' || event.key === '4' || event.key === '7' || event.key === '1') {
+                    labyrinth.left = 1;
+                    update = true;
+                }
+
+                if (event.key === 'ArrowRight' || event.key === '6' || event.key === '9' || event.key === '3') {
+                    labyrinth.right = 1;
+                    update = true;
+                }
+
+                if (event.key === 'ArrowUp' || event.key === '8' || event.key === '7' || event.key === '9') {
+                    labyrinth.up = 1;
+                    update = true;
+                }
+
+                if (event.key === 'ArrowDown' || event.key === '2' || event.key === '3' || event.key === '1') {
+                    labyrinth.down = 1;
+                    update = true;
+                }
+
+                if (event.key === '.' || event.key === '5') {
+                    update = true;
+                }
             }
 
-            step();
-        });
+            if (update)
+                step();
 
-        $(document).on('keyup', function (event) {
-            if (event.key === 'ArrowLeft') {
-                labyrinth.left = 0;
-            } else if (event.key === 'ArrowRight') {
-                labyrinth.right = 0;
-            } else if (event.key === 'ArrowUp') {
-                labyrinth.up = 0;
-            } else if (event.key === 'ArrowDown') {
-                labyrinth.down = 0;
-            }
+            //console.log('Key:' + event.key);
         });
 
         step();

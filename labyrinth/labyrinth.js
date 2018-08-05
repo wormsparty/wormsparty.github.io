@@ -556,7 +556,7 @@ Labyrinth.new = function(engine) {
                         } else if (p === 'v') {
                             handle.engine.text(p, xx, yy, 16, 0, 0, 255);
                         } else if (p === 'r') {
-                            handle.engine.text(p, xx, yy, 16, 0, 0, 0);
+                            handle.engine.text(p, xx, yy, 16, 255, 0, 255);
                         } else {
                             handle.engine.text(p, xx, yy, 16, 255, 255, 255);
                         }
