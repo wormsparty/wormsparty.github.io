@@ -63,11 +63,6 @@
         engine.clear(5, 5, 5);
         labyrinth.update();
         labyrinth.draw();
-
-        labyrinth.left = 0;
-        labyrinth.right = 0;
-        labyrinth.up = 0;
-        labyrinth.down = 0;
     }
 
     function all_loaded() {
@@ -118,6 +113,24 @@
                 step();
 
             //console.log('Key:' + event.key);
+        });
+
+        $(document).on('keyup', function (event) {
+            if (event.key === 'ArrowLeft' || event.key === '4' || event.key === '7' || event.key === '1') {
+                labyrinth.left = 0;
+            }
+
+            if (event.key === 'ArrowRight' || event.key === '6' || event.key === '9' || event.key === '3') {
+                labyrinth.right = 0;
+            }
+
+            if (event.key === 'ArrowUp' || event.key === '8' || event.key === '7' || event.key === '9') {
+                labyrinth.up = 0;
+            }
+
+            if (event.key === 'ArrowDown' || event.key === '2' || event.key === '3' || event.key === '1') {
+                labyrinth.down = 0;
+            }
         });
 
         step();
