@@ -83,6 +83,12 @@
             } else if (event.key === 'h') {
                 labyrinth.open_help = !labyrinth.open_help;
                 update = true;
+            } else if (event.key === 'j') {
+                labyrinth.open_journal = !labyrinth.open_journal;
+                update = true;
+            } else if (event.key === 'p') {
+                labyrinth.pickup = true;
+                update = true;
             } else {
                 if (event.key === 'ArrowLeft' || event.key === '4' || event.key === '7' || event.key === '1') {
                     labyrinth.left = 1;

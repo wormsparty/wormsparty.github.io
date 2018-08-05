@@ -119,7 +119,9 @@ let maps = {
             '                #..................................#         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
-            '                #####..#############################         \n',
+            '                #####..#############################         \n' +
+            '                                                             \n' +
+            '                             p: prendre                      \n',
         meta: '' +
             '                                                             \n' +
             '                                                             \n' +
@@ -130,8 +132,8 @@ let maps = {
             '                                                             \n' +
             '                ####################################         \n' +
             '                #                                  #         \n' +
-            '                #                                  #         \n' +
-            '                #                                  #         \n' +
+            '                # $$$$$                            #         \n' +
+            '                # $$$$$                            #         \n' +
             '                #                                  #         \n' +
             '                #                JJJJJJJ           #         \n' +
             '                #                JJJJJJJ           #         \n' +
@@ -139,7 +141,9 @@ let maps = {
             '                #     @                            #         \n' +
             '                #                                  #         \n' +
             '                #                                  #         \n' +
-            '                #####56#############################         \n',
+            '                #####56#############################         \n' +
+            '                                                             \n' +
+            '                                                             \n',
     },
     'coop': {
         map: '' +
@@ -152,15 +156,15 @@ let maps = {
             '                #..................................#         \n' +
             '                #...................................         \n' +
             '                #...................................         \n' +
-            '                #.....#?....#*)...#&%...#####......#         \n' +
-            '                #.....#?....#[(...#%%...#..........#         \n' +
-            '                #.....#?....#]/...#%&...#.......####         \n' +
-            '                #.....#?....#{]...#&%...#.......#$$# Caisse 1\n' +
-            '                #.....#?....#})...#%%...#.......####         \n' +
+            '                #.....#.....#.....#.....#####......#         \n' +
+            '                #.....#.....#.....#.....#...#......#         \n' +
+            '                #.....#.....#.....#.....#...#......#         \n' +
+            '                #.....#.....#.....#.....#...#......#         \n' +
+            '                #.....#.....#.....#.....#####......#         \n' +
+            '                #..................................#         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
             '                ####################################         \n' +
-            '                                                             \n' +
             '                                                             \n' +
             '                             p: prendre                      \n' +
             '                             d: déposer                      \n',
@@ -174,15 +178,15 @@ let maps = {
             '                #        vvvvvvvv                  #         \n' +
             '                #        vvvvvvvv              @   1         \n' +
             '                #        vvvvvvvv                  2         \n' +
-            '                #     #     #     #     #####      #         \n' +
-            '                #     #     #     #     #          #         \n' +
-            '                #     #     #     #     #       ####         \n' +
-            '                #     #     #     #     #       #  #         \n' +
-            '                #     #     #     #     #       ####         \n' +
+            '                #     #?    #*)   #&%   #####      #         \n' +
+            '                #     #?    #](   #%%   #ccc#      #         \n' +
+            '                #     #?    #]*   #%&   #ccc#      #         \n' +
+            '                #     #?    #{!   #&%   #ccc#      #         \n' +
+            '                #     #?    #})   #%%   #####      #         \n' +
+            '                #                                  #         \n' +
             '                #                                  #         \n' +
             '                #                                  #         \n' +
             '                ####################################         \n' +
-            '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n',
@@ -196,23 +200,23 @@ let screens = {
             '                                                           \n' +
             '                                                           \n' +
             '      #####################################################\n' +
-            '      #...................................................#\n' +
-            '      #....................Inventaire.....................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
+            '      #                                                   #\n' +
+            '      #                    Inventaire                     #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
             '      #####################################################\n',
     },
     'journal': {
@@ -221,23 +225,23 @@ let screens = {
             '                                                           \n' +
             '                                                           \n' +
             '      #####################################################\n' +
-            '      #...................................................#\n' +
-            '      #.....................Journal.......................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
+            '      #                                                   #\n' +
+            '      #                       Journal                     #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
             '      #####################################################\n',
     },
     'help': {
@@ -255,11 +259,10 @@ let screens = {
             '      #      Déplacement: flèche directionnelles          #\n' +
             "      #      Utiliser: i, puis sélectionner l'objet       #\n" +
             '      #      Prendre: p                                   #\n' +
-            "      #      Déposer: d, puis sélectionner l'objet        #\n" +
             '      #      Parler: marcher vers le PNJ                  #\n' +
-            '      #      Acheter: prendre les objets souhaités,       #\n' +
-            '      #               puis poser la somme équivalente     #\n' +
+            '      #      Journal: j                                   #\n' +
             '      #      Fermer cette aide: h                         #\n' +
+            '      #                                                   #\n' +
             '      #                                                   #\n' +
             '      #                                                   #\n' +
             '      #                                                   #\n' +
@@ -267,11 +270,12 @@ let screens = {
     },
 };
 
-let initial_map = 'coop';
+let initial_map = '1e';
 
 function parse_all_maps() {
     let all_teleports = {};
     let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    let item_symbols = [ '{', '}', '[', ']', '(', ')', '&', '%', '!', '?', '*', '$'];
 
     for (let key in maps) {
         let current_map = maps[key];
@@ -283,6 +287,7 @@ function parse_all_maps() {
         current_map.map_length = visual_map[0].length;
         current_map.map_height = visual_map.length;
         current_map.pnj_positions = {};
+        current_map.item_positions = {};
 
         if (visual_map[0].length !== meta_map[0].length) {
             console.log('Carte META de largeur différente que la carte visuelle!!');
@@ -330,6 +335,13 @@ function parse_all_maps() {
                         });
 
                     }
+                } else if (item_symbols.indexOf(chr) > -1) {
+                    if (current_map.item_positions[chr] === undefined) {
+                        current_map.item_positions[chr] = []
+                    }
+
+                    //console.log('Adding ' + chr + ' at ' + x + ', ' + y + ' (' + key + ')');
+                    current_map.item_positions[chr].push({x: x, y: y});
                 } else if (chr !== ' ' && chr !== undefined) {
                     if (chr === '@') {
                         current_map.start = {x: x, y: y};
@@ -368,11 +380,15 @@ Labyrinth.new = function(engine) {
         right: 0,
         open_inventory: false,
         open_help: false,
+        open_journal: false,
+        pickup: false,
         engine: engine,
         map_length: 0,
         map_height: 0,
         current_map: undefined,
         current_status: "",
+        inventory: [],
+        coins: 0,
     };
 
     function change_map(map_name) {
@@ -463,8 +479,116 @@ Labyrinth.new = function(engine) {
         }
     }
 
+    function get_price(item) {
+        if (item === '%') {
+            return 10;
+        } else if (item === '&') {
+            return 2;
+        } else if (item === '(') {
+            return 5;
+        } else if (item === ')') {
+            return 5;
+        } else if (item === '[') {
+            return 10;
+        } else if (item === ']') {
+            return 10;
+        } else if (item === '{') {
+            return 15;
+        } else if (item === '}') {
+            return 15;
+        } else if (item === '*') {
+            return 1;
+        } else if (item === '?') {
+            return 4;
+        } else if (item === '!') {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
+    function get_description(item) {
+        if (item === '$')
+            return 'Une pièce de $1'
+
+        if (item === '%')
+            return 'Un plat pré-cuisiné';
+
+        if (item === '&')
+            return 'Un coca';
+
+        if (item === '(')
+            return 'Un bout de bois gauche';
+
+        if (item === ')')
+            return 'Un bout de bois droit';
+
+        if (item === '[')
+            return 'Un crochet gauche';
+
+        if (item === ']')
+            return 'Un crochet droit';
+
+        if (item === '{')
+            return 'Un arc gauche';
+
+        if (item === '}')
+            return 'Un arc droit';
+
+        if (item === '*')
+            return 'Un caillou';
+
+        if (item === '?')
+            return 'Une potion mystère';
+
+        if (item === '!')
+            return 'Un sort mystère';
+    }
+
     function update_on_map(handle) {
         let hero_pos = handle.pnjs['@'];
+
+        if (handle.pickup)
+        {
+            let item_picked = false;
+
+            for(let item in handle.current_map.item_positions) {
+                let positions = handle.current_map.item_positions[item];
+                let price = get_price(item);
+                let description = get_description(item);
+
+                for(let i = 0 ; i < positions.length; i++) {
+                    if (positions[i].x === hero_pos.x && positions[i].y === hero_pos.y) {
+                        if (item === '$') {
+                            handle.coins++;
+                            positions.splice(i, 1);
+                            handle.current_status = description + " ajouté(e) à l'inventaire";
+                        } else if (handle.coins >= price) {
+                            handle.inventory.push(item);
+                            handle.coins -= price;
+                            positions.splice(i, 1);
+                            handle.current_status = description + " ajouté(e) à l'inventaire";
+                        } else {
+                            handle.current_status = "Pas assez d'argent!";
+                        }
+
+                        item_picked = true;
+                        break;
+                    }
+                }
+
+                if (item_picked)
+                    break;
+            }
+
+            if (!item_picked) {
+                handle.current_status = "Il n'y a rien à prendre.";
+            }
+
+            handle.pickup = false;
+            return;
+        }
+
         let new_pos = {x: hero_pos.x, y: hero_pos.y };
 
         if (handle.up)
@@ -493,7 +617,9 @@ Labyrinth.new = function(engine) {
                 } else if (p === 'r') {
                     handle.current_status = 'Bonjour!';
                 } else if (p === 'v') {
-                    handle.current_status = 'Le vol ne paie pas!';
+                    handle.current_status = 'On ne peut pas sortir sans payer!';
+                } else if (p === 'c') {
+                    handle.current_status = "On n'est pas sensé pouvoir me parler!";
                 } else if (p === 'm') {
                     handle.current_status = 'Une pièce?';
                 } else {
@@ -553,34 +679,34 @@ Labyrinth.new = function(engine) {
                 handle.pnjs['@'] = ret.pos;
             }
 
-            let current_symbol = handle.current_map.map[ handle.pnjs['@'].y * (handle.map_length + 1) +  handle.pnjs['@'].x];
+            hero_pos = handle.pnjs['@'];
+            let item_found = false;
 
-            if (current_symbol === '%') {
-                handle.current_status = 'Un sandwich (1$)';
-            } else if (current_symbol === '&') {
-                handle.current_status = 'Un coca (1$)';
-            } else if (current_symbol === '(') {
-                handle.current_status = 'Un bout de bois gauche (1$)';
-            } else if (current_symbol === ')') {
-                handle.current_status = 'Un bout de bois droit (1$)';
-            } else if (current_symbol === '[') {
-                handle.current_status = 'Un crochet gauche (2$)';
-            } else if (current_symbol === ']') {
-                handle.current_status = 'Un crochet droit (2$)';
-            } else if (current_symbol === '{') {
-                handle.current_status = 'Un arc gauche (3$)';
-            } else if (current_symbol === '}') {
-                handle.current_status = 'Un arc droit (3$)';
-            } else if (current_symbol === '*') {
-                handle.current_status = 'Un caillou (1$)';
-            } else if (current_symbol === '/') {
-                handle.current_status = 'Une barre (4$)';
-            } else if (current_symbol === '?') {
-                handle.current_status = 'Un sort mystère (1$)';
-            } else {
-                handle.current_status = ret.newstatus;
+            for(let item in handle.current_map.item_positions) {
+                let positions = handle.current_map.item_positions[item];
+                let price = get_price(item);
+                let description = get_description(item);
+
+                for(let i = 0 ; i < positions.length; i++) {
+                    if (positions[i].x === hero_pos.x && positions[i].y === hero_pos.y) {
+                        handle.current_status = description;
+
+                        if (item !== '$') {
+                            handle.current_status += ' ($' + price + ')';
+                        }
+
+                        item_found = true;
+                        break;
+                    }
+                }
+
+                if (item_found)
+                    break;
             }
 
+            if (!item_found) {
+                handle.current_status = '';
+            }
         }
     }
 
@@ -592,11 +718,17 @@ Labyrinth.new = function(engine) {
         // Nothing?
     }
 
+    function update_on_journal(handle) {
+        // Nothing?
+    }
+
     handle.update = function() {
         if (handle.open_inventory) {
             update_on_inventory(handle);
         } else if (handle.open_help) {
             update_on_help(handle);
+        } else if (handle.open_journal) {
+            update_on_journal(handle);
         } else {
             update_on_map(handle);
         }
@@ -632,6 +764,8 @@ Labyrinth.new = function(engine) {
                             handle.engine.text(p, xx, yy, 16, 155, 155, 155);
                         } else if (p === 'v') {
                             handle.engine.text(p, xx, yy, 16, 0, 0, 255);
+                        } else if (p === 'c') {
+                            handle.engine.text(p, xx, yy, 16, 0, 255, 255);
                         } else if (p === 'r') {
                             handle.engine.text(p, xx, yy, 16, 255, 0, 255);
                         } else {
@@ -644,6 +778,53 @@ Labyrinth.new = function(engine) {
                 }
 
                 if (pnj_found)
+                {
+                    x++;
+                    continue;
+                }
+
+                let item_found = false;
+
+                for (let item in handle.current_map.item_positions) {
+                    let positions = handle.current_map.item_positions[item];
+
+                    for (let i = 0; i < positions.length; i++) {
+                        if (x === positions[i].x && y === positions[i].y) {
+                            if (item === '$')
+                                handle.engine.text(item, xx, yy, 16, 200, 200, 0);
+                            else if (item === '[')
+                                handle.engine.text(item, xx, yy, 16, 255, 255, 0);
+                            else if (item === ']')
+                                handle.engine.text(item, xx, yy, 16, 255, 0, 255);
+                            else if (item === '{')
+                                handle.engine.text(item, xx, yy, 16, 0, 255, 255);
+                            else if (item === '}')
+                                handle.engine.text(item, xx, yy, 16, 255, 0, 0);
+                            else if (item === '(')
+                                handle.engine.text(item, xx, yy, 16, 0, 255, 0);
+                            else if (item === ')')
+                                handle.engine.text(item, xx, yy, 16, 0, 0, 255);
+                            else if (item === '*')
+                                handle.engine.text(item, xx, yy, 16, 155, 255, 255);
+                            else if (item === '%')
+                                handle.engine.text(item, xx, yy, 16, 255, 155, 0);
+                            else if (item === '&')
+                                handle.engine.text(item, xx, yy, 16, 255, 0, 0);
+                            else if (item === '?')
+                                handle.engine.text(item, xx, yy, 16, 255, 255, 255);
+                            else if (item === '!')
+                                handle.engine.text(item, xx, yy, 16, 30, 30, 30);
+
+                            item_found = true;
+                            break;
+                        }
+                    }
+
+                    if (item_found)
+                        break;
+                }
+
+                if (item_found)
                 {
                     x++;
                     continue;
@@ -664,7 +845,24 @@ Labyrinth.new = function(engine) {
                         }
                     }
 
-                    if (pnj_found || handle.current_map.map[y * (handle.map_length + 1) + x + length] !== val)
+                    if (!pnj_found)
+                    {
+                        for (let item in handle.current_map.item_positions) {
+                            let positions = handle.current_map.item_positions[item];
+
+                            for (let i = 0; i < positions.length; i++) {
+                                if (x + length === positions[i].x && y === positions[i].y) {
+                                    item_found = true;
+                                    break;
+                                }
+                            }
+
+                            if (item_found)
+                                break;
+                        }
+                    }
+
+                    if (pnj_found || item_found || handle.current_map.map[y * (handle.map_length + 1) + x + length] !== val)
                         break;
                 }
 
@@ -674,32 +872,6 @@ Labyrinth.new = function(engine) {
                     handle.engine.text(str, xx, yy, 16, 100, 100, 100);
                 else if (val === '~')
                     handle.engine.text(str, xx, yy, 16, 200, 200, 200);
-                else if (val === '$')
-                    handle.engine.text(str, xx, yy, 16, 200, 200, 0);
-                else if (val === '[')
-                    handle.engine.text(str, xx, yy, 16, 255, 255, 0);
-                else if (val === ']')
-                    handle.engine.text(str, xx, yy, 16, 255, 0, 255);
-                else if (val === '{')
-                    handle.engine.text(str, xx, yy, 16, 0, 255, 255);
-                else if (val === '}')
-                    handle.engine.text(str, xx, yy, 16, 255, 0, 0);
-                else if (val === '(')
-                    handle.engine.text(str, xx, yy, 16, 0, 255, 0);
-                else if (val === ')')
-                    handle.engine.text(str, xx, yy, 16, 0, 0, 255);
-                else if (val === '/')
-                    handle.engine.text(str, xx, yy, 16, 0, 155, 255);
-                else if (val === '*')
-                    handle.engine.text(str, xx, yy, 16, 155, 255, 255);
-                else if (val === '%')
-                    handle.engine.text(str, xx, yy, 16, 255, 155, 0);
-                else if (val === '&')
-                    handle.engine.text(str, xx, yy, 16, 255, 0, 0);
-                else if (val === '?')
-                    handle.engine.text(str, xx, yy, 16, 255, 255, 255);
-                else if (val === '!')
-                    handle.engine.text(str, xx, yy, 16, 0, 0, 0);
                 else
                     handle.engine.text(str, xx, yy, 16, 255, 255, 255);
 
@@ -737,11 +909,25 @@ Labyrinth.new = function(engine) {
         }
     }
 
+    function draw_journal(handle)
+    {
+        let inventory = screens['journal'];
+
+        for(let y = 0; y < inventory.map_height; y++) {
+            for (let x = 0; x < inventory.map_length; x++) {
+                let start = y * (inventory.map_length + 1);
+                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
+            }
+        }
+    }
+
     handle.draw = function() {
         if (handle.open_inventory) {
             draw_inventory(handle);
         } else if (handle.open_help) {
             draw_help(handle);
+        } else if (handle.open_journal) {
+            draw_journal(handle);
         } else {
             draw_map(handle);
         }
