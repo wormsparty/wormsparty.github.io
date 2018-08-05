@@ -13,16 +13,16 @@ let maps = {
             '#.....#                      #      ..............................#\n' +
             '#.....#                      #      #.............................#\n' +
             '#.....#                      #      #.............................#\n' +
-            '#.....###############################................####.........#\n' +
+            '#.....#                      ########................####.........#\n' +
             '#.....#                             #................#EL#.........#\n' +
-            '#.....#  Objectif: va à ton bureau  #................#CA#.........#\n' +
+            '#.....#                             #................#CA#.........#\n' +
             '#.....#                             #................####.........#\n' +
             '#.....###############################.............................#\n' +
             '#.................................................................#\n' +
             '#................................................####..############\n' +
             '#####################################............#                 \n' +
             '                                    #............#                 \n' +
-            '                                    #............#                 \n' +
+            '          h : aide                  #............#                 \n' +
             '                                    #............#                 \n' +
             '                                    #............#                 \n' +
             '                                    #............#                 \n' +
@@ -236,7 +236,7 @@ let screens = {
             '      #...................................................#\n' +
             '      #####################################################\n',
     },
-    'aide': {
+    'help': {
         map: '' +
             '                                                           \n' +
             '                                                           \n' +
@@ -245,25 +245,25 @@ let screens = {
             '                                                           \n' +
             '                                                           \n' +
             '      #####################################################\n' +
-            '      #...................................................#\n' +
-            '      #......................Aide.........................#\n' +
-            '      #...................................................#\n' +
-            '      #......Déplacement: flèche directionnelles..........#\n' +
-            "      #......Utiliser: i, puis sélectionner l'objet.......#\n" +
-            '      #......Prendre: p...................................#\n' +
-            "      #......Déposer: d, puis sélectionner l'objet........#\n" +
-            '      #......Parler: marcher vers le PNJ..................#\n' +
-            '      #......Acheter: prendre les objets souhaités,.......#\n' +
-            '      #...............puis poser la somme équivalente.....#\n' +
-            '      #......Fermer cette aide: h.........................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
-            '      #...................................................#\n' +
+            '      #                                                   #\n' +
+            '      #                       Aide                        #\n' +
+            '      #                                                   #\n' +
+            '      #      Déplacement: flèche directionnelles          #\n' +
+            "      #      Utiliser: i, puis sélectionner l'objet       #\n" +
+            '      #      Prendre: p                                   #\n' +
+            "      #      Déposer: d, puis sélectionner l'objet        #\n" +
+            '      #      Parler: marcher vers le PNJ                  #\n' +
+            '      #      Acheter: prendre les objets souhaités,       #\n' +
+            '      #               puis poser la somme équivalente     #\n' +
+            '      #      Fermer cette aide: h                         #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
+            '      #                                                   #\n' +
             '      #####################################################\n',
     },
 };
 
-let initial_map = 'coop';
+let initial_map = 'outside';
 
 function parse_all_maps() {
     let all_teleports = {};
@@ -363,6 +363,7 @@ Labyrinth.new = function(engine) {
         left: 0,
         right: 0,
         open_inventory: false,
+        open_help: false,
         engine: engine,
         map_length: 0,
         map_height: 0,
@@ -517,9 +518,15 @@ Labyrinth.new = function(engine) {
         // TODO
     }
 
+    function update_on_help(handle) {
+        // Nothing?
+    }
+
     handle.update = function() {
         if (handle.open_inventory) {
             update_on_inventory(handle);
+        } else if (handle.open_help) {
+            update_on_help(handle);
         } else {
             update_on_map(handle);
         }
@@ -609,7 +616,21 @@ Labyrinth.new = function(engine) {
 
     function draw_inventory(handle)
     {
+        // TODO: Items!
+
         let inventory = screens['inventory'];
+
+        for(let y = 0; y < inventory.map_height; y++) {
+            for (let x = 0; x < inventory.map_length; x++) {
+                let start = y * (inventory.map_length + 1);
+                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
+            }
+        }
+    }
+
+    function draw_help(handle)
+    {
+        let inventory = screens['help'];
 
         for(let y = 0; y < inventory.map_height; y++) {
             for (let x = 0; x < inventory.map_length; x++) {
@@ -622,6 +643,8 @@ Labyrinth.new = function(engine) {
     handle.draw = function() {
         if (handle.open_inventory) {
             draw_inventory(handle);
+        } else if (handle.open_help) {
+            draw_help(handle);
         } else {
             draw_map(handle);
         }
