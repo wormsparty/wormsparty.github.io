@@ -146,25 +146,25 @@ let maps = {
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
-            '                                                             \n' +
-            '                                                             \n' +
             '                               Coop                          \n' +
             '                                                             \n' +
             '                ####################################         \n' +
             '                #..................................#         \n' +
             '                #...................................         \n' +
             '                #...................................         \n' +
-            '                #.....#.....#.....#.....#####......#         \n' +
-            '                #.....#.....#.....#.....#..........# Caisse 1\n' +
-            '                #.....#.....#.....#.....#.......####         \n' +
-            '                #.....#.....#.....#.....#.......#$$#         \n' +
-            '                #.....#.....#.....#.....#.......####         \n' +
+            '                #.....#?....#*)...#&%...#####......#         \n' +
+            '                #.....#?....#[(...#%%...#..........#         \n' +
+            '                #.....#?....#]/...#%&...#.......####         \n' +
+            '                #.....#?....#{]...#&%...#.......#$$# Caisse 1\n' +
+            '                #.....#?....#})...#%%...#.......####         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
-            '                ####################################         \n',
+            '                ####################################         \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                             p: prendre                      \n' +
+            '                             d: déposer                      \n',
         meta: '' +
-            '                                                             \n' +
-            '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
@@ -181,7 +181,11 @@ let maps = {
             '                #     #     #     #     #       ####         \n' +
             '                #                                  #         \n' +
             '                #                                  #         \n' +
-            '                ####################################         \n',
+            '                ####################################         \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n' +
+            '                                                             \n',
     },
 };
 
@@ -263,7 +267,7 @@ let screens = {
     },
 };
 
-let initial_map = 'outside';
+let initial_map = 'coop';
 
 function parse_all_maps() {
     let all_teleports = {};
@@ -549,7 +553,34 @@ Labyrinth.new = function(engine) {
                 handle.pnjs['@'] = ret.pos;
             }
 
-            handle.current_status = ret.newstatus;
+            let current_symbol = handle.current_map.map[ handle.pnjs['@'].y * (handle.map_length + 1) +  handle.pnjs['@'].x];
+
+            if (current_symbol === '%') {
+                handle.current_status = 'Un sandwich (1$)';
+            } else if (current_symbol === '&') {
+                handle.current_status = 'Un coca (1$)';
+            } else if (current_symbol === '(') {
+                handle.current_status = 'Un bout de bois gauche (1$)';
+            } else if (current_symbol === ')') {
+                handle.current_status = 'Un bout de bois droit (1$)';
+            } else if (current_symbol === '[') {
+                handle.current_status = 'Un crochet gauche (2$)';
+            } else if (current_symbol === ']') {
+                handle.current_status = 'Un crochet droit (2$)';
+            } else if (current_symbol === '{') {
+                handle.current_status = 'Un arc gauche (3$)';
+            } else if (current_symbol === '}') {
+                handle.current_status = 'Un arc droit (3$)';
+            } else if (current_symbol === '*') {
+                handle.current_status = 'Un caillou (1$)';
+            } else if (current_symbol === '/') {
+                handle.current_status = 'Une barre (4$)';
+            } else if (current_symbol === '?') {
+                handle.current_status = 'Un sort mystère (1$)';
+            } else {
+                handle.current_status = ret.newstatus;
+            }
+
         }
     }
 
@@ -645,6 +676,30 @@ Labyrinth.new = function(engine) {
                     handle.engine.text(str, xx, yy, 16, 200, 200, 200);
                 else if (val === '$')
                     handle.engine.text(str, xx, yy, 16, 200, 200, 0);
+                else if (val === '[')
+                    handle.engine.text(str, xx, yy, 16, 255, 255, 0);
+                else if (val === ']')
+                    handle.engine.text(str, xx, yy, 16, 255, 0, 255);
+                else if (val === '{')
+                    handle.engine.text(str, xx, yy, 16, 0, 255, 255);
+                else if (val === '}')
+                    handle.engine.text(str, xx, yy, 16, 255, 0, 0);
+                else if (val === '(')
+                    handle.engine.text(str, xx, yy, 16, 0, 255, 0);
+                else if (val === ')')
+                    handle.engine.text(str, xx, yy, 16, 0, 0, 255);
+                else if (val === '/')
+                    handle.engine.text(str, xx, yy, 16, 0, 155, 255);
+                else if (val === '*')
+                    handle.engine.text(str, xx, yy, 16, 155, 255, 255);
+                else if (val === '%')
+                    handle.engine.text(str, xx, yy, 16, 255, 155, 0);
+                else if (val === '&')
+                    handle.engine.text(str, xx, yy, 16, 255, 0, 0);
+                else if (val === '?')
+                    handle.engine.text(str, xx, yy, 16, 255, 255, 255);
+                else if (val === '!')
+                    handle.engine.text(str, xx, yy, 16, 0, 0, 0);
                 else
                     handle.engine.text(str, xx, yy, 16, 255, 255, 255);
 
