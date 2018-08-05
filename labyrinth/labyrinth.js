@@ -39,7 +39,7 @@ let maps = {
             '#     #                      #      2                             #\n' +
             '#     #                      #      #                             #\n' +
             '#     #                      #      #                             #\n' +
-            '#     ###############################mmmm            ####         #\n' +
+            '#     #                      ########mmmm            ####         #\n' +
             '#     #                             #mmmm            #  #         #\n' +
             '#     #                             #mmmm            #  #         #\n' +
             '#     #                             #mmmm            ####         #\n' +
@@ -367,7 +367,8 @@ Labyrinth.new = function(engine) {
         engine: engine,
         map_length: 0,
         map_height: 0,
-        current_map: undefined
+        current_map: undefined,
+        current_status: "",
     };
 
     function change_map(map_name) {
@@ -397,14 +398,16 @@ Labyrinth.new = function(engine) {
                 return {
                     'success': true,
                     'pos': {x: tp.ex + (new_hero_pos.x - old_hero_pos.x), y: tp.ey + (new_hero_pos.y - old_hero_pos.y)},
-                    'newmap': tp.map
+                    'newmap': tp.map,
+                    'newstatus': '',
                 };
             }
         }
 
         if (new_hero_pos.x === old_hero_pos.x && new_hero_pos.y === old_hero_pos.y) {
             return {
-                'success': false
+                'success': false,
+                'newstatus': '',
             }
         }
 
@@ -416,13 +419,14 @@ Labyrinth.new = function(engine) {
             if (newval !== '#') {
                 return {
                     'success': true,
-                    'pos': new_hero_pos
+                    'pos': new_hero_pos,
+                    'newstatus': '',
                 };
             }
         }
 
         if (new_hero_pos.x >= 0 && new_hero_pos.x < handle.map_length
-         && old_hero_pos.y >= 0 && old_hero_pos.y < handle.map_height)
+         && old_hero_pos.y >= 0 && old_hero_pos.y < handle.map_height && old_hero_pos.x !== new_hero_pos.x)
         {
             let newval = handle.current_map.map[old_hero_pos.y * (handle.map_length + 1) + new_hero_pos.x];
 
@@ -430,12 +434,13 @@ Labyrinth.new = function(engine) {
                 return {
                     'success': true,
                     'pos': { x: new_hero_pos.x, y: old_hero_pos.y },
+                    'newstatus': '',
                 };
             }
         }
 
         if (old_hero_pos.x >= 0 && old_hero_pos.x < handle.map_length
-         && new_hero_pos.y >= 0 && new_hero_pos.y < handle.map_height)
+         && new_hero_pos.y >= 0 && new_hero_pos.y < handle.map_height && old_hero_pos.y !== new_hero_pos.y)
         {
             let newval = handle.current_map.map[new_hero_pos.y * (handle.map_length + 1) + old_hero_pos.x];
 
@@ -443,51 +448,18 @@ Labyrinth.new = function(engine) {
                 return {
                     'success': true,
                     'pos': {x: old_hero_pos.x, y: new_hero_pos.y },
+                    'newstatus': '',
                 };
             }
         }
 
         return {
-            'success': false
+            'success': false,
+            'newstatus': "Aïe! Un mur",
         }
     }
 
     function update_on_map(handle) {
-        for (let p in handle.pnjs) {
-            let pnj = handle.pnjs[p];
-
-            if (p === '@')
-                continue;
-
-            let new_pnj = {x: pnj.x, y: pnj.y};
-            let r = Math.floor(Math.random() * 8);
-
-            if (r === 0) {
-                new_pnj.x++;
-            } else if (r === 1) {
-                new_pnj.x--;
-            } else if (r === 2) {
-                new_pnj.y++;
-            } else if (r === 3) {
-                new_pnj.y--;
-            } else if (r === 4) {
-                new_pnj.x++;
-                new_pnj.y++;
-            } else if (r === 5) {
-                new_pnj.x--;
-                new_pnj.y++;
-            } else if (r === 6) {
-                new_pnj.x++;
-                new_pnj.y--;
-            } else if (r === 7) {
-                new_pnj.x--;
-                new_pnj.y--;
-            }
-
-            if (handle.current_map.map[new_pnj.y * (handle.current_map.map_length + 1) + new_pnj.x] === '.')
-                handle.pnjs[p] = new_pnj;
-        }
-
         let hero_pos = handle.pnjs['@'];
         let new_pos = {x: hero_pos.x, y: hero_pos.y };
 
@@ -503,14 +475,81 @@ Labyrinth.new = function(engine) {
         if (handle.right)
             new_pos.x++;
 
-        let ret = test_new_position(hero_pos, new_pos);
+        let talked = false;
 
-        if (ret.success) {
-            if (typeof ret.newmap !== 'undefined') {
-                change_map(ret.newmap);
+        for (let p in handle.pnjs) {
+            if (p === '@')
+                continue;
+
+            let pnj = handle.pnjs[p];
+
+            if (pnj.x === new_pos.x && pnj.y === new_pos.y) {
+                if (p === 'J') {
+                    handle.current_status = 'La machine à café est cassée!';
+                } else if (p === 'r') {
+                    handle.current_status = 'Bonjour!';
+                } else if (p === 'v') {
+                    handle.current_status = 'Le vol ne paie pas!';
+                } else if (p === 'm') {
+                    handle.current_status = 'Une pièce?';
+                } else {
+                    handle.current_status = '???';
+                }
+
+                talked = true;
+                break;
+            }
+        }
+
+        if (!talked)
+        {
+            for (let p in handle.pnjs) {
+                let pnj = handle.pnjs[p];
+
+                if (p === '@')
+                    continue;
+
+                let new_pnj = {x: pnj.x, y: pnj.y};
+                let r = Math.floor(Math.random() * 16);
+
+                if (r === 0) {
+                    new_pnj.x++;
+                } else if (r === 1) {
+                    new_pnj.x--;
+                } else if (r === 2) {
+                    new_pnj.y++;
+                } else if (r === 3) {
+                    new_pnj.y--;
+                } else if (r === 4) {
+                    new_pnj.x++;
+                    new_pnj.y++;
+                } else if (r === 5) {
+                    new_pnj.x--;
+                    new_pnj.y++;
+                } else if (r === 6) {
+                    new_pnj.x++;
+                    new_pnj.y--;
+                } else if (r === 7) {
+                    new_pnj.x--;
+                    new_pnj.y--;
+                }
+
+                if (handle.current_map.map[new_pnj.y * (handle.current_map.map_length + 1) + new_pnj.x] === '.'
+                 && new_pnj.x !== new_pos.x && new_pnj.y !== new_pos.y)
+                    handle.pnjs[p] = new_pnj;
             }
 
-            handle.pnjs['@'] = ret.pos;
+            let ret = test_new_position(hero_pos, new_pos);
+
+            if (ret.success) {
+                if (typeof ret.newmap !== 'undefined') {
+                    change_map(ret.newmap);
+                }
+
+                handle.pnjs['@'] = ret.pos;
+            }
+
+            handle.current_status = ret.newstatus;
         }
     }
 
@@ -612,6 +651,9 @@ Labyrinth.new = function(engine) {
                 x += length;
             }
         }
+
+        handle.engine.text("  > " + handle.current_status, 0, engine.reference_height - 48, 16, 255, 255, 255);
+        handle.engine.text("  PV: 20/20", 0, engine.reference_height - 32, 16, 255, 255, 255);
     }
 
     function draw_inventory(handle)
