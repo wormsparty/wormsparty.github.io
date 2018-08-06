@@ -270,7 +270,7 @@ let screens = {
     },
 };
 
-let initial_map = '1e';
+let initial_map = 'coop';
 
 function parse_all_maps() {
     let all_teleports = {};
@@ -509,7 +509,7 @@ Labyrinth.new = function(engine) {
 
     function get_description(item) {
         if (item === '$')
-            return 'Une pièce de $1'
+            return 'Une pièce de $1';
 
         if (item === '%')
             return 'Un plat pré-cuisiné';
@@ -611,7 +611,9 @@ Labyrinth.new = function(engine) {
 
             let pnj = handle.pnjs[p];
 
-            if (pnj.x === new_pos.x && pnj.y === new_pos.y) {
+            if (pnj.x === new_pos.x && pnj.y === new_pos.y ||
+                pnj.x === hero_pos.x && pnj.y === new_pos.y && new_pos.y !== hero_pos.y ||
+                pnj.x === new_pos.x && pnj.y === hero_pos.y && new_pos.x !== hero_pos.x) {
                 if (p === 'J') {
                     handle.current_status = 'La machine à café est cassée!';
                 } else if (p === 'r') {
@@ -734,6 +736,10 @@ Labyrinth.new = function(engine) {
         }
     };
 
+    function to_screen_coord(x, y) {
+        return {x: 9.6 * x, y: 16 * y };
+    }
+
     function draw_map(handle) {
         for(let y = 0; y < handle.map_height; y++)
         {
@@ -741,90 +747,8 @@ Labyrinth.new = function(engine) {
             {
                 let length = 0;
                 let val = handle.current_map.map[y * (handle.map_length + 1) + x];
-                let xx = 9.6 * x;
-                let yy = 16 * y;
-                let str = "";
-                let pnj_found = false;
 
-                if (val === undefined)
-                {
-                    x++;
-                    continue;
-                }
-
-                for (let p in handle.pnjs) {
-                    let pnj = handle.pnjs[p];
-
-                    if (x === pnj.x && y === pnj.y) {
-                        if (p === '@') {
-                            handle.engine.text(p, xx, yy, 16, 255, 0, 0);
-                        } else if (p === 'J') {
-                            handle.engine.text(p, xx, yy, 16, 0, 255, 255);
-                        } else if (p === 'm') {
-                            handle.engine.text(p, xx, yy, 16, 155, 155, 155);
-                        } else if (p === 'v') {
-                            handle.engine.text(p, xx, yy, 16, 0, 0, 255);
-                        } else if (p === 'c') {
-                            handle.engine.text(p, xx, yy, 16, 0, 255, 255);
-                        } else if (p === 'r') {
-                            handle.engine.text(p, xx, yy, 16, 255, 0, 255);
-                        } else {
-                            handle.engine.text(p, xx, yy, 16, 255, 255, 255);
-                        }
-
-                        pnj_found = true;
-                        break;
-                    }
-                }
-
-                if (pnj_found)
-                {
-                    x++;
-                    continue;
-                }
-
-                let item_found = false;
-
-                for (let item in handle.current_map.item_positions) {
-                    let positions = handle.current_map.item_positions[item];
-
-                    for (let i = 0; i < positions.length; i++) {
-                        if (x === positions[i].x && y === positions[i].y) {
-                            if (item === '$')
-                                handle.engine.text(item, xx, yy, 16, 200, 200, 0);
-                            else if (item === '[')
-                                handle.engine.text(item, xx, yy, 16, 255, 255, 0);
-                            else if (item === ']')
-                                handle.engine.text(item, xx, yy, 16, 255, 0, 255);
-                            else if (item === '{')
-                                handle.engine.text(item, xx, yy, 16, 0, 255, 255);
-                            else if (item === '}')
-                                handle.engine.text(item, xx, yy, 16, 255, 0, 0);
-                            else if (item === '(')
-                                handle.engine.text(item, xx, yy, 16, 0, 255, 0);
-                            else if (item === ')')
-                                handle.engine.text(item, xx, yy, 16, 0, 0, 255);
-                            else if (item === '*')
-                                handle.engine.text(item, xx, yy, 16, 155, 255, 255);
-                            else if (item === '%')
-                                handle.engine.text(item, xx, yy, 16, 255, 155, 0);
-                            else if (item === '&')
-                                handle.engine.text(item, xx, yy, 16, 255, 0, 0);
-                            else if (item === '?')
-                                handle.engine.text(item, xx, yy, 16, 255, 255, 255);
-                            else if (item === '!')
-                                handle.engine.text(item, xx, yy, 16, 30, 30, 30);
-
-                            item_found = true;
-                            break;
-                        }
-                    }
-
-                    if (item_found)
-                        break;
-                }
-
-                if (item_found)
+                if (val === ' ' || val === '\n' || val === undefined)
                 {
                     x++;
                     continue;
@@ -833,85 +757,115 @@ Labyrinth.new = function(engine) {
                 while(true)
                 {
                     length++;
-                    str += val;
 
-                    for (let p in handle.pnjs) {
-                        let pnj = handle.pnjs[p];
+                    let chr = handle.current_map.map[y * (handle.map_length + 1) + x + length];
 
-                        if (x + length === pnj.x && y === pnj.y)
-                        {
-                            pnj_found = true;
-                            break;
-                        }
-                    }
-
-                    if (!pnj_found)
-                    {
-                        for (let item in handle.current_map.item_positions) {
-                            let positions = handle.current_map.item_positions[item];
-
-                            for (let i = 0; i < positions.length; i++) {
-                                if (x + length === positions[i].x && y === positions[i].y) {
-                                    item_found = true;
-                                    break;
-                                }
-                            }
-
-                            if (item_found)
-                                break;
-                        }
-                    }
-
-                    if (pnj_found || item_found || handle.current_map.map[y * (handle.map_length + 1) + x + length] !== val)
+                    if (chr !== val)
                         break;
                 }
 
+                let coord = to_screen_coord(x, y);
+                let str = handle.current_map.map.substr(y * (handle.map_length + 1) + x, length);
+
                 if (val === '#')
-                    handle.engine.text(str, xx, yy, 16, 100, 100, 100);
+                    handle.engine.text(str, coord.x, coord.y, 16, 100, 100, 100);
                 else if (val === '.')
-                    handle.engine.text(str, xx, yy, 16, 100, 100, 100);
+                    handle.engine.text(str, coord.x, coord.y, 16, 100, 100, 100);
                 else if (val === '~')
-                    handle.engine.text(str, xx, yy, 16, 200, 200, 200);
+                    handle.engine.text(str, coord.x, coord.y, 16, 200, 200, 200);
                 else
-                    handle.engine.text(str, xx, yy, 16, 255, 255, 255);
+                    handle.engine.text(str, coord.x, coord.y, 16, 255, 255, 255);
 
                 x += length;
             }
         }
+    }
 
+    function draw_pnjs(handle)
+    {
+        for (let p in handle.pnjs)
+        {
+            let pnj = handle.pnjs[p];
+            let coord = to_screen_coord(pnj.x, pnj.y);
+
+            handle.engine.rect(coord.x, coord.y, 10, 16, 5, 5, 5);
+
+            if (p === '@') {
+                handle.engine.text(p, coord.x, coord.y, 16, 255, 0, 0);
+            } else if (p === 'J') {
+                handle.engine.text(p, coord.x, coord.y, 16, 0, 255, 255);
+            } else if (p === 'm') {
+                handle.engine.text(p, coord.x, coord.y, 16, 155, 155, 155);
+            } else if (p === 'v') {
+                handle.engine.text(p, coord.x, coord.y, 16, 0, 0, 255);
+            } else if (p === 'c') {
+                handle.engine.text(p, coord.x, coord.y, 16, 0, 255, 255);
+            } else if (p === 'r') {
+                handle.engine.text(p, coord.x, coord.y, 16, 255, 0, 255);
+            } else {
+                handle.engine.text(p, coord.x, coord.y, 16, 255, 255, 255);
+            }
+        }
+    }
+
+    function draw_items(handle) {
+        for (let item in handle.current_map.item_positions)
+        {
+            let positions = handle.current_map.item_positions[item];
+
+            for (let i = 0; i < positions.length; i++)
+            {
+                let coord = to_screen_coord(positions[i].x, positions[i].y);
+
+                handle.engine.rect(coord.x, coord.y, 10, 16, 5, 5, 5);
+
+                if (item === '$')
+                    handle.engine.text(item, coord.x, coord.y, 16, 200, 200, 0);
+                else if (item === '[')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 255, 0);
+                else if (item === ']')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 255);
+                else if (item === '{')
+                    handle.engine.text(item, coord.x, coord.y, 16, 0, 255, 255);
+                else if (item === '}')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 0);
+                else if (item === '(')
+                    handle.engine.text(item, coord.x, coord.y, 16, 0, 255, 0);
+                else if (item === ')')
+                    handle.engine.text(item, coord.x, coord.y, 16, 0, 0, 255);
+                else if (item === '*')
+                    handle.engine.text(item, coord.x, coord.y, 16, 155, 255, 255);
+                else if (item === '%')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 155, 0);
+                else if (item === '&')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 0);
+                else if (item === '?')
+                    handle.engine.text(item, coord.x, coord.y, 16, 255, 255, 255);
+                else if (item === '!')
+                    handle.engine.text(item, coord.x, coord.y, 16, 30, 30, 30);
+            }
+        }
+    }
+
+    function draw_overlay(handle) {
         handle.engine.text("  > " + handle.current_status, 0, engine.reference_height - 48, 16, 255, 255, 255);
         handle.engine.text("  PV: 20/20", 0, engine.reference_height - 32, 16, 255, 255, 255);
     }
 
-    function draw_inventory(handle)
+    function draw_all(handle)
+    {
+        draw_map(handle);
+        draw_items(handle);
+        draw_pnjs(handle);
+        draw_overlay(handle);
+    }
+
+    function draw_screen(handle, screen)
     {
         // TODO: Items!
+        // TODO: Journal!
 
-        let inventory = screens['inventory'];
-
-        for(let y = 0; y < inventory.map_height; y++) {
-            for (let x = 0; x < inventory.map_length; x++) {
-                let start = y * (inventory.map_length + 1);
-                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
-            }
-        }
-    }
-
-    function draw_help(handle)
-    {
-        let inventory = screens['help'];
-
-        for(let y = 0; y < inventory.map_height; y++) {
-            for (let x = 0; x < inventory.map_length; x++) {
-                let start = y * (inventory.map_length + 1);
-                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
-            }
-        }
-    }
-
-    function draw_journal(handle)
-    {
-        let inventory = screens['journal'];
+        let inventory = screens[screen];
 
         for(let y = 0; y < inventory.map_height; y++) {
             for (let x = 0; x < inventory.map_length; x++) {
@@ -923,13 +877,13 @@ Labyrinth.new = function(engine) {
 
     handle.draw = function() {
         if (handle.open_inventory) {
-            draw_inventory(handle);
+            draw_screen(handle, 'inventory');
         } else if (handle.open_help) {
-            draw_help(handle);
+            draw_screen(handle, 'help');
         } else if (handle.open_journal) {
-            draw_journal(handle);
+            draw_screen(handle, 'journal');
         } else {
-            draw_map(handle);
+            draw_all(handle);
         }
     };
 /*

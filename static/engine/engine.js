@@ -116,7 +116,7 @@ Engine.new = function(descriptor, click) {
     };
 
     handle.text = function(str, x, y, s, r, g, b) {
-        handle.graphics.text(str, x, y, s, r, g, b);
+        handle.graphics.text(str, x, y - 2, s, r, g, b);
     };
 
     handle.load_sound = function(descriptor, onload, onfailure) {
