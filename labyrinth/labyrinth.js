@@ -733,6 +733,11 @@ Labyrinth.new = function(engine)
             hero_pos = ret.pos;
             handle.pnjs['@'] = ret.pos;
         }
+        else
+        {
+            hero_pos = future_pos;
+            handle.pnjs['@'] = future_pos;
+        }
 
         update_current_status(handle, hero_pos);
         return hero_pos;
@@ -880,7 +885,7 @@ Labyrinth.new = function(engine)
         {
             let pnj = handle.pnjs[p];
             let coord = to_screen_coord(pnj.x, pnj.y);
-            let color = get_symbol_color(pnj);
+            let color = get_symbol_color(p);
 
             //console.log('Drawing ' + p + ' at ' + coord.x + ', ' + coord.y);
 
