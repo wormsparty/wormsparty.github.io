@@ -272,12 +272,14 @@ let screens = {
 
 let initial_map = 'coop';
 
-function parse_all_maps() {
+function parse_all_maps()
+{
     let all_teleports = {};
     let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     let item_symbols = [ '{', '}', '[', ']', '(', ')', '&', '%', '!', '?', '*', '$'];
 
-    for (let key in maps) {
+    for (let key in maps)
+    {
         let current_map = maps[key];
 
         let visual_map = current_map.map.split('\n');
@@ -299,8 +301,10 @@ function parse_all_maps() {
             return;
         }
 
-        for(let y = 0; y < current_map.map_height; y++) {
-            for(let x = 0; x < current_map.map_length; x++) {
+        for(let y = 0; y < current_map.map_height; y++)
+        {
+            for(let x = 0; x < current_map.map_length; x++)
+            {
                 let chr = meta_map[y][x];
 
                 if (chr === '#')
@@ -308,17 +312,22 @@ function parse_all_maps() {
                     if (visual_map[y][x] !== '#') {
                         console.log('Les murs ne marchent pas en (' + x + ', ' + y + '), carte = ' + key);
                     }
-                } else if (teleport_symbols.indexOf(chr) > -1) {
-                    if (all_teleports[chr] === undefined) {
+                }
+                else if (teleport_symbols.indexOf(chr) > -1)
+                {
+                    if (all_teleports[chr] === undefined)
+                    {
                         all_teleports[chr] = {
                             map: key,
                             x: x,
                             y: y
                         };
-                    } else {
+                    }
+                    else
+                    {
                         current_map.teleports.push({
-                            sx: x,
-                            sy: y,
+                            x: x,
+                            y: y,
                             map: all_teleports[chr].map,
                             ex: all_teleports[chr].x,
                             ey: all_teleports[chr].y,
@@ -327,28 +336,33 @@ function parse_all_maps() {
                         let other_map = maps[all_teleports[chr].map];
 
                         other_map.teleports.push({
-                            sx: all_teleports[chr].x,
-                            sy: all_teleports[chr].y,
+                            x: all_teleports[chr].x,
+                            y: all_teleports[chr].y,
                             map: key,
                             ex: x,
                             ey: y,
                         });
 
                     }
-                } else if (item_symbols.indexOf(chr) > -1) {
+                }
+                else if (item_symbols.indexOf(chr) > -1)
+                {
                     if (current_map.item_positions[chr] === undefined) {
                         current_map.item_positions[chr] = []
                     }
 
-                    //console.log('Adding ' + chr + ' at ' + x + ', ' + y + ' (' + key + ')');
                     current_map.item_positions[chr].push({x: x, y: y});
-                } else if (chr !== ' ' && chr !== undefined) {
-                    if (chr === '@') {
+                }
+                else if (chr !== ' ' && chr !== undefined)
+                {
+                    if (chr === '@')
+                    {
                         current_map.start = {x: x, y: y};
-                    } else {
-                        if (current_map.pnj_positions[chr] === undefined) {
-                            current_map.pnj_positions[chr] = []
-                        }
+                    }
+                    else
+                    {
+                        if (current_map.pnj_positions[chr] === undefined)
+                            current_map.pnj_positions[chr] = [];
 
                         current_map.pnj_positions[chr].push({x: x, y: y});
                     }
@@ -359,8 +373,10 @@ function parse_all_maps() {
     }
 }
 
-function parse_all_screens() {
-    for (let key in screens) {
+function parse_all_screens()
+{
+    for (let key in screens)
+    {
         let map = screens[key];
         let splitted_map = map.map.split('\n');
 
@@ -369,7 +385,8 @@ function parse_all_screens() {
     }
 }
 
-Labyrinth.new = function(engine) {
+Labyrinth.new = function(engine)
+{
     parse_all_maps();
     parse_all_screens();
 
@@ -391,125 +408,120 @@ Labyrinth.new = function(engine) {
         coins: 0,
     };
 
-    function change_map(map_name) {
-        handle.current_map = maps[map_name];
-        handle.map_length = handle.current_map.map_length;
-        handle.map_height = handle.current_map.map_height;
-        handle.pnjs = {};
-
-        for(let chr in handle.current_map.pnj_positions) {
-            let positions = handle.current_map.pnj_positions[chr];
-            handle.pnjs[chr] = positions[Math.floor(Math.random() * positions.length)];
-        }
-
-        handle.pnjs['@'] = handle.current_map.start;
-    }
-
-    change_map(initial_map);
-
-    function test_new_position(old_hero_pos, new_hero_pos)
+    /*
+        1) Helper functions
+     */
+    function get_symbol_at(handle, pos)
     {
-        for(let i in handle.current_map.teleports) {
-            let tp = handle.current_map.teleports[i];
-
-            if (tp.sx === new_hero_pos.x && tp.sy === new_hero_pos.y
-             || (tp.sx === old_hero_pos.x && tp.sy === new_hero_pos.y && old_hero_pos.y !== new_hero_pos.y)
-             || (tp.sx === new_hero_pos.x && tp.sy === old_hero_pos.y && old_hero_pos.x !== new_hero_pos.x)) {
-                return {
-                    'success': true,
-                    'pos': {x: tp.ex + (new_hero_pos.x - old_hero_pos.x), y: tp.ey + (new_hero_pos.y - old_hero_pos.y)},
-                    'newmap': tp.map,
-                    'newstatus': '',
-                };
-            }
-        }
-
-        if (new_hero_pos.x === old_hero_pos.x && new_hero_pos.y === old_hero_pos.y) {
-            return {
-                'success': false,
-                'newstatus': '',
-            }
-        }
-
-        if (new_hero_pos.x >= 0 && new_hero_pos.x < handle.map_length
-         && new_hero_pos.y >= 0 && new_hero_pos.y < handle.map_height)
-        {
-            let newval = handle.current_map.map[new_hero_pos.y * (handle.map_length + 1) + new_hero_pos.x];
-
-            if (newval !== '#') {
-                return {
-                    'success': true,
-                    'pos': new_hero_pos,
-                    'newstatus': '',
-                };
-            }
-        }
-
-        if (new_hero_pos.x >= 0 && new_hero_pos.x < handle.map_length
-         && old_hero_pos.y >= 0 && old_hero_pos.y < handle.map_height && old_hero_pos.x !== new_hero_pos.x)
-        {
-            let newval = handle.current_map.map[old_hero_pos.y * (handle.map_length + 1) + new_hero_pos.x];
-
-            if (newval !== '#') {
-                return {
-                    'success': true,
-                    'pos': { x: new_hero_pos.x, y: old_hero_pos.y },
-                    'newstatus': '',
-                };
-            }
-        }
-
-        if (old_hero_pos.x >= 0 && old_hero_pos.x < handle.map_length
-         && new_hero_pos.y >= 0 && new_hero_pos.y < handle.map_height && old_hero_pos.y !== new_hero_pos.y)
-        {
-            let newval = handle.current_map.map[new_hero_pos.y * (handle.map_length + 1) + old_hero_pos.x];
-
-            if (newval !== '#') {
-                return {
-                    'success': true,
-                    'pos': {x: old_hero_pos.x, y: new_hero_pos.y },
-                    'newstatus': '',
-                };
-            }
-        }
-
-        return {
-            'success': false,
-            'newstatus': "Aïe! Un mur",
-        }
+        return handle.current_map.map[pos.y * (handle.current_map.map_length + 1) + pos.x];
     }
 
-    function get_price(item) {
-        if (item === '%') {
+    function get_string_from(handle, x, y, length)
+    {
+        return handle.current_map.map.substr(y * (handle.map_length + 1) + x, length);
+    }
+
+    function pos_equal(p1, p2)
+    {
+        return p1.x === p2.x && p1.y === p2.y;
+    }
+
+    function to_screen_coord(x, y)
+    {
+        return {x: 9.6 * x, y: 16 * y };
+    }
+
+    function get_background_color()
+    {
+        return {r: 5, g: 5, b: 5};
+    }
+
+    function get_text_color()
+    {
+        return {r: 255, g: 255, b: 255};
+    }
+
+    function get_symbol_color(chr)
+    {
+        if (chr === '#' || chr === '.')
+            return {r: 100, g: 100, b: 100};
+        else if (chr === '~')
+            return {r: 200, g: 200, b: 200};
+        else if (chr === '@')
+            return {r: 255, g: 0, b: 0};
+        else if (chr === 'J')
+            return {r: 0, g: 255, b: 255};
+        else if (chr === 'm')
+            return {r: 155, g: 155, b: 155};
+        else if (chr === 'v')
+            return {r: 0, g: 0, b: 255};
+        else if (chr === 'c')
+            return {r: 0, g: 255, b: 255};
+        else if (chr === 'r')
+            return {r: 255, g: 0, b: 255};
+        else if (chr === '$')
+            return {r: 200, g: 200, b: 0};
+        else if (chr === '[')
+            return {r: 255, g: 255, b: 0};
+        else if (chr === ']')
+            return {r: 255, g: 0, b: 255};
+        else if (chr === '{')
+            return {r: 0, g: 255, b: 255};
+        else if (chr === '}')
+            return {r: 255, g: 0, b: 0};
+        else if (chr === '(')
+            return {r: 0, b: 255, g: 0};
+        else if (chr === ')')
+            return {r: 0, g: 0, b: 255};
+        else if (chr === '*')
+            return {r: 155, g: 255, b: 255};
+        else if (chr === '%')
+            return {r: 255, g: 155, b: 0};
+        else if (chr === '&')
+            return {r: 255, g: 0, b: 0};
+        else if (chr === '?')
+            return {r: 255, g: 255, b: 255};
+        else if (chr === '!')
+            return {r: 30, g: 30, b: 30};
+        else
+            return get_text_color();
+    }
+
+    /*
+        2) Item management
+     */
+    function get_price(item)
+    {
+        if (item === '%')
             return 10;
-        } else if (item === '&') {
+        else if (item === '&')
             return 2;
-        } else if (item === '(') {
+        else if (item === '(')
             return 5;
-        } else if (item === ')') {
+        else if (item === ')')
             return 5;
-        } else if (item === '[') {
+        else if (item === '[')
             return 10;
-        } else if (item === ']') {
+        else if (item === ']')
             return 10;
-        } else if (item === '{') {
+        else if (item === '{')
             return 15;
-        } else if (item === '}') {
+        else if (item === '}')
             return 15;
-        } else if (item === '*') {
+        else if (item === '*')
             return 1;
-        } else if (item === '?') {
+        else if (item === '?')
             return 4;
-        } else if (item === '!') {
+        else if (item === '!')
             return 2;
-        } else {
+        else
             return 0;
-        }
     }
 
-    function get_description(item) {
+    function get_description(item)
+    {
         if (item === '$')
-            return 'Une pièce de $1';
+            return 'Une pièce de 1.-';
 
         if (item === '%')
             return 'Un plat pré-cuisiné';
@@ -545,30 +557,60 @@ Labyrinth.new = function(engine) {
             return 'Un sort mystère';
     }
 
-    function update_on_map(handle) {
-        let hero_pos = handle.pnjs['@'];
+    function update_current_status(handle, hero_pos)
+    {
+        for(let item in handle.current_map.item_positions)
+        {
+            let positions = handle.current_map.item_positions[item];
 
+            for(let i = 0 ; i < positions.length; i++)
+            {
+                if (pos_equal(positions[i], hero_pos))
+                {
+                    handle.current_status = get_description(item);
+
+                    if (item !== '$')
+                        handle.current_status += ' ($' + get_price(item) + ')';
+
+                    return;
+                }
+            }
+        }
+
+        handle.current_status = '';
+    }
+
+    function try_pick_item(handle, hero_pos)
+    {
         if (handle.pickup)
         {
             let item_picked = false;
 
-            for(let item in handle.current_map.item_positions) {
+            for(let item in handle.current_map.item_positions)
+            {
                 let positions = handle.current_map.item_positions[item];
                 let price = get_price(item);
                 let description = get_description(item);
 
-                for(let i = 0 ; i < positions.length; i++) {
-                    if (positions[i].x === hero_pos.x && positions[i].y === hero_pos.y) {
-                        if (item === '$') {
+                for(let i = 0 ; i < positions.length; i++)
+                {
+                    if (pos_equal(positions[i], hero_pos))
+                    {
+                        if (item === '$')
+                        {
                             handle.coins++;
                             positions.splice(i, 1);
-                            handle.current_status = description + " ajouté(e) à l'inventaire";
-                        } else if (handle.coins >= price) {
+                            handle.current_status = description + " pris";
+                        }
+                        else if (handle.coins >= price)
+                        {
                             handle.inventory.push(item);
                             handle.coins -= price;
                             positions.splice(i, 1);
-                            handle.current_status = description + " ajouté(e) à l'inventaire";
-                        } else {
+                            handle.current_status = description + " pris";
+                        }
+                        else
+                        {
                             handle.current_status = "Pas assez d'argent!";
                         }
 
@@ -581,135 +623,196 @@ Labyrinth.new = function(engine) {
                     break;
             }
 
-            if (!item_picked) {
+            if (!item_picked)
                 handle.current_status = "Il n'y a rien à prendre.";
-            }
 
             handle.pickup = false;
-            return;
+            return true;
         }
 
-        let new_pos = {x: hero_pos.x, y: hero_pos.y };
+        return false;
+    }
 
-        if (handle.up)
-            new_pos.y--;
+    /*
+        2) PNJ management
+     */
+    function get_pnj_dialog(pnj)
+    {
+        if (pnj === 'J') {
+            return 'La machine à café est cassée!';
+        } else if (pnj === 'r') {
+            return 'Bonjour!';
+        } else if (pnj === 'v') {
+            return 'On ne peut pas sortir sans payer!';
+        } else if (pnj === 'c') {
+            return "On n'est pas sensé pouvoir me parler!";
+        } else if (pnj === 'm') {
+            return 'Une pièce?';
+        } else {
+            return '???';
+        }
+    }
 
-        if (handle.down)
-            new_pos.y++;
+    function try_talk(handle, future_pos)
+    {
+        for (let pnj in handle.pnjs)
+        {
+            if (pnj === '@')
+                continue;
 
-        if (handle.left)
-            new_pos.x--;
+            let pnj_pos = handle.pnjs[pnj];
 
-        if (handle.right)
-            new_pos.x++;
+            if (pos_equal(pnj_pos, future_pos))
+            {
+                handle.current_status = get_pnj_dialog(pnj);
+                return true;
+            }
+        }
 
-        let talked = false;
+        return false;
+    }
 
-        for (let p in handle.pnjs) {
+    function get_random_mouvement(pnj)
+    {
+        let new_pnj = {x: pnj.x, y: pnj.y};
+        let r = Math.floor(Math.random() * 16);
+
+        if (r === 0) {
+            new_pnj.x++;
+        } else if (r === 1) {
+            new_pnj.x--;
+        } else if (r === 2) {
+            new_pnj.y++;
+        } else if (r === 3) {
+            new_pnj.y--;
+        } else if (r === 4) {
+            new_pnj.x++;
+            new_pnj.y++;
+        } else if (r === 5) {
+            new_pnj.x--;
+            new_pnj.y++;
+        } else if (r === 6) {
+            new_pnj.x++;
+            new_pnj.y--;
+        } else if (r === 7) {
+            new_pnj.x--;
+            new_pnj.y--;
+        }
+
+        return new_pnj;
+    }
+
+    function move_pnjs(handle, future_pos)
+    {
+        for (let p in handle.pnjs)
+        {
+            let pnj = handle.pnjs[p];
+
             if (p === '@')
                 continue;
 
-            let pnj = handle.pnjs[p];
+            let new_pnj = get_random_mouvement(pnj);
 
-            if (pnj.x === new_pos.x && pnj.y === new_pos.y ||
-                pnj.x === hero_pos.x && pnj.y === new_pos.y && new_pos.y !== hero_pos.y ||
-                pnj.x === new_pos.x && pnj.y === hero_pos.y && new_pos.x !== hero_pos.x) {
-                if (p === 'J') {
-                    handle.current_status = 'La machine à café est cassée!';
-                } else if (p === 'r') {
-                    handle.current_status = 'Bonjour!';
-                } else if (p === 'v') {
-                    handle.current_status = 'On ne peut pas sortir sans payer!';
-                } else if (p === 'c') {
-                    handle.current_status = "On n'est pas sensé pouvoir me parler!";
-                } else if (p === 'm') {
-                    handle.current_status = 'Une pièce?';
-                } else {
-                    handle.current_status = '???';
-                }
-
-                talked = true;
-                break;
-            }
+            if (!pos_equal(new_pnj, future_pos) && get_symbol_at(handle, new_pnj) === '.')
+                handle.pnjs[p] = new_pnj;
         }
+    }
 
-        if (!talked)
+    /*
+        3) Hero management
+     */
+    function move_hero(handle, hero_pos, future_pos)
+    {
+        let ret = try_teleport(hero_pos, future_pos);
+
+        if (ret.success)
         {
-            for (let p in handle.pnjs) {
-                let pnj = handle.pnjs[p];
+            if (ret.newmap !== undefined)
+                change_map(ret.newmap);
 
-                if (p === '@')
-                    continue;
+            hero_pos = ret.pos;
+            handle.pnjs['@'] = ret.pos;
+        }
 
-                let new_pnj = {x: pnj.x, y: pnj.y};
-                let r = Math.floor(Math.random() * 16);
+        update_current_status(handle, hero_pos);
+        return hero_pos;
+    }
 
-                if (r === 0) {
-                    new_pnj.x++;
-                } else if (r === 1) {
-                    new_pnj.x--;
-                } else if (r === 2) {
-                    new_pnj.y++;
-                } else if (r === 3) {
-                    new_pnj.y--;
-                } else if (r === 4) {
-                    new_pnj.x++;
-                    new_pnj.y++;
-                } else if (r === 5) {
-                    new_pnj.x--;
-                    new_pnj.y++;
-                } else if (r === 6) {
-                    new_pnj.x++;
-                    new_pnj.y--;
-                } else if (r === 7) {
-                    new_pnj.x--;
-                    new_pnj.y--;
+    function get_future_position(handle, hero_pos)
+    {
+        let future_pos = {x: hero_pos.x + handle.right - handle.left, y: hero_pos.y + handle.down - handle.up};
+
+        if (get_symbol_at(handle, future_pos) !== '.') {
+            if (hero_pos.y === future_pos.y || get_symbol_at(handle, {x: future_pos.x, y: hero_pos.y}) !== '.') {
+                if (hero_pos.x === future_pos.y || get_symbol_at(handle, {x: hero_pos.x, y: future_pos.y}) !== '.') {
+                    return hero_pos;
                 }
 
-                if (handle.current_map.map[new_pnj.y * (handle.current_map.map_length + 1) + new_pnj.x] === '.'
-                 && new_pnj.x !== new_pos.x && new_pnj.y !== new_pos.y)
-                    handle.pnjs[p] = new_pnj;
+                return {x: hero_pos.x, y: future_pos.y};
             }
 
-            let ret = test_new_position(hero_pos, new_pos);
+            return {x: future_pos.x, y: hero_pos.y};
+        }
 
-            if (ret.success) {
-                if (typeof ret.newmap !== 'undefined') {
-                    change_map(ret.newmap);
-                }
+        return future_pos;
+    }
 
-                handle.pnjs['@'] = ret.pos;
-            }
+    /*
+        4) Map management
+     */
+    function change_map(map_name)
+    {
+        handle.current_map = maps[map_name];
+        handle.map_length = handle.current_map.map_length;
+        handle.map_height = handle.current_map.map_height;
+        handle.pnjs = {};
 
-            hero_pos = handle.pnjs['@'];
-            let item_found = false;
+        for(let pnj in handle.current_map.pnj_positions)
+        {
+            let positions = handle.current_map.pnj_positions[pnj];
+            handle.pnjs[pnj] = positions[Math.floor(Math.random() * positions.length)];
+        }
 
-            for(let item in handle.current_map.item_positions) {
-                let positions = handle.current_map.item_positions[item];
-                let price = get_price(item);
-                let description = get_description(item);
+        handle.pnjs['@'] = handle.current_map.start;
+    }
 
-                for(let i = 0 ; i < positions.length; i++) {
-                    if (positions[i].x === hero_pos.x && positions[i].y === hero_pos.y) {
-                        handle.current_status = description;
+    change_map(initial_map);
 
-                        if (item !== '$') {
-                            handle.current_status += ' ($' + price + ')';
-                        }
+    function try_teleport(hero_pos, future_pos)
+    {
+        for (let i in handle.current_map.teleports)
+        {
+            let tp = handle.current_map.teleports[i];
 
-                        item_found = true;
-                        break;
-                    }
-                }
-
-                if (item_found)
-                    break;
-            }
-
-            if (!item_found) {
-                handle.current_status = '';
+            if (pos_equal(tp, future_pos))
+            {
+                return {
+                    'success': true,
+                    'pos': {x: tp.ex + (future_pos.x - hero_pos.x), y: tp.ey + (future_pos.y - hero_pos.y)},
+                    'newmap': tp.map,
+                    'newstatus': '',
+                };
             }
         }
+
+        return {
+            'success': false
+        }
+    }
+
+    function update_on_map(handle)
+    {
+        let hero_pos = handle.pnjs['@'];
+        let future_pos = get_future_position(handle, hero_pos);
+
+        if (try_pick_item(handle, hero_pos))
+            return;
+
+        if (try_talk(handle, future_pos))
+            return;
+
+        hero_pos = move_hero(handle, hero_pos, future_pos);
+        move_pnjs(handle, hero_pos);
     }
 
     function update_on_inventory(handle) {
@@ -724,23 +827,20 @@ Labyrinth.new = function(engine) {
         // Nothing?
     }
 
-    handle.update = function() {
-        if (handle.open_inventory) {
+    handle.update = function()
+    {
+        if (handle.open_inventory)
             update_on_inventory(handle);
-        } else if (handle.open_help) {
+        else if (handle.open_help)
             update_on_help(handle);
-        } else if (handle.open_journal) {
+        else if (handle.open_journal)
             update_on_journal(handle);
-        } else {
+        else
             update_on_map(handle);
-        }
     };
 
-    function to_screen_coord(x, y) {
-        return {x: 9.6 * x, y: 16 * y };
-    }
-
-    function draw_map(handle) {
+    function draw_map(handle)
+    {
         for(let y = 0; y < handle.map_height; y++)
         {
             for(let x = 0; x < handle.map_length;)
@@ -758,24 +858,17 @@ Labyrinth.new = function(engine) {
                 {
                     length++;
 
-                    let chr = handle.current_map.map[y * (handle.map_length + 1) + x + length];
+                    let chr = get_symbol_at(handle, {x: x + length, y: y});
 
                     if (chr !== val)
                         break;
                 }
 
                 let coord = to_screen_coord(x, y);
-                let str = handle.current_map.map.substr(y * (handle.map_length + 1) + x, length);
+                let str = get_string_from(handle, x, y, length);
+                let color = get_symbol_color(val);
 
-                if (val === '#')
-                    handle.engine.text(str, coord.x, coord.y, 16, 100, 100, 100);
-                else if (val === '.')
-                    handle.engine.text(str, coord.x, coord.y, 16, 100, 100, 100);
-                else if (val === '~')
-                    handle.engine.text(str, coord.x, coord.y, 16, 200, 200, 200);
-                else
-                    handle.engine.text(str, coord.x, coord.y, 16, 255, 255, 255);
-
+                handle.engine.text(str, coord, 16, color);
                 x += length;
             }
         }
@@ -787,28 +880,17 @@ Labyrinth.new = function(engine) {
         {
             let pnj = handle.pnjs[p];
             let coord = to_screen_coord(pnj.x, pnj.y);
+            let color = get_symbol_color(pnj);
 
-            handle.engine.rect(coord.x, coord.y, 10, 16, 5, 5, 5);
+            //console.log('Drawing ' + p + ' at ' + coord.x + ', ' + coord.y);
 
-            if (p === '@') {
-                handle.engine.text(p, coord.x, coord.y, 16, 255, 0, 0);
-            } else if (p === 'J') {
-                handle.engine.text(p, coord.x, coord.y, 16, 0, 255, 255);
-            } else if (p === 'm') {
-                handle.engine.text(p, coord.x, coord.y, 16, 155, 155, 155);
-            } else if (p === 'v') {
-                handle.engine.text(p, coord.x, coord.y, 16, 0, 0, 255);
-            } else if (p === 'c') {
-                handle.engine.text(p, coord.x, coord.y, 16, 0, 255, 255);
-            } else if (p === 'r') {
-                handle.engine.text(p, coord.x, coord.y, 16, 255, 0, 255);
-            } else {
-                handle.engine.text(p, coord.x, coord.y, 16, 255, 255, 255);
-            }
+            handle.engine.rect(coord, 10, 16, get_background_color());
+            handle.engine.text(p, coord, 16, color);
         }
     }
 
-    function draw_items(handle) {
+    function draw_items(handle)
+    {
         for (let item in handle.current_map.item_positions)
         {
             let positions = handle.current_map.item_positions[item];
@@ -816,40 +898,20 @@ Labyrinth.new = function(engine) {
             for (let i = 0; i < positions.length; i++)
             {
                 let coord = to_screen_coord(positions[i].x, positions[i].y);
+                let color = get_symbol_color(item);
 
-                handle.engine.rect(coord.x, coord.y, 10, 16, 5, 5, 5);
-
-                if (item === '$')
-                    handle.engine.text(item, coord.x, coord.y, 16, 200, 200, 0);
-                else if (item === '[')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 255, 0);
-                else if (item === ']')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 255);
-                else if (item === '{')
-                    handle.engine.text(item, coord.x, coord.y, 16, 0, 255, 255);
-                else if (item === '}')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 0);
-                else if (item === '(')
-                    handle.engine.text(item, coord.x, coord.y, 16, 0, 255, 0);
-                else if (item === ')')
-                    handle.engine.text(item, coord.x, coord.y, 16, 0, 0, 255);
-                else if (item === '*')
-                    handle.engine.text(item, coord.x, coord.y, 16, 155, 255, 255);
-                else if (item === '%')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 155, 0);
-                else if (item === '&')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 0, 0);
-                else if (item === '?')
-                    handle.engine.text(item, coord.x, coord.y, 16, 255, 255, 255);
-                else if (item === '!')
-                    handle.engine.text(item, coord.x, coord.y, 16, 30, 30, 30);
+                handle.engine.rect(coord, 10, 16, get_background_color());
+                handle.engine.text(item, coord, 16, color);
             }
         }
     }
 
-    function draw_overlay(handle) {
-        handle.engine.text("  > " + handle.current_status, 0, engine.reference_height - 48, 16, 255, 255, 255);
-        handle.engine.text("  PV: 20/20", 0, engine.reference_height - 32, 16, 255, 255, 255);
+    function draw_overlay(handle)
+    {
+        let text_color = get_text_color();
+
+        handle.engine.text("  > " + handle.current_status, {x: 0, y: engine.reference_height - 48}, 16, text_color);
+        handle.engine.text("  PV: 20/20", {x: 0, y: engine.reference_height - 32}, 16, text_color);
     }
 
     function draw_all(handle)
@@ -867,24 +929,26 @@ Labyrinth.new = function(engine) {
 
         let inventory = screens[screen];
 
-        for(let y = 0; y < inventory.map_height; y++) {
-            for (let x = 0; x < inventory.map_length; x++) {
+        for(let y = 0; y < inventory.map_height; y++)
+        {
+            for (let x = 0; x < inventory.map_length; x++)
+            {
                 let start = y * (inventory.map_length + 1);
-                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), 0, y * 16, 16, 100, 100, 100);
+                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), {x: 0, y: y * 16}, 16, get_text_color());
             }
         }
     }
 
-    handle.draw = function() {
-        if (handle.open_inventory) {
+    handle.draw = function()
+    {
+        if (handle.open_inventory)
             draw_screen(handle, 'inventory');
-        } else if (handle.open_help) {
+        else if (handle.open_help)
             draw_screen(handle, 'help');
-        } else if (handle.open_journal) {
+        else if (handle.open_journal)
             draw_screen(handle, 'journal');
-        } else {
+        else
             draw_all(handle);
-        }
     };
 /*
     function is_inside(handle, x, y, btn) {

@@ -1,13 +1,16 @@
 "use strict";
 
-function isfullscreen() {
+function isfullscreen()
+{
     return document.fullscreenElement || document.mozFullScreenElement ||document.webkitFullscreenElement;
 }
 
-function fullscreen() {
+function fullscreen()
+{
     const canvas = document.getElementById('canvas');
 
-    if (!isfullscreen()) {
+    if (!isfullscreen())
+    {
         if (canvas.requestFullscreen) {
             canvas.requestFullscreen();
         } else if (canvas.mozRequestFullScreen) {
@@ -15,7 +18,9 @@ function fullscreen() {
         } else if (canvas.webkitRequestFullscreen) {
             canvas.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         }
-    } else {
+    }
+    else
+    {
         if (document.cancelFullScreen) {
             document.cancelFullScreen();
         } else if (document.mozCancelFullScreen) {
@@ -28,7 +33,8 @@ function fullscreen() {
 
 let Engine = {};
 
-Engine.new = function(descriptor, click) {
+Engine.new = function(descriptor, click)
+{
     // Default NES resolution
     if (descriptor.width === undefined)
       descriptor.width = 256;
@@ -64,10 +70,6 @@ Engine.new = function(descriptor, click) {
             error: 'Could not load Canvas2D graphics.'
         };
     }
-
-    handle.clear = function(r, g, b) {
-        handle.graphics.clear(r, g, b);
-    };
 
     handle.load_image = function(descriptor, onload, onfailure) {
         let imageSrc = new Image();
@@ -111,29 +113,12 @@ Engine.new = function(descriptor, click) {
         return sprite;
     };
 
-    handle.rect = function(x, y, w, h, r, g, b) {
-        handle.graphics.rect(x, y, w, h, r, g, b);
-    };
-
-    handle.text = function(str, x, y, s, r, g, b) {
-        handle.graphics.text(str, x, y - 2, s, r, g, b);
-    };
-
-    handle.load_sound = function(descriptor, onload, onfailure) {
-        handle.audio.load(descriptor, onload, onfailure);
-    };
-
-    handle.play = function(descriptor) {
-        handle.audio.play(descriptor);
-    };
-
-    handle.stop = function(descriptor) {
-        handle.audio.stop(descriptor);
-    };
-
-    handle.get_coordinate = function(x, y, w, h) {
-      return handle.graphics.get_coordinate(x, y, w, h);
-    };
+    handle.clear = handle.graphics.clear;
+    handle.rect = handle.graphics.rect;
+    handle.text = handle.graphics.text;
+    handle.load_sound = handle.audio.load;
+    handle.play = handle.audio.play;
+    handle.stop = handle.audio.stop;
 
     function get_zoom(width, height, reference_width, reference_height)
     {
@@ -147,46 +132,29 @@ Engine.new = function(descriptor, click) {
         return zoom;
     }
 
-    handle.resize = function(width, height) {
-        var rotate = false;
-        var zoom;
+    handle.resize = function(width, height)
+    {
+        let zoom;
 
-        var zoom_h = get_zoom(width, height, handle.reference_width, handle.reference_height);
-        var zoom_v = get_zoom(width, height, handle.reference_height, handle.reference_width);
+        let zoom_h = get_zoom(width, height, handle.reference_width, handle.reference_height);
+        let zoom_v = get_zoom(width, height, handle.reference_height, handle.reference_width);
 
         if (zoom_v > zoom_h)
-        {
-            if (handle.allow_rotate)
-              rotate = true;
-
             zoom = Math.floor(zoom_v);
-        }
         else
-        {
             zoom = Math.floor(zoom_h);
-        }
 
         if (zoom < 1)
           zoom = 1;
 
-        let borderx, bordery, ajustementx, ajustementy;
+        let borderx = Math.floor((width - handle.reference_width * zoom) / 2),
+            bordery = Math.floor((height - handle.reference_height * zoom) / 2),
+            ajustementx = Math.floor(width - handle.reference_width * zoom - borderx * 2),
+            ajustementy = Math.floor(height - handle.reference_height * zoom - bordery * 2);
 
-        if (rotate) {
-          borderx = Math.floor((width - handle.reference_height * zoom) / 2);
-          bordery = Math.floor((height - handle.reference_width * zoom) / 2);
-          ajustementx = Math.floor(width - handle.reference_height * zoom - borderx * 2);
-          ajustementy = Math.floor(height - handle.reference_width * zoom - bordery * 2);
-        } else {
-          borderx = Math.floor((width - handle.reference_width * zoom) / 2);
-          bordery = Math.floor((height - handle.reference_height * zoom) / 2);
-          ajustementx = Math.floor(width - handle.reference_width * zoom - borderx * 2);
-          ajustementy = Math.floor(height - handle.reference_height * zoom - bordery * 2);
-        }
-
-        handle.rotate = rotate;
         handle.canvas.width = width;
         handle.canvas.height = height;
-        handle.graphics.resize(zoom, rotate, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
+        handle.graphics.resize(zoom, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
     };
 
     return {

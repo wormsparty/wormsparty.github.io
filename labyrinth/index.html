@@ -67,7 +67,7 @@
 
     function all_loaded() {
         $(window).resize(function () {
-            engine.resize($(window).width(), $(window).height())
+            engine.resize($(window).width(), $(window).height());
             engine.clear(5, 5, 5);
             labyrinth.draw();
         });
