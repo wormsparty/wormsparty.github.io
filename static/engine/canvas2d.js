@@ -96,7 +96,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     };
 
     handle.rect = function(pos, w, h, color) {
-        handle.ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ', 1)';
+        handle.ctx.fillStyle = color;
 
         let x = pos.x;
         let y = pos.y;
@@ -137,7 +137,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 
     handle.text = function(str, pos, s, color)
     {
-        handle.ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ', 1)';
+        handle.ctx.fillStyle = color;
         handle.ctx.font = s + 'px inconsola, monospace';
 
         // TODO: Don't draw text outside

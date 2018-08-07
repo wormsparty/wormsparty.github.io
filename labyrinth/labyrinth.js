@@ -91,7 +91,7 @@ let maps = {
             '                #     @                            #         \n' +
             '                #                                  #         \n' +
             '                #                                  #         \n' +
-            '                #                                  #         \n' +
+            '                #                        %         #         \n' +
             '                #      #######                     #         \n' +
             '                #      rrrrrr#                     #         \n' +
             '                #      rrrrrr#                     #         \n' +
@@ -167,7 +167,7 @@ let maps = {
             '                ####################################               \n' +
             '                                                                   \n' +
             '                             p: prendre                            \n' +
-            '                             d: déposer                            \n',
+            '                                                                   \n',
         meta: '' +
             '                                                                   \n' +
             '                                                                   \n' +
@@ -178,11 +178,11 @@ let maps = {
             '                #        vvvvvvvv                  #               \n' +
             '                #        vvvvvvvv              @   1               \n' +
             '                #        vvvvvvvv                  2               \n' +
-            '                #     #?    #*)   #&%   #####      #               \n' +
-            '                #     #?    #](   #%%   #ccc#      #               \n' +
-            '                #     #?    #]*   #%&   #ccc#      #               \n' +
-            '                #     #?    #{!   #&%   #ccc#      #               \n' +
-            '                #     #?    #})   #%%   #####      #               \n' +
+            '                #     #?    #*)   #&]   #####      #               \n' +
+            '                #     #?    #](   #(}   #ccc#      #               \n' +
+            '                #     #?    #]*   #}&   #ccc#      #               \n' +
+            '                #     #?    #{!   #&)   #ccc#      #               \n' +
+            '                #     #?    #})   #[*   #####      #               \n' +
             '                #                                  #               \n' +
             '                #                                  #               \n' +
             '                #                                  #               \n' +
@@ -433,38 +433,38 @@ Labyrinth.new = function(engine)
 
     function get_background_color()
     {
-        return {r: 5, g: 5, b: 5};
+        return "#050505";
     }
 
     function get_text_color()
     {
-        return {r: 255, g: 255, b: 255};
+        return "#FFFFFF";
     }
 
     function get_tile_color(chr)
     {
         if (chr === '#' || chr === '.')
-            return {r: 100, g: 100, b: 100};
+            return "#646464";
         else if (chr === '~')
-            return {r: 200, g: 200, b: 200};
+            return "#C8C8C8";
         else
             return get_text_color();
     }
 
     function get_pnj_color(chr)
     {
-        if (chr === '@')
-            return {r: 255, g: 0, b: 0};
-        else if (chr === 'J')
-            return {r: 0, g: 255, b: 255};
-        else if (chr === 'm')
-            return {r: 155, g: 155, b: 155};
+        if (chr === 'm')
+            return "#9B9B9B";
         else if (chr === 'v')
-            return {r: 0, g: 0, b: 255};
+            return "#0000FF";
         else if (chr === 'c')
-            return {r: 0, g: 255, b: 255};
+            return "#0055DD";
+        else if (chr === 'J')
+            return "#00FFFF";
         else if (chr === 'r')
-            return {r: 255, g: 0, b: 255};
+            return "#FF00FF";
+        else if (chr === '@')
+            return "#FF0000";
         else
             return get_text_color();
     }
@@ -472,29 +472,29 @@ Labyrinth.new = function(engine)
     function get_item_color(chr)
     {
         if (chr === '$')
-            return {r: 200, g: 200, b: 0};
-        else if (chr === '[')
-            return {r: 255, g: 255, b: 0};
-        else if (chr === ']')
-            return {r: 255, g: 0, b: 255};
-        else if (chr === '{')
-            return {r: 0, g: 255, b: 255};
-        else if (chr === '}')
-            return {r: 255, g: 0, b: 0};
+            return "#FFFF00";
         else if (chr === '(')
-            return {r: 0, b: 255, g: 0};
-        else if (chr === ')')
-            return {r: 0, g: 0, b: 255};
-        else if (chr === '*')
-            return {r: 155, g: 255, b: 255};
-        else if (chr === '%')
-            return {r: 255, g: 155, b: 0};
+            return "#FF8800";
         else if (chr === '&')
-            return {r: 255, g: 0, b: 0};
-        else if (chr === '?')
-            return {r: 255, g: 255, b: 255};
+            return "#FF0000";
+        else if (chr === '[')
+            return "#FF0088";
+        else if (chr === ']')
+            return "#FF00FF";
+        else if (chr === '*')
+            return "#dd99FF";
+        else if (chr === '{')
+            return "#00FFFF";
+        else if (chr === ')')
+            return "#0000FF";
+        else if (chr === '}')
+            return "#00FF00";
+        else if (chr === '%')
+            return "#114400";
         else if (chr === '!')
-            return {r: 30, g: 30, b: 30};
+            return "#555555";
+        else if (chr === '?')
+            return "#FFFFFF";
         else
             return get_text_color();
     }
@@ -536,7 +536,7 @@ Labyrinth.new = function(engine)
             return 'Une pièce de 1.-';
 
         if (item === '%')
-            return 'Un plat pré-cuisiné';
+            return 'Un masque à gaz';
 
         if (item === '&')
             return 'Un coca';
@@ -581,8 +581,8 @@ Labyrinth.new = function(engine)
                 {
                     handle.current_status = get_description(item);
 
-                    if (item !== '$')
-                        handle.current_status += ' ($' + get_price(item) + ')';
+                    if (item !== '$' && handle.current_map_name === 'coop')
+                        handle.current_status += ' (' + get_price(item) + '.-)';
 
                     return;
                 }
@@ -614,12 +614,19 @@ Labyrinth.new = function(engine)
                             positions.splice(i, 1);
                             handle.current_status = description + " pris";
                         }
-                        else if (handle.coins >= price)
+                        else if (handle.current_map_name !== 'coop' || handle.coins >= price)
                         {
                             handle.inventory.push(item);
-                            handle.coins -= price;
+
+                            if (handle.current_map_name === 'coop')
+                            {
+                                handle.coins -= price;
+                                handle.current_status = description + " pris pour " + price + '.-';
+                            }
+                            else
+                                handle.current_status = description + " pris";
+
                             positions.splice(i, 1);
-                            handle.current_status = description + " pris";
                         }
                         else
                         {
@@ -780,6 +787,7 @@ Labyrinth.new = function(engine)
     function change_map(map_name)
     {
         handle.current_map = maps[map_name];
+        handle.current_map_name = map_name;
         handle.map_length = handle.current_map.map_length;
         handle.map_height = handle.current_map.map_height;
         handle.pnjs = {};
@@ -863,7 +871,7 @@ Labyrinth.new = function(engine)
             for(let x = 0; x < handle.map_length;)
             {
                 let length = 0;
-                let val = handle.current_map.map[y * (handle.map_length + 1) + x];
+                let val = get_symbol_at(handle, {x: x, y: y});
 
                 if (val === ' ' || val === '\n' || val === undefined)
                 {
