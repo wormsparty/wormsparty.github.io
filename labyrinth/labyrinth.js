@@ -499,6 +499,8 @@ Labyrinth.new = function(engine)
 
     function update_current_status(handle, hero_pos)
     {
+        let item_found = false;
+
         Object.keys(handle.current_map.item_positions).some(function(item)
         {
             let positions = handle.current_map.item_positions[item];
@@ -512,6 +514,7 @@ Labyrinth.new = function(engine)
                     if (item !== '$' && handle.current_map_name === 'coop')
                         handle.current_status += ' (' + item2price[item] + '.-)';
 
+                    item_found = true;
                     return true;
                 }
             }
@@ -519,7 +522,9 @@ Labyrinth.new = function(engine)
             return false;
         });
 
-        handle.current_status = '';
+        if (!item_found) {
+            handle.current_status = '';
+        }
     }
 
     function try_pick_item(handle, hero_pos)
