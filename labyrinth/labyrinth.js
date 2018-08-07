@@ -833,7 +833,7 @@ Labyrinth.new = function(engine)
             let coord = to_screen_coord(pnj.x, pnj.y);
             let color = pnj2color[p];
 
-            handle.engine.rect(coord, 10, 16, get_background_color());
+            handle.engine.rect(coord, handle.char_width, 16, get_background_color());
             handle.engine.text(p, coord, 16, color);
         });
     }
@@ -849,7 +849,7 @@ Labyrinth.new = function(engine)
                 let coord = to_screen_coord(positions[i].x, positions[i].y);
                 let color = item2color[item];
 
-                handle.engine.rect(coord, 10, 16, get_background_color());
+                handle.engine.rect(coord, handle.char_width, 16, get_background_color());
                 handle.engine.text(item, coord, 16, color);
             }
         });
