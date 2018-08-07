@@ -169,7 +169,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         //handle.ctx.fillStyle = 'rgba(0, 255, 255, 1)';
         handle.ctx.fillRect(handle.margin_left, handle.window_height - handle.margin_bottom, handle.window_width - handle.margin_right - handle.margin_left, handle.margin_bottom);
 
-        handle.ctx.fillStyle = 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', 1)';
+        handle.ctx.fillStyle = color;
         handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
     };
 

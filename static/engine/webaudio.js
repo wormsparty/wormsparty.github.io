@@ -1,23 +1,23 @@
 "use strict";
 
-var WebAudio = {};
+let WebAudio = {};
 
 WebAudio.new = function() {
     // Fix up prefixing
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var context = new AudioContext();
+    let context = new AudioContext();
 
     if (!context) {
       return undefined;
     }
 
-    var handle = {
+    let handle = {
       context: context,
       data: {}
     };
     
     handle.load = function(file, onload, onfailure) {
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.open('GET', file, true);
         request.responseType = 'arraybuffer';
 
@@ -50,12 +50,12 @@ WebAudio.new = function() {
     };
 
     handle.play = function(filename) {
-      var data = handle.data[filename];
+        let data = handle.data[filename];
 
-      var source = handle.context.createBufferSource();
-      source.buffer = data;
-      source.connect(handle.context.destination);
-      source.start(0);
+        let source = handle.context.createBufferSource();
+        source.buffer = data;
+        source.connect(handle.context.destination);
+        source.start(0);
     };
 
     return handle;
