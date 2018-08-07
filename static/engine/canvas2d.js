@@ -2,7 +2,8 @@
 
 let Canvas2D = {};
 
-Canvas2D.new = function(canvas, reference_width, reference_height, click) {
+Canvas2D.new = function(canvas, reference_width, reference_height, click)
+{
 	let handle = {
 		ctx: canvas.getContext('2d'),
         scaleFactor: 1,
@@ -138,7 +139,7 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     handle.text = function(str, pos, s, color)
     {
         handle.ctx.fillStyle = color;
-        handle.ctx.font = s + 'px inconsola, monospace';
+        handle.ctx.font = s + 'px Inconsolata, monospace';
 
         // TODO: Don't draw text outside
         let x = pos.x;
@@ -171,6 +172,10 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
 
         handle.ctx.fillStyle = color;
         handle.ctx.fillRect(handle.margin_left, handle.margin_top, handle.window_width - handle.margin_left - handle.margin_right, handle.window_height - handle.margin_bottom - handle.margin_top);
+    };
+
+    handle.get_char_width = function() {
+        return 8;//handle.ctx.measureText('\t').width;
     };
 
     return handle;

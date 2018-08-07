@@ -406,6 +406,7 @@ Labyrinth.new = function(engine)
         current_status: "",
         inventory: [],
         coins: 0,
+        char_width: engine.graphics.get_char_width()
     };
 
     /*
@@ -424,7 +425,7 @@ Labyrinth.new = function(engine)
     }
 
     function to_screen_coord(x, y) {
-        return {x: 9.6 * x - 2, y: 16 * y };
+        return {x: handle.char_width * x - 2, y: 16 * y };
     }
 
     function get_background_color() {
@@ -889,10 +890,11 @@ Labyrinth.new = function(engine)
         if (screen === 'inventory')
         {
             let y = 7;
+            let x = 14;
 
             if (handle.inventory.length === 0)
             {
-                let coord = to_screen_coord(14, y);
+                let coord = to_screen_coord(x, y);
                 handle.engine.text('Rien', coord, 16, get_text_color());
             }
             else
@@ -900,7 +902,7 @@ Labyrinth.new = function(engine)
                 for(let i in Object.keys(handle.inventory))
                 {
                     let item = handle.inventory[i];
-                    let coord = to_screen_coord(14, y);
+                    let coord = to_screen_coord(x, y);
                     handle.engine.text('[' + i + '] ' + item2description[item], coord, 16, get_text_color());
                     y++;
                 }
