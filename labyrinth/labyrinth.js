@@ -270,7 +270,7 @@ let screens = {
     },
 };
 
-let initial_map = 'coop';
+let initial_map = 'rez';
 
 function parse_all_maps()
 {
@@ -872,7 +872,6 @@ Labyrinth.new = function(engine)
 
     function draw_screen(handle, screen)
     {
-        // TODO: Items!
         // TODO: Journal!
 
         let inventory = screens[screen];
@@ -884,6 +883,29 @@ Labyrinth.new = function(engine)
                 let start = y * (inventory.map_length + 1);
                 handle.engine.text(inventory.map.substring(start, start + inventory.map_length), {x: 0, y: y * 16}, 16, get_text_color());
             }
+        }
+
+        // TODO: Items!
+        if (screen === 'inventory')
+        {
+            let y = 7;
+
+            if (handle.inventory.length === 0)
+            {
+                let coord = to_screen_coord(14, y);
+                handle.engine.text('Rien', coord, 16, get_text_color());
+            }
+            else
+            {
+                for(let i in Object.keys(handle.inventory))
+                {
+                    let item = handle.inventory[i];
+                    let coord = to_screen_coord(14, y);
+                    handle.engine.text('[' + i + '] ' + item2description[item], coord, 16, get_text_color());
+                    y++;
+                }
+            }
+
         }
     }
 
