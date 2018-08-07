@@ -98,13 +98,12 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     handle.rect = function(pos, w, h, color) {
         handle.ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ', 1)';
 
-        pos.x = handle.margin_left + pos.x * handle.scaleFactor;
-        pos.y = handle.margin_top + pos.y * handle.scaleFactor;
-        w *= handle.scaleFactor;
-        h *= handle.scaleFactor;
-
         // TODO: Handle out-of-frame case
-        handle.ctx.fillRect(pos.x, pos.y, w, h);
+        handle.ctx.fillRect(
+            handle.margin_left + pos.x * handle.scaleFactor,
+            handle.margin_top + pos.y * handle.scaleFactor,
+            w * handle.scaleFactor,
+            h * handle.scaleFactor);
     };
 
     handle.text = function(str, pos, s, color)

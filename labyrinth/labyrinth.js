@@ -441,13 +441,19 @@ Labyrinth.new = function(engine)
         return {r: 255, g: 255, b: 255};
     }
 
-    function get_symbol_color(chr)
+    function get_tile_color(chr)
     {
         if (chr === '#' || chr === '.')
             return {r: 100, g: 100, b: 100};
         else if (chr === '~')
             return {r: 200, g: 200, b: 200};
-        else if (chr === '@')
+        else
+            return get_text_color();
+    }
+
+    function get_pnj_color(chr)
+    {
+        if (chr === '@')
             return {r: 255, g: 0, b: 0};
         else if (chr === 'J')
             return {r: 0, g: 255, b: 255};
@@ -459,7 +465,13 @@ Labyrinth.new = function(engine)
             return {r: 0, g: 255, b: 255};
         else if (chr === 'r')
             return {r: 255, g: 0, b: 255};
-        else if (chr === '$')
+        else
+            return get_text_color();
+    }
+
+    function get_item_color(chr)
+    {
+        if (chr === '$')
             return {r: 200, g: 200, b: 0};
         else if (chr === '[')
             return {r: 255, g: 255, b: 0};
@@ -871,7 +883,7 @@ Labyrinth.new = function(engine)
 
                 let coord = to_screen_coord(x, y);
                 let str = get_string_from(handle, x, y, length);
-                let color = get_symbol_color(val);
+                let color = get_tile_color(val);
 
                 handle.engine.text(str, coord, 16, color);
                 x += length;
@@ -885,9 +897,7 @@ Labyrinth.new = function(engine)
         {
             let pnj = handle.pnjs[p];
             let coord = to_screen_coord(pnj.x, pnj.y);
-            let color = get_symbol_color(p);
-
-            //console.log('Drawing ' + p + ' at ' + coord.x + ', ' + coord.y);
+            let color = get_pnj_color(p);
 
             handle.engine.rect(coord, 10, 16, get_background_color());
             handle.engine.text(p, coord, 16, color);
@@ -903,7 +913,7 @@ Labyrinth.new = function(engine)
             for (let i = 0; i < positions.length; i++)
             {
                 let coord = to_screen_coord(positions[i].x, positions[i].y);
-                let color = get_symbol_color(item);
+                let color = get_item_color(item);
 
                 handle.engine.rect(coord, 10, 16, get_background_color());
                 handle.engine.text(item, coord, 16, color);
