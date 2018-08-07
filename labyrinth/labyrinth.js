@@ -5,57 +5,57 @@ let Labyrinth = {};
 let maps = {
     'outside': {
         map: '' +
-            '                                                                   \n' +
-            '#######                      ########################              \n' +
-            '#.....#                      #      #...............#              \n' +
-            '#.....#                      #      #...............#              \n' +
-            '#.....# Jordils         Coop #      ................###############\n' +
-            '#.....#                      #      ..............................#\n' +
-            '#.....#                      #      #.............................#\n' +
-            '#.....#                      #      #.............................#\n' +
-            '#.....#                      ########................####.........#\n' +
-            '#.....#                             #................#EL#.........#\n' +
-            '#.....#                             #................#CA#.........#\n' +
-            '#.....#                             #................####.........#\n' +
-            '#.....###############################.............................#\n' +
-            '#.................................................................#\n' +
-            '#................................................####..############\n' +
-            '#####################################............#                 \n' +
-            '                                    #............#                 \n' +
-            '          h : aide                  #............#                 \n' +
-            '                                    #............#                 \n' +
-            '                                    #............#                 \n' +
-            '                                    #............#                 \n' +
-            '                                    #............####..############\n' +
-            '                                    #..............~~~~~~~........#\n' +
-            '                                    #...............~~~~..........#\n' +
-            '                                    ###############################\n',
+            '#     #                             #               #                           \n' +
+            '#.....#                             #...............#                           \n' +
+            '#.....#                             #...............#                           \n' +
+            '#.....#                             #...............#                           \n' +
+            '#.....#                             #...............############################\n' +
+            '#.....#                  ############.............................#             \n' +
+            '#.....#                  #          #.............................#             \n' +
+            '#.....#                  #          #.............................#             \n' +
+            '#.....#                  #  Manger  .................####.........#             \n' +
+            '#.....#                  #          .................####.........#             \n' +
+            '#.....#                  #          #................####.........#             \n' +
+            '#.....#                  #          #.............................#             \n' +
+            '#.....#                  ############.............................#             \n' +
+            '#.....#                             #.............................#             \n' +
+            '#.....###############################............####..############             \n' +
+            '#................................................#                              \n' +
+            '#................................................#                              \n' +
+            '#####################################............#   Travailler                 \n' +
+            '                                    #............#                              \n' +
+            '              h : aide              #............#                              \n' +
+            '                                    #............#                              \n' +
+            '                                    #............####..############             \n' +
+            '                                    #..............~~~~~~~........#             \n' +
+            '                                    #...............~~~~..........#             \n' +
+            '                                    ###############################             \n',
         meta: '' +
-            '                                                                   \n' +
-            '#######                      ########################              \n' +
-            '#     #                      #      #               #              \n' +
-            '#     #                      #      #               #              \n' +
-            '#  @  #                      #      1               ###############\n' +
-            '#     #                      #      2                             #\n' +
-            '#     #                      #      #                             #\n' +
-            '#     #                      #      #                             #\n' +
-            '#     #                      ########mmmm            ####         #\n' +
-            '#     #                             #mmmm            #  #         #\n' +
-            '#     #                             #mmmm            #  #         #\n' +
-            '#     #                             #mmmm            ####         #\n' +
-            '#     ###############################                             #\n' +
-            '#                                                                 #\n' +
-            '#                                                ####34############\n' +
-            '#####################################            #                 \n' +
-            '                                    #            #                 \n' +
-            '                                    #            #                 \n' +
-            '                                    #            #                 \n' +
-            '                                    #            #                 \n' +
-            '                                    #            #                 \n' +
-            '                                    #            ####56############\n' +
-            '                                    #                             #\n' +
-            '                                    #                             #\n' +
-            '                                    ###############################\n',
+            '#     #                             #               #                           \n' +
+            '#55555#                             #444444444444444#                           \n' +
+            '#     #                             #               #                           \n' +
+            '#     #                             #               #                           \n' +
+            '#  @  #                             #               ############################\n' +
+            '#     #                  ############                             #             \n' +
+            '#     #                  #          #                             #             \n' +
+            '#     #                  #          #                             #             \n' +
+            '#     #                  #          1                ####         #             \n' +
+            '#     #                  #          1                ####         #             \n' +
+            '#     #                  #          #                ####         #             \n' +
+            '#     #                  #          #                             #             \n' +
+            '#     #                  ############                             #             \n' +
+            '#     #                             #                             #             \n' +
+            '#     ###############################            ####222###########             \n' +
+            '#                                                #                              \n' +
+            '#                                                #                              \n' +
+            '#####################################            #                              \n' +
+            '                                    #            #                              \n' +
+            '                                    #            #                              \n' +
+            '                                    #            #                              \n' +
+            '                                    #            ####333###########             \n' +
+            '                                    #                             #             \n' +
+            '                                    #                             #             \n' +
+            '                                    ###############################             \n',
     },
     'rez': {
         map: '' +
@@ -64,9 +64,9 @@ let maps = {
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
-            '                               ELCA Rez                      \n' +
+            '                           Travailler - rez                  \n' +
             '                                                             \n' +
-            '                #####..#############################         \n' +
+            '                #####...############################         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
@@ -86,7 +86,7 @@ let maps = {
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
-            '                #####34#############################         \n' +
+            '                #####222############################         \n' +
             '                #                                  #         \n' +
             '                #     @                            #         \n' +
             '                #                                  #         \n' +
@@ -106,7 +106,7 @@ let maps = {
             '                                                             \n' +
             '                                                             \n' +
             '                                                             \n' +
-            '                             ELCA premier                    \n' +
+            '                           Travailler - 1e                   \n' +
             '                                                             \n' +
             '                ####################################         \n' +
             '                #..................................#         \n' +
@@ -119,7 +119,7 @@ let maps = {
             '                #..................................#         \n' +
             '                #..................................#         \n' +
             '                #..................................#         \n' +
-            '                #####..#############################         \n' +
+            '                #####...############################         \n' +
             '                                                             \n' +
             '                             p: prendre                      \n',
         meta: '' +
@@ -141,7 +141,7 @@ let maps = {
             '                #     @                            #         \n' +
             '                #                                  #         \n' +
             '                #                                  #         \n' +
-            '                #####56#############################         \n' +
+            '                #####333############################         \n' +
             '                                                             \n' +
             '                                                             \n',
     },
@@ -150,7 +150,7 @@ let maps = {
             '                                                                   \n' +
             '                                                                   \n' +
             '                                                                   \n' +
-            '                               Coop                                \n' +
+            '                              Manger                               \n' +
             '                                                                   \n' +
             '                ####################################               \n' +
             '                #..................................#               \n' +
@@ -166,7 +166,7 @@ let maps = {
             '                #..................................#               \n' +
             '                ####################################               \n' +
             '                                                                   \n' +
-            '                             p: prendre                            \n' +
+            '                             p: acheter                            \n' +
             '                                                                   \n',
         meta: '' +
             '                                                                   \n' +
@@ -177,7 +177,7 @@ let maps = {
             '                ####################################               \n' +
             '                #        vvvvvvvv                  #               \n' +
             '                #        vvvvvvvv              @   1               \n' +
-            '                #        vvvvvvvv                  2               \n' +
+            '                #        vvvvvvvv                  1               \n' +
             '                #     #?    #*)   #&]   #####      #               \n' +
             '                #     #?    #](   #(}   #ccc#      #               \n' +
             '                #     #?    #]*   #}&   #ccc#      #               \n' +
@@ -191,6 +191,98 @@ let maps = {
             '                                                                   \n' +
             '                                                                   \n',
     },
+    'rue': {
+        map: '' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                ####################################               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #################.....##############               \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n',
+        meta: '' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                ####################################               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #################55555##############               \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n',
+    },
+    'lac': {
+        map: '' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                ####################################               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #..................................#               \n' +
+            '                #########..................#########               \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n',
+        meta: '' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                ####################################               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #                                  #               \n' +
+            '                #########444444444444444444#########               \n' +
+            '                                                                   \n' +
+            '                                                                   \n' +
+            '                                                                   \n',
+    },
 };
 
 let screens = {
@@ -199,25 +291,25 @@ let screens = {
             '                                                           \n' +
             '                                                           \n' +
             '                                                           \n' +
-            '      #####################################################\n' +
-            '      #                                                   #\n' +
-            '      #                    Inventaire                     #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #                                                   #\n' +
-            '      #####################################################\n',
+            '      .~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.\n' +
+            '      |                                                   |\n' +
+            '      |                    Inventaire                     |\n' +
+            '      |                    ~~~~~~~~~~                     |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      |                                                   |\n' +
+            '      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\n'
     },
     'journal': {
         map: '' +
@@ -271,11 +363,13 @@ let screens = {
 };
 
 let initial_map = 'rez';
+let char_per_line = 80;
+let map_lines = 26;
 
 function parse_all_maps()
 {
     let all_teleports = {};
-    let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q'];
     let item_symbols = [ '{', '}', '[', ']', '(', ')', '&', '%', '!', '?', '*', '$'];
 
     for (let key in maps)
@@ -285,25 +379,38 @@ function parse_all_maps()
         let visual_map = current_map.map.split('\n');
         let meta_map = current_map.meta.split('\n');
 
+        if (visual_map.length !== map_lines)
+            console.log('La carte VISU ' + key + " n'a pas exactement " + map_lines + ' lignes.');
+
+        if (meta_map.length !== map_lines)
+            console.log('La carte META ' + key + " n'a pas exactement " + map_lines + ' lignes.');
+
+        for(let i = 0; i < map_lines; i++)
+        {
+            if (visual_map[i].length !== char_per_line)
+                console.log('La carte VISU de ' + key + ' ligne ' + i + " n'a pas exactement " + char_per_line + ' caractères');
+
+            if (meta_map[i].length !== char_per_line)
+                console.log('La carte META de ' + key + ' ligne ' + i + " n'a pas exactement " + char_per_line + ' caractères')
+        }
+
         current_map.teleports = [];
-        current_map.map_length = visual_map[0].length;
-        current_map.map_height = visual_map.length;
         current_map.pnj_positions = {};
         current_map.item_positions = {};
 
         if (visual_map[0].length !== meta_map[0].length) {
-            console.log('Carte META de largeur différente que la carte visuelle!!');
+            console.log('Carte META de largeur différente que la carte visuelle pour ' + key);
             return;
         }
 
         if (visual_map.length !== meta_map.length) {
-            console.log('Carte META de hauteur différente que la carte visuelle!!');
+            console.log('Carte META de hauteur différente que la carte visuelle pour ' + key);
             return;
         }
 
-        for(let y = 0; y < current_map.map_height; y++)
+        for(let y = 0; y < map_lines; y++)
         {
-            for(let x = 0; x < current_map.map_length; x++)
+            for(let x = 0; x < char_per_line; x++)
             {
                 let chr = meta_map[y][x];
 
@@ -380,8 +487,14 @@ function parse_all_screens()
         let map = screens[key];
         let splitted_map = map.map.split('\n');
 
-        map.map_length = splitted_map[0].length;
-        map.map_height = splitted_map.length;
+        if (map.length !== map_lines)
+            console.log("L'écran " + key + " n'a pas exactement " + map_lines + ' lines.');
+
+        for(let i = 0 ; i < map_lines; i++)
+        {
+            if (splitted_map[i].length !== char_per_line)
+                console.log("La ligne " + i + " de l'écran " + key + " n'a pas exactement " + char_per_line + ' caractères.');
+        }
     }
 }
 
@@ -400,8 +513,6 @@ Labyrinth.new = function(engine)
         open_journal: false,
         pickup: false,
         engine: engine,
-        map_length: 0,
-        map_height: 0,
         current_map: undefined,
         current_status: "",
         inventory: [],
@@ -413,11 +524,11 @@ Labyrinth.new = function(engine)
         1) Helper functions
      */
     function get_symbol_at(handle, pos) {
-        return handle.current_map.map[pos.y * (handle.current_map.map_length + 1) + pos.x];
+        return handle.current_map.map[pos.y * (char_per_line + 1) + pos.x];
     }
 
     function get_string_from(handle, x, y, length) {
-        return handle.current_map.map.substr(y * (handle.map_length + 1) + x, length);
+        return handle.current_map.map.substr(y * (char_per_line + 1) + x, length);
     }
 
     function pos_equal(p1, p2) {
@@ -425,11 +536,11 @@ Labyrinth.new = function(engine)
     }
 
     function to_screen_coord(x, y) {
-        return {x: handle.char_width * x - 2, y: 16 * y };
+        return {x: handle.char_width * x, y: 16 * y };
     }
 
     function get_background_color() {
-        return "#050505";
+        return "#151515";
     }
 
     function get_text_color() {
@@ -712,8 +823,6 @@ Labyrinth.new = function(engine)
     {
         handle.current_map = maps[map_name];
         handle.current_map_name = map_name;
-        handle.map_length = handle.current_map.map_length;
-        handle.map_height = handle.current_map.map_height;
         handle.pnjs = {};
 
         Object.keys(handle.current_map.pnj_positions).forEach(function(pnj) {
@@ -789,9 +898,9 @@ Labyrinth.new = function(engine)
 
     function draw_map(handle)
     {
-        for(let y = 0; y < handle.map_height; y++)
+        for(let y = 0; y < map_lines; y++)
         {
-            for(let x = 0; x < handle.map_length;)
+            for(let x = 0; x < char_per_line;)
             {
                 let length = 0;
                 let val = get_symbol_at(handle, {x: x, y: y});
@@ -877,19 +986,19 @@ Labyrinth.new = function(engine)
 
         let inventory = screens[screen];
 
-        for(let y = 0; y < inventory.map_height; y++)
+        for(let y = 0; y < map_lines; y++)
         {
-            for (let x = 0; x < inventory.map_length; x++)
+            for (let x = 0; x < char_per_line; x++)
             {
-                let start = y * (inventory.map_length + 1);
-                handle.engine.text(inventory.map.substring(start, start + inventory.map_length), {x: 0, y: y * 16}, 16, get_text_color());
+                let start = y * (char_per_line + 1);
+                handle.engine.text(inventory.map.substring(start, start + char_per_line), {x: 0, y: y * 16}, 16, get_text_color());
             }
         }
 
         // TODO: Items!
         if (screen === 'inventory')
         {
-            let y = 7;
+            let y = 8;
             let x = 14;
 
             if (handle.inventory.length === 0)
