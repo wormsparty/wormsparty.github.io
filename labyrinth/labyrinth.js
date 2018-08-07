@@ -411,163 +411,91 @@ Labyrinth.new = function(engine)
     /*
         1) Helper functions
      */
-    function get_symbol_at(handle, pos)
-    {
+    function get_symbol_at(handle, pos) {
         return handle.current_map.map[pos.y * (handle.current_map.map_length + 1) + pos.x];
     }
 
-    function get_string_from(handle, x, y, length)
-    {
+    function get_string_from(handle, x, y, length) {
         return handle.current_map.map.substr(y * (handle.map_length + 1) + x, length);
     }
 
-    function pos_equal(p1, p2)
-    {
+    function pos_equal(p1, p2) {
         return p1.x === p2.x && p1.y === p2.y;
     }
 
-    function to_screen_coord(x, y)
-    {
+    function to_screen_coord(x, y) {
         return {x: 9.6 * x - 2, y: 16 * y };
     }
 
-    function get_background_color()
-    {
+    function get_background_color() {
         return "#050505";
     }
 
-    function get_text_color()
-    {
+    function get_text_color() {
         return "#FFFFFF";
     }
 
-    function get_tile_color(chr)
-    {
-        if (chr === '#' || chr === '.')
-            return "#646464";
-        else if (chr === '~')
-            return "#C8C8C8";
-        else
-            return get_text_color();
-    }
+    let tile2color = {
+        '#': '#646464',
+        '.': "#646464",
+        '~': "#C8C8C8",
+    };
 
-    function get_pnj_color(chr)
-    {
-        if (chr === 'm')
-            return "#9B9B9B";
-        else if (chr === 'v')
-            return "#0000FF";
-        else if (chr === 'c')
-            return "#0055DD";
-        else if (chr === 'J')
-            return "#00FFFF";
-        else if (chr === 'r')
-            return "#FF00FF";
-        else if (chr === '@')
-            return "#FF0000";
-        else
-            return get_text_color();
-    }
+    let pnj2color = {
+        'm': "#9B9B9B",
+        'v': "#0000FF",
+        'c': "#0055DD",
+        'J': "#00FFFF",
+        'r': "#FF00FF",
+        '@': "#FF0000",
+    };
 
-    function get_item_color(chr)
-    {
-        if (chr === '$')
-            return "#FFFF00";
-        else if (chr === '(')
-            return "#FF8800";
-        else if (chr === '&')
-            return "#FF0000";
-        else if (chr === '[')
-            return "#FF0088";
-        else if (chr === ']')
-            return "#FF00FF";
-        else if (chr === '*')
-            return "#dd99FF";
-        else if (chr === '{')
-            return "#00FFFF";
-        else if (chr === ')')
-            return "#0000FF";
-        else if (chr === '}')
-            return "#00FF00";
-        else if (chr === '%')
-            return "#114400";
-        else if (chr === '!')
-            return "#555555";
-        else if (chr === '?')
-            return "#FFFFFF";
-        else
-            return get_text_color();
-    }
+    let item2color = {
+        '$': "#FFFF00",
+        '(': "#FF8800",
+        '&': "#FF0000",
+        '[': "#FF0088",
+        ']': "#FF00FF",
+        '*': "#dd99FF",
+        '{': "#00FFFF",
+        ')': "#0000FF",
+        '}': "#00FF00",
+        '%': "#114400",
+        '!': "#555555",
+        '?': "#FFFFFF",
+    };
 
     /*
         2) Item management
      */
-    function get_price(item)
-    {
-        if (item === '%')
-            return 10;
-        else if (item === '&')
-            return 2;
-        else if (item === '(')
-            return 5;
-        else if (item === ')')
-            return 5;
-        else if (item === '[')
-            return 10;
-        else if (item === ']')
-            return 10;
-        else if (item === '{')
-            return 15;
-        else if (item === '}')
-            return 15;
-        else if (item === '*')
-            return 1;
-        else if (item === '?')
-            return 4;
-        else if (item === '!')
-            return 2;
-        else
-            return 0;
-    }
+    let item2price = {
+        '%': 10,
+        '&': 2,
+        '(': 5,
+        ')': 5,
+        '[': 10,
+        ']': 10,
+        '{': 15,
+        '}': 15,
+        '*': 1,
+        '?': 4,
+        '!': 2,
+    };
 
-    function get_description(item)
-    {
-        if (item === '$')
-            return 'Une pièce de 1.-';
-
-        if (item === '%')
-            return 'Un masque à gaz';
-
-        if (item === '&')
-            return 'Un coca';
-
-        if (item === '(')
-            return 'Un bout de bois gauche';
-
-        if (item === ')')
-            return 'Un bout de bois droit';
-
-        if (item === '[')
-            return 'Un crochet gauche';
-
-        if (item === ']')
-            return 'Un crochet droit';
-
-        if (item === '{')
-            return 'Un arc gauche';
-
-        if (item === '}')
-            return 'Un arc droit';
-
-        if (item === '*')
-            return 'Un caillou';
-
-        if (item === '?')
-            return 'Une potion mystère';
-
-        if (item === '!')
-            return 'Un sort mystère';
-    }
+    let item2description = {
+        '$': 'Une pièce de 1.-',
+        '%': 'Un masque à gaz',
+        '&': 'Un coca',
+        '(': 'Un bout de bois gauche',
+        ')': 'Un bout de bois droit',
+        '[': 'Un crochet gauche',
+        ']': 'Un crochet droit',
+        '{': 'Un arc gauche',
+        '}': 'Un arc droit',
+        '*': 'Un caillou',
+        '?': 'Une potion mystère',
+        '!': 'Un sort mystère',
+    };
 
     function update_current_status(handle, hero_pos)
     {
@@ -579,10 +507,10 @@ Labyrinth.new = function(engine)
             {
                 if (pos_equal(positions[i], hero_pos))
                 {
-                    handle.current_status = get_description(item);
+                    handle.current_status = item2description[item];
 
                     if (item !== '$' && handle.current_map_name === 'coop')
-                        handle.current_status += ' (' + get_price(item) + '.-)';
+                        handle.current_status += ' (' + item2price[item] + '.-)';
 
                     return;
                 }
@@ -601,8 +529,8 @@ Labyrinth.new = function(engine)
             for(let item in handle.current_map.item_positions)
             {
                 let positions = handle.current_map.item_positions[item];
-                let price = get_price(item);
-                let description = get_description(item);
+                let price = item2price[item];
+                let description = item2description[item];
 
                 for(let i = 0 ; i < positions.length; i++)
                 {
@@ -655,22 +583,13 @@ Labyrinth.new = function(engine)
     /*
         2) PNJ management
      */
-    function get_pnj_dialog(pnj)
-    {
-        if (pnj === 'J') {
-            return 'La machine à café est cassée!';
-        } else if (pnj === 'r') {
-            return 'Bonjour!';
-        } else if (pnj === 'v') {
-            return 'On ne peut pas sortir sans payer!';
-        } else if (pnj === 'c') {
-            return "On n'est pas sensé pouvoir me parler!";
-        } else if (pnj === 'm') {
-            return 'Une pièce?';
-        } else {
-            return '???';
-        }
-    }
+    let pnj2dialog = {
+        'J': 'La machine à café est cassée!',
+        'r': 'Bonjour!',
+        'v': 'On ne peut pas sortir sans payer!',
+        'c': "On n'est pas sensé pouvoir me parler!",
+        'm': 'Une pièce?',
+    };
 
     function try_talk(handle, future_pos)
     {
@@ -683,7 +602,7 @@ Labyrinth.new = function(engine)
 
             if (pos_equal(pnj_pos, future_pos))
             {
-                handle.current_status = get_pnj_dialog(pnj);
+                handle.current_status = pnj2dialog[pnj];
                 return true;
             }
         }
@@ -691,31 +610,26 @@ Labyrinth.new = function(engine)
         return false;
     }
 
+    let mouvementMap = {
+        0: {x: 1, y: 0},
+        1: {x: -1, y: 0},
+        2: {x: 0, y: 1},
+        3: {x: 0, y: -1},
+        4: {x: 1, y: 1},
+        5: {x: -1, y: 1},
+        6: {x: 1, y: -1},
+        7: {x: -1, y: -1},
+    };
+
     function get_random_mouvement(pnj)
     {
         let new_pnj = {x: pnj.x, y: pnj.y};
         let r = Math.floor(Math.random() * 16);
+        let mouvement = mouvementMap[r];
 
-        if (r === 0) {
-            new_pnj.x++;
-        } else if (r === 1) {
-            new_pnj.x--;
-        } else if (r === 2) {
-            new_pnj.y++;
-        } else if (r === 3) {
-            new_pnj.y--;
-        } else if (r === 4) {
-            new_pnj.x++;
-            new_pnj.y++;
-        } else if (r === 5) {
-            new_pnj.x--;
-            new_pnj.y++;
-        } else if (r === 6) {
-            new_pnj.x++;
-            new_pnj.y--;
-        } else if (r === 7) {
-            new_pnj.x--;
-            new_pnj.y--;
+        if (mouvement !== undefined) {
+            new_pnj.x += mouvement.x;
+            new_pnj.y += mouvement.y;
         }
 
         return new_pnj;
@@ -891,7 +805,10 @@ Labyrinth.new = function(engine)
 
                 let coord = to_screen_coord(x, y);
                 let str = get_string_from(handle, x, y, length);
-                let color = get_tile_color(val);
+                let color = tile2color[val];
+
+                if (color === undefined)
+                    color = get_text_color();
 
                 handle.engine.text(str, coord, 16, color);
                 x += length;
@@ -905,7 +822,7 @@ Labyrinth.new = function(engine)
         {
             let pnj = handle.pnjs[p];
             let coord = to_screen_coord(pnj.x, pnj.y);
-            let color = get_pnj_color(p);
+            let color = pnj2color[p];
 
             handle.engine.rect(coord, 10, 16, get_background_color());
             handle.engine.text(p, coord, 16, color);
@@ -921,7 +838,7 @@ Labyrinth.new = function(engine)
             for (let i = 0; i < positions.length; i++)
             {
                 let coord = to_screen_coord(positions[i].x, positions[i].y);
-                let color = get_item_color(item);
+                let color = item2color[item];
 
                 handle.engine.rect(coord, 10, 16, get_background_color());
                 handle.engine.text(item, coord, 16, color);
