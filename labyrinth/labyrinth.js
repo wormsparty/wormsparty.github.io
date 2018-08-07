@@ -499,7 +499,7 @@ Labyrinth.new = function(engine)
 
     function update_current_status(handle, hero_pos)
     {
-        for(let item in handle.current_map.item_positions)
+        Object.keys(handle.current_map.item_positions).some(function(item)
         {
             let positions = handle.current_map.item_positions[item];
 
@@ -512,10 +512,12 @@ Labyrinth.new = function(engine)
                     if (item !== '$' && handle.current_map_name === 'coop')
                         handle.current_status += ' (' + item2price[item] + '.-)';
 
-                    return;
+                    return true;
                 }
             }
-        }
+
+            return false;
+        });
 
         handle.current_status = '';
     }
@@ -526,7 +528,7 @@ Labyrinth.new = function(engine)
         {
             let item_picked = false;
 
-            for(let item in handle.current_map.item_positions)
+            Object.keys(handle.current_map.item_positions).some(function(item)
             {
                 let positions = handle.current_map.item_positions[item];
                 let price = item2price[item];
@@ -562,13 +564,12 @@ Labyrinth.new = function(engine)
                         }
 
                         item_picked = true;
-                        break;
+                        return true;
                     }
                 }
 
-                if (item_picked)
-                    break;
-            }
+                return false;
+            });
 
             if (!item_picked)
                 handle.current_status = "Il n'y a rien à prendre.";
@@ -593,21 +594,25 @@ Labyrinth.new = function(engine)
 
     function try_talk(handle, future_pos)
     {
-        for (let pnj in handle.pnjs)
-        {
+        let talked = false;
+
+        Object.keys(handle.pnjs).some(function(pnj) {
             if (pnj === '@')
-                continue;
+                return false;
 
             let pnj_pos = handle.pnjs[pnj];
 
             if (pos_equal(pnj_pos, future_pos))
             {
                 handle.current_status = pnj2dialog[pnj];
+                talked = true;
                 return true;
             }
-        }
 
-        return false;
+            return false;
+        });
+
+        return talked;
     }
 
     let mouvementMap = {
@@ -637,18 +642,17 @@ Labyrinth.new = function(engine)
 
     function move_pnjs(handle, future_pos)
     {
-        for (let p in handle.pnjs)
+        Object.keys(handle.pnjs).forEach(function(p)
         {
-            let pnj = handle.pnjs[p];
-
             if (p === '@')
-                continue;
+                return;
 
+            let pnj = handle.pnjs[p];
             let new_pnj = get_random_mouvement(pnj);
 
             if (!pos_equal(new_pnj, future_pos) && get_symbol_at(handle, new_pnj) === '.')
                 handle.pnjs[p] = new_pnj;
-        }
+        });
     }
 
     /*
@@ -706,11 +710,10 @@ Labyrinth.new = function(engine)
         handle.map_height = handle.current_map.map_height;
         handle.pnjs = {};
 
-        for(let pnj in handle.current_map.pnj_positions)
-        {
+        Object.keys(handle.current_map.pnj_positions).forEach(function(pnj) {
             let positions = handle.current_map.pnj_positions[pnj];
             handle.pnjs[pnj] = positions[Math.floor(Math.random() * positions.length)];
-        }
+        });
 
         handle.pnjs['@'] = handle.current_map.start;
     }
@@ -818,7 +821,7 @@ Labyrinth.new = function(engine)
 
     function draw_pnjs(handle)
     {
-        for (let p in handle.pnjs)
+        Object.keys(handle.pnjs).forEach(function(p)
         {
             let pnj = handle.pnjs[p];
             let coord = to_screen_coord(pnj.x, pnj.y);
@@ -826,12 +829,12 @@ Labyrinth.new = function(engine)
 
             handle.engine.rect(coord, 10, 16, get_background_color());
             handle.engine.text(p, coord, 16, color);
-        }
+        });
     }
 
     function draw_items(handle)
     {
-        for (let item in handle.current_map.item_positions)
+        Object.keys(handle.current_map.item_positions).forEach(function(item)
         {
             let positions = handle.current_map.item_positions[item];
 
@@ -843,7 +846,7 @@ Labyrinth.new = function(engine)
                 handle.engine.rect(coord, 10, 16, get_background_color());
                 handle.engine.text(item, coord, 16, color);
             }
-        }
+        });
     }
 
     function draw_overlay(handle)
