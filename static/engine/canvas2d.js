@@ -98,10 +98,39 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
     handle.rect = function(pos, w, h, color) {
         handle.ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ', 1)';
 
-        // TODO: Handle out-of-frame case
+        let x = pos.x;
+        let y = pos.y;
+
+        if (x < 0)
+        {
+            w += x;
+            x = 0;
+        }
+
+        if (y < 0)
+        {
+            h += y;
+            y = 0;
+        }
+
+        if (x >= handle.reference_width)
+        {
+            w -= x - handle.reference_width;
+            x = handle.reference_width - 1;
+        }
+
+        if (y >= handle.reference_height)
+        {
+            h -= y - handle.reference_height;
+            y = handle.reference_height - 1;
+        }
+
+        if (w <= 0 || h <= 0)
+            return;
+
         handle.ctx.fillRect(
-            handle.margin_left + pos.x * handle.scaleFactor,
-            handle.margin_top + pos.y * handle.scaleFactor,
+            handle.margin_left + x * handle.scaleFactor,
+            handle.margin_top + y * handle.scaleFactor,
             w * handle.scaleFactor,
             h * handle.scaleFactor);
     };
@@ -111,11 +140,15 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click) {
         handle.ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ', 1)';
         handle.ctx.font = s + 'px inconsola, monospace';
 
+        // TODO: Don't draw text outside
+        let x = pos.x;
+        let y = pos.y + s - 2;
+
         handle.ctx.save();
         handle.ctx.translate(handle.margin_left, handle.margin_top);
         handle.ctx.scale(handle.scaleFactor, handle.scaleFactor);
 
-        handle.ctx.fillText(str, pos.x, pos.y + s - 2);
+        handle.ctx.fillText(str, x, y);
         handle.ctx.restore();
     };
 

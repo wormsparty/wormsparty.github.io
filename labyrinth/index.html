@@ -60,7 +60,6 @@
     let engine = undefined;
 
     function step() {
-        engine.clear(5, 5, 5);
         labyrinth.update();
         labyrinth.draw();
     }
@@ -68,7 +67,6 @@
     function all_loaded() {
         $(window).resize(function () {
             engine.resize($(window).width(), $(window).height());
-            engine.clear(5, 5, 5);
             labyrinth.draw();
         });
 
