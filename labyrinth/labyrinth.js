@@ -887,9 +887,21 @@ Labyrinth.new = function(engine)
 
                         if (id === tp.id)
                         {
+                            let new_x = tp.x + (future_pos.x - hero_pos.x);
+                            let new_y = tp.y + (future_pos.y - hero_pos.y);
+
+                            // Fix the case where teleport + mouvement ends up in a wall!
+                            if (maps[new_map].map[new_y * (char_per_line + 1) + new_x] === '#')
+                            {
+                                if (maps[new_map].map[new_y * (char_per_line + 1) + tp.x] === '#')
+                                    new_y = tp.y;
+                                else
+                                    new_x = tp.x;
+                            }
+
                             return {
                                 'success': true,
-                                'pos': {x: tp.x + (future_pos.x - hero_pos.x), y: tp.y + (future_pos.y - hero_pos.y)},
+                                'pos': {x: new_x, y: new_y},
                                 'newmap': new_map,
                                 'newstatus': '',
                             };
