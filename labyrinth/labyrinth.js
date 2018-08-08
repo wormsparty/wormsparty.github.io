@@ -58,7 +58,13 @@ let maps = {
             '                                     ##                               ###       \n' +
             '                                       ##                         ####          \n' +
             '                                         #########################              ',
-
+        teleport_map: {
+            1: 'coop',
+            2: 'rez',
+            3: '1e',
+            4: 'rue',
+            5: 'lac'
+        }
     },
     'rez': {
         map: '' +
@@ -115,6 +121,9 @@ let maps = {
             '                                                                                \n' +
             '                                                                                \n' +
             '                                                                                ',
+        teleport_map: {
+            2: 'outside',
+        }
     },
     '1e': {
         map: '' +
@@ -171,6 +180,9 @@ let maps = {
             '                                                                                \n' +
             '                                                                                \n' +
             '                                                                                ',
+        teleport_map: {
+            3: 'outside',
+        }
     },
     'coop': {
         map: '' +
@@ -227,6 +239,9 @@ let maps = {
             '                                                                                \n' +
             '                                                                                \n' +
             '                                                                                ',
+        teleport_map: {
+            1: 'outside',
+        }
     },
     'rue': {
         map: '' +
@@ -283,6 +298,9 @@ let maps = {
             '                                                                                \n' +
             '                                                                                \n' +
             '                                                                                ',
+        teleport_map: {
+            4: 'outside',
+        }
     },
     'lac': {
         map: '' +
@@ -339,6 +357,9 @@ let maps = {
             '                                                                                \n' +
             '                                                                                \n' +
             '                                                                                ',
+        teleport_map: {
+            5: 'outside',
+        },
     },
 };
 
@@ -409,8 +430,7 @@ let map_lines = 26;
 
 function parse_all_maps()
 {
-    let all_teleports = {};
-    let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q'];
+    let teleport_symbols = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     let item_symbols = [ '{', '}', '[', ']', '(', ')', '&', '%', '!', '?', '*', '$'];
 
     for (let key in maps)
@@ -435,7 +455,8 @@ function parse_all_maps()
                 console.log('La carte META de ' + key + ' ligne ' + i + " n'a pas exactement " + char_per_line + ' caractères (' + meta_map[i].length + ')')
         }
 
-        current_map.teleports = [];
+        current_map.teleports = {};
+        current_map.teleport_count = {};
         current_map.pnj_positions = {};
         current_map.item_positions = {};
 
@@ -453,35 +474,14 @@ function parse_all_maps()
                 }
                 else if (teleport_symbols.indexOf(chr) > -1)
                 {
-                    if (all_teleports[chr] === undefined)
+                    if (current_map.teleports[chr] === undefined)
                     {
-                        all_teleports[chr] = {
-                            map: key,
-                            x: x,
-                            y: y
-                        };
+                        current_map.teleports[chr] = [];
+                        current_map.teleport_count[chr] = 0;
                     }
-                    else
-                    {
-                        current_map.teleports.push({
-                            x: x,
-                            y: y,
-                            map: all_teleports[chr].map,
-                            ex: all_teleports[chr].x,
-                            ey: all_teleports[chr].y,
-                        });
 
-                        let other_map = maps[all_teleports[chr].map];
-
-                        other_map.teleports.push({
-                            x: all_teleports[chr].x,
-                            y: all_teleports[chr].y,
-                            map: key,
-                            ex: x,
-                            ey: y,
-                        });
-
-                    }
+                    current_map.teleports[chr].push({ x: x, y: y, id: current_map.teleport_count[chr] });
+                    current_map.teleport_count[chr]++;
                 }
                 else if (item_symbols.indexOf(chr) > -1)
                 {
@@ -867,18 +867,35 @@ Labyrinth.new = function(engine)
 
     function try_teleport(hero_pos, future_pos)
     {
-        for (let i in handle.current_map.teleports)
+        for (let chr in handle.current_map.teleports)
         {
-            let tp = handle.current_map.teleports[i];
+            let teleports_for_char = handle.current_map.teleports[chr];
 
-            if (pos_equal(tp, future_pos))
+            for(let j = 0; j < teleports_for_char.length; j++)
             {
-                return {
-                    'success': true,
-                    'pos': {x: tp.ex + (future_pos.x - hero_pos.x), y: tp.ey + (future_pos.y - hero_pos.y)},
-                    'newmap': tp.map,
-                    'newstatus': '',
-                };
+                let pos = teleports_for_char[j];
+
+                if (pos_equal(pos, future_pos))
+                {
+                    let id = pos.id;
+                    let new_map = handle.current_map.teleport_map[chr];
+                    let teleports_of_other_map = maps[new_map].teleports[chr];
+
+                    for(let k = 0; k < teleports_of_other_map.length; k++)
+                    {
+                        let tp = teleports_of_other_map[k];
+
+                        if (id === tp.id)
+                        {
+                            return {
+                                'success': true,
+                                'pos': {x: tp.x + (future_pos.x - hero_pos.x), y: tp.y + (future_pos.y - hero_pos.y)},
+                                'newmap': new_map,
+                                'newstatus': '',
+                            };
+                        }
+                    }
+                }
             }
         }
 
@@ -1030,13 +1047,12 @@ Labyrinth.new = function(engine)
             }
             else
             {
-                for(let i in Object.keys(handle.inventory))
-                {
+                Object.keys(handle.inventory).forEach(function (i) {
                     let item = handle.inventory[i];
                     let coord = to_screen_coord(x, y);
                     handle.engine.text('[' + i + '] ' + item2description[item], coord, 16, get_text_color());
                     y++;
-                }
+                });
             }
 
         }
