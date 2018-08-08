@@ -46,6 +46,8 @@ Engine.new = function(descriptor, click)
         canvas: document.getElementById(descriptor.canvasId),
         reference_width: descriptor.width,
         reference_height: descriptor.height,
+        font_size: descriptor.font_size,
+        font_family: descriptor.font_family,
         allow_rotate: false,
         rotate: false
     };
@@ -61,7 +63,9 @@ Engine.new = function(descriptor, click)
         };
     }
 
-    handle.graphics = Canvas2D.new(handle.canvas, handle.reference_width, handle.reference_height, click);
+    handle.graphics = Canvas2D.new(handle.canvas,
+        handle.reference_width, handle.reference_height,
+        handle.font_size, handle.font_family, click);
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');

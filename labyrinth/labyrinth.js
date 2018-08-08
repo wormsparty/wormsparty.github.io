@@ -969,7 +969,7 @@ Labyrinth.new = function(engine)
                 if (color === undefined)
                     color = get_text_color();
 
-                handle.engine.text(str, coord, 16, color);
+                handle.engine.text(str, coord, color);
                 x += length;
             }
         }
@@ -984,7 +984,7 @@ Labyrinth.new = function(engine)
             let color = pnj2color[p];
 
             handle.engine.rect(coord, handle.char_width, 16, get_background_color());
-            handle.engine.text(p, coord, 16, color);
+            handle.engine.text(p, coord, color);
         });
     }
 
@@ -1000,7 +1000,7 @@ Labyrinth.new = function(engine)
                 let color = item2color[item];
 
                 handle.engine.rect(coord, handle.char_width, 16, get_background_color());
-                handle.engine.text(item, coord, 16, color);
+                handle.engine.text(item, coord, color);
             }
         });
     }
@@ -1009,8 +1009,8 @@ Labyrinth.new = function(engine)
     {
         let text_color = get_text_color();
 
-        handle.engine.text("  > " + handle.current_status, {x: 0, y: engine.reference_height - 48}, 16, text_color);
-        handle.engine.text("  PV: 20/20", {x: 0, y: engine.reference_height - 32}, 16, text_color);
+        handle.engine.text("  > " + handle.current_status, {x: 0, y: engine.reference_height - 48}, text_color);
+        handle.engine.text("  PV: 20/20", {x: 0, y: engine.reference_height - 32}, text_color);
     }
 
     function draw_all(handle)
@@ -1030,7 +1030,7 @@ Labyrinth.new = function(engine)
             for (let x = 0; x < char_per_line; x++)
             {
                 let start = y * (char_per_line + 1);
-                handle.engine.text(inventory.map.substring(start, start + char_per_line), {x: 0, y: y * 16}, 16, get_text_color());
+                handle.engine.text(inventory.map.substring(start, start + char_per_line), {x: 0, y: y * 16}, get_text_color());
             }
         }
 
@@ -1043,14 +1043,14 @@ Labyrinth.new = function(engine)
             if (handle.inventory.length === 0)
             {
                 let coord = to_screen_coord(x, y);
-                handle.engine.text('Rien', coord, 16, get_text_color());
+                handle.engine.text('Rien', coord, get_text_color());
             }
             else
             {
                 Object.keys(handle.inventory).forEach(function (i) {
                     let item = handle.inventory[i];
                     let coord = to_screen_coord(x, y);
-                    handle.engine.text('[' + i + '] ' + item2description[item], coord, 16, get_text_color());
+                    handle.engine.text('[' + i + '] ' + item2description[item], coord, get_text_color());
                     y++;
                 });
             }

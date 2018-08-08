@@ -2,7 +2,7 @@
 
 let Canvas2D = {};
 
-Canvas2D.new = function(canvas, reference_width, reference_height, click)
+Canvas2D.new = function(canvas, reference_width, reference_height, font_size, font_family, click)
 {
 	let handle = {
 		ctx: canvas.getContext('2d'),
@@ -14,7 +14,10 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click)
         window_width: 0,
         window_height: 0,
         reference_width: reference_width,
-        reference_height: reference_height
+        reference_height: reference_height,
+        font_size: font_size,
+        font_family: font_family,
+        font: font_size + 'px ' + font_family
 	};
 
     canvas.addEventListener('click', function(event) {
@@ -136,14 +139,14 @@ Canvas2D.new = function(canvas, reference_width, reference_height, click)
             h * handle.scaleFactor);
     };
 
-    handle.text = function(str, pos, s, color)
+    handle.text = function(str, pos, color)
     {
         handle.ctx.fillStyle = color;
-        handle.ctx.font = s + 'px Inconsolata, monospace';
+        handle.ctx.font = handle.font;
 
         // TODO: Don't draw text outside
         let x = pos.x;
-        let y = pos.y + s - 2;
+        let y = pos.y + handle.font_size - 3;
 
         handle.ctx.save();
         handle.ctx.translate(handle.margin_left, handle.margin_top);
