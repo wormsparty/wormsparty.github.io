@@ -625,18 +625,18 @@ Labyrinth.new = function(engine)
     };
 
     let item2description = {
-        '$': 'Une pièce de 1.-',
-        '%': 'Un masque à gaz',
-        '&': 'Un coca',
-        '(': 'Un bout de bois gauche',
-        ')': 'Un bout de bois droit',
-        '[': 'Un crochet gauche',
-        ']': 'Un crochet droit',
-        '{': 'Un arc gauche',
-        '}': 'Un arc droit',
-        '*': 'Un caillou',
-        '?': 'Une potion mystère',
-        '!': 'Un sort mystère',
+        '$': 'Pièce de 1.-',
+        '%': 'Masque à gaz',
+        '&': 'Canette de Coca',
+        '(': 'Bout de bois gauche',
+        ')': 'Bout de bois droit',
+        '[': 'Crochet gauche',
+        ']': 'Crochet droit',
+        '{': 'Arc gauche',
+        '}': 'Arc droit',
+        '*': 'Caillou',
+        '?': 'Potion mystère',
+        '!': 'Sort mystère',
     };
 
     function update_current_status(handle, hero_pos)
@@ -830,20 +830,64 @@ Labyrinth.new = function(engine)
     function get_future_position(handle, hero_pos)
     {
         let future_pos = {x: hero_pos.x + handle.right - handle.left, y: hero_pos.y + handle.down - handle.up};
+        let allowed_walking_symbols;
 
-        if (get_symbol_at(handle, future_pos) !== '.') {
-            if (hero_pos.y === future_pos.y || get_symbol_at(handle, {x: future_pos.x, y: hero_pos.y}) !== '.') {
-                if (hero_pos.x === future_pos.y || get_symbol_at(handle, {x: hero_pos.x, y: future_pos.y}) !== '.') {
-                    return hero_pos;
+        if (handle.inventory.indexOf('%') > -1)
+            allowed_walking_symbols = [ '.', '~' ];
+        else
+            allowed_walking_symbols = [ '.' ];
+
+        let symbol = get_symbol_at(handle, future_pos);
+
+        if (allowed_walking_symbols.indexOf(symbol) > -1)
+            return {x: future_pos.x, y: future_pos.y, status: '' };
+
+        if (hero_pos.y !== future_pos.y)
+        {
+            symbol = get_symbol_at(handle, {x: hero_pos.x, y: future_pos.y});
+
+            if (allowed_walking_symbols.indexOf(symbol) > -1)
+                return {x: hero_pos.x, y: future_pos.y, status: ''};
+            else
+            {
+                if (future_pos.x !== hero_pos.x)
+                    symbol = get_symbol_at(handle, {x: future_pos.x, y: hero_pos.y});
+
+                if (allowed_walking_symbols.indexOf(symbol) > -1)
+                    return {x: future_pos.x, y: hero_pos.y, status: ''};
+                else
+                {
+                    let status = '';
+
+                    if (symbol === '#')
+                        status = 'Aïe! Un mur.';
+
+                    if (symbol === '~')
+                        status = "C'est toxique!";
+
+                    return {x: hero_pos.x, y: hero_pos.y, status: status};
                 }
-
-                return {x: hero_pos.x, y: future_pos.y};
             }
-
-            return {x: future_pos.x, y: hero_pos.y};
         }
+        else
+        {
+            symbol = get_symbol_at(handle, {x: future_pos.x, y: hero_pos.y});
 
-        return future_pos;
+            if (allowed_walking_symbols.indexOf(symbol) > -1)
+                return {x: future_pos.x, y: hero_pos.y, status: ''};
+            else
+            {
+                let status = '';
+
+                if (symbol === '#')
+                    status = 'Aïe! Un mur.';
+
+                if (symbol === '~')
+                    status = "C'est toxique!";
+
+                return {x: hero_pos.x, y: hero_pos.y, status: status};
+            }
+        }
     }
 
     /*
@@ -920,6 +964,12 @@ Labyrinth.new = function(engine)
     {
         let hero_pos = handle.pnjs['@'];
         let future_pos = get_future_position(handle, hero_pos);
+
+        if (future_pos.status !== '')
+        {
+            handle.current_status = future_pos.status;
+            return;
+        }
 
         if (try_pick_item(handle, hero_pos))
             return;
