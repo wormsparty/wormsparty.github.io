@@ -134,18 +134,7 @@ Engine.new = function(descriptor, click)
 
     handle.resize = function(width, height)
     {
-        let zoom;
-
-        let zoom_h = get_zoom(width, height, handle.reference_width, handle.reference_height);
-        let zoom_v = get_zoom(width, height, handle.reference_height, handle.reference_width);
-
-        if (zoom_v > zoom_h)
-            zoom = Math.floor(zoom_v);
-        else
-            zoom = Math.floor(zoom_h);
-
-        if (zoom < 1)
-          zoom = 1;
+        let zoom = get_zoom(width, height, handle.reference_width, handle.reference_height);
 
         let borderx = Math.floor((width - handle.reference_width * zoom) / 2),
             bordery = Math.floor((height - handle.reference_height * zoom) / 2),
