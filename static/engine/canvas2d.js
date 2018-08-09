@@ -99,7 +99,8 @@ Canvas2D.new = function(canvas, reference_width, reference_height, font_size, fo
         }
     };
 
-    handle.rect = function(pos, w, h, color) {
+    handle.rect = function(pos, w, h, color)
+    {
         handle.ctx.fillStyle = color;
 
         let x = pos.x;

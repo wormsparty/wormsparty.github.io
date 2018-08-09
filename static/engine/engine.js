@@ -48,8 +48,7 @@ Engine.new = function(descriptor, click)
         reference_height: descriptor.height,
         font_size: descriptor.font_size,
         font_family: descriptor.font_family,
-        allow_rotate: false,
-        rotate: false
+        margin_top: descriptor.margin_top,
     };
 
     handle.canvas.focus();
@@ -65,7 +64,8 @@ Engine.new = function(descriptor, click)
 
     handle.graphics = Canvas2D.new(handle.canvas,
         handle.reference_width, handle.reference_height,
-        handle.font_size, handle.font_family, click);
+        handle.font_size, handle.font_family,
+        click);
 
     if (!handle.graphics) {
         console.log('Failed to load Canvas2D.');
@@ -138,6 +138,8 @@ Engine.new = function(descriptor, click)
 
     handle.resize = function(width, height)
     {
+        height -= handle.margin_top;
+
         let zoom = get_zoom(width, height, handle.reference_width, handle.reference_height);
 
         let borderx = Math.floor((width - handle.reference_width * zoom) / 2),
@@ -147,6 +149,8 @@ Engine.new = function(descriptor, click)
 
         handle.canvas.width = width;
         handle.canvas.height = height;
+        handle.canvas.style.marginTop = handle.margin_top + 'px';
+
         handle.graphics.resize(zoom, borderx + ajustementx, borderx, bordery + ajustementy, bordery, width, height);
     };
 
