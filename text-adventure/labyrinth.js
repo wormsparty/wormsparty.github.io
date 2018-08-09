@@ -424,7 +424,7 @@ let screens = {
     },
 };
 
-let initial_map = 'rez';
+let initial_map = 'coop';
 let char_per_line = 80;
 let map_lines = 26;
 
@@ -921,36 +921,29 @@ Labyrinth.new = function(engine)
 
                 if (pos_equal(pos, future_pos))
                 {
-                    let id = pos.id;
                     let new_map = handle.current_map.teleport_map[chr];
                     let teleports_of_other_map = maps[new_map].teleports[chr];
 
-                    for(let k = 0; k < teleports_of_other_map.length; k++)
+                    let tp = teleports_of_other_map[pos.id];
+
+                    let new_x = tp.x + (future_pos.x - hero_pos.x);
+                    let new_y = tp.y + (future_pos.y - hero_pos.y);
+
+                    // Fix the case where teleport + mouvement ends up in a wall!
+                    if (maps[new_map].map[new_y * (char_per_line + 1) + new_x] === '#')
                     {
-                        let tp = teleports_of_other_map[k];
-
-                        if (id === tp.id)
-                        {
-                            let new_x = tp.x + (future_pos.x - hero_pos.x);
-                            let new_y = tp.y + (future_pos.y - hero_pos.y);
-
-                            // Fix the case where teleport + mouvement ends up in a wall!
-                            if (maps[new_map].map[new_y * (char_per_line + 1) + new_x] === '#')
-                            {
-                                if (maps[new_map].map[new_y * (char_per_line + 1) + tp.x] === '#')
-                                    new_y = tp.y;
-                                else
-                                    new_x = tp.x;
-                            }
-
-                            return {
-                                'success': true,
-                                'pos': {x: new_x, y: new_y},
-                                'newmap': new_map,
-                                'newstatus': '',
-                            };
-                        }
+                        if (maps[new_map].map[new_y * (char_per_line + 1) + tp.x] === '#')
+                            new_y = tp.y;
+                        else
+                            new_x = tp.x;
                     }
+
+                    return {
+                        'success': true,
+                        'pos': {x: new_x, y: new_y},
+                        'newmap': new_map,
+                        'newstatus': '',
+                    };
                 }
             }
         }
